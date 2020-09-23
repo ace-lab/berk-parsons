@@ -1,0 +1,59 @@
+problem_name: last_k_match
+
+problem_description: |
+  A student has created a list of keys and valuse as <code>[key1, value1a,
+  value1b, ..., key2, value2a, ...]</code>. For this question we want to
+  ignore all the values.
+  Write a function that takes in <code>li</code>,
+  <code>key</code>, and <code>num_values</code> and returns index of the last
+  matching <code>key</code> in the list. <code>num_values</code> represents
+  how many values are associated with each key.
+  It should return <code>'Key not found'</code> if there is no match.<br><br>
+
+  <pre><code>
+  >> last_k_match([5,2], 5, 1)
+  # [5 -> (), 2 -> ()]
+  # The 0th index is the only match.
+  0
+  >> last_k_match([5,2,5,4,5,8], 5, 1)
+  # [5 -> (2), 5 -> (4), 5 -> (8)]
+  # The 4th index (or start of the 3rd pair) is the rightmost match
+  4
+  >> last_k_match([5,2,5,4,5,8], 5, 2)
+  # [5 -> (2, 5), 4 -> (5, 8)]
+  # The 0th index is the only match.
+  4
+  >> last_k_match([2,5,4,5,8,5], 5, 1) # All the 1s are values, not keys
+  # [2 -> (5), 4 -> (5), 8 -> (5)]
+  'Key not found'
+  </code></pre>
+
+initial_code: >
+  def last_k_match(li, key, num_values):
+
+solution: |
+  def last_k_match(li, key, num_values):
+      for i in range(len(li) - num_values - 1, -1, -num_values-1):
+          if li[i] == key:
+              return i
+      return 'Key not found'
+
+test_fn: last_k_match
+
+test_cases:
+  - fn_args: [[5,2,0], 5, 0]
+    expected: 0
+  - fn_args: [[5,2,5,4,5,8], 5, 1]
+    expected: 4
+  - fn_args: [[5,2,5,4,5,8], 5, 2]
+    expected: 0
+  - fn_args: [[2,1,4,1,8,1], 1, 1]
+    expected: Key not found
+
+hidden_tests:
+  - fn_args: [[5,2,0], 20, 0]
+    expected: Key not found
+  - fn_args: [[2,1,4,1,8,1], 4, 1]
+    expected: 2
+  - fn_args: [[8,1,4,1,8,1,16,1], 8, 3]
+    expected: 4

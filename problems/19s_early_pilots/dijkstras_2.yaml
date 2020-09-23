@@ -1,0 +1,162 @@
+problem_name: dijkstras_2
+
+algorithm_description:
+  <h4> Dijkstra's </h4>
+  Suppose we have a graph of nodes and edges with distances, e.g. locations and roads
+  with commute times. We want to find the shortest amount of time it will take to get
+  to any of the nodes (or locations) from a source. Dijkstra’s algorithm is a popular
+  way to do this. Dijkstra’s algorithm maintains a set of vertices whose final
+  shortest-paths have not yet been determined. At the start, this is every single vertex
+  besides the source. It repeatedly selects the vertex <code>v</code> in that set with
+  the minimum shortest-path and removes it from the set (as we now know it is indeed the
+  shortest path). It then updates all edges leaving that vertex <code>v</code> to
+  determine if there is a shorter path to them passing through <code>v</code> and
+  updates the shortest-path estimate for them if so.
+  <br />
+  <img id="gif-desc" src="https://upload.wikimedia.org/wikipedia/commons/5/57/Dijkstra_Animation.gif" />
+  <figcaption class="small text-muted"> Gif credits to Wikipedia </figcaption>
+  <button type="button" class="btn btn-primary"
+  onclick=document.getElementById('gif-desc').src='https://upload.wikimedia.org/wikipedia/commons/5/57/Dijkstra_Animation.gif'>Restart gif</button>
+
+
+
+
+# Should be unnecessary, but leaving here for no real reason. TODO: Delete.
+problem_description:
+  A teammate says they have a working Dijkstra algorithm, but you don't totally trust them.
+  They give you an annotated graph as well as the source vertex. You want to write code to
+  check that their solution is actually correct. You can assume all vertices are reachable.
+  <br><br>
+  One efficient way to do this is to validate each vertex locally. For each vertex <code>v</code>, assume
+  all other vertices in the graph have correct <code>distance</code>s, and confirm that the
+  <code>distance</code> and <code>parent</code> are correct for <code>v</code>.
+  <br><br>
+  Your function should take 2 inputs, <code>graph</code> (the annotated graph) and <code>
+  source</code> (the source vertex). It should return <code>True</code> if <code>graph</code>
+  is a correctly annotated graph, and <code>False</code> otherwise. Implement the efficient
+  solution proposed above. Do NOT just re-implement Dijkstra.
+
+initial_code: |
+  def dijkstras_validator(graph, source):
+code_lines: |
+  DIJKSTRA(graph, source)
+  create vertex list vertices
+  for every vertex v in graph
+  vertex.distance = INFINITY
+  vertex.parent = UNDEFINED
+  add v to vertices
+  source.distance = 0
+  while vertices is not empty
+  next_closest_vertex <← vertex in vertices with minimum distance
+  remove next_closest_vertex from vertices
+  for every neighbor n of next_closest_vertex
+  new_distance = next_closest_vertex.distance + distance(next_closest_vertex, n)
+  if new_distance < n.distance
+  n.distance = new_distance
+  n.parent = next_closest_vertex
+
+test_code: |
+  import copy
+
+  def testdjikstras_validator(index):
+      graph = graphs[index]
+      for v in graph:
+          if v.id == 'A':
+              source = v
+
+      return dijkstras_validator(graph, source)
+
+  class Vertex:
+      def __init__(self, vid):
+          self.id = vid
+          self.neighbors = {}
+
+  def constructGraph(edges, source_id):
+      vertices = {}
+
+      for v1, v2, dst in edges:
+          if v1 not in vertices:
+              vertices[v1] = Vertex(v1)
+          if v2 not in vertices:
+              vertices[v2] = Vertex(v2)
+          vertices[v1].neighbors[vertices[v2]] = dst
+          vertices[v2].neighbors[vertices[v1]] = dst
+
+      return list(vertices.values()), vertices[source_id]
+
+  def dijkstra(graph, source):
+      vertices = []
+
+      for vertex in graph:
+          vertex.distance = float("inf")
+          vertex.parent = None
+          vertices.append(vertex)
+      source.distance = 0
+      while len(vertices) > 0:
+          next_closest_vertex = min(vertices, key=lambda vertex: vertex.distance)
+          vertices.remove(next_closest_vertex)
+          for neighbor, neighbor_distance in next_closest_vertex.neighbors.items():
+              new_distance = next_closest_vertex.distance + neighbor_distance
+              if new_distance < neighbor.distance:
+                  neighbor.distance = new_distance
+                  neighbor.parent = next_closest_vertex
+
+  # Graph from end of https://inst.eecs.berkeley.edu/~cs61b/fa17/materials/lectures/lect33.pdf
+  graph, source = constructGraph([
+          ('A', 'C', 5),
+          ('A', 'B', 2),
+          ('A', 'D', 3),
+          ('A', 'G', 7),
+          ('B', 'C', 4),
+          ('B', 'D', 5),
+          ('B', 'E', 3),
+          ('C', 'E', 2),
+          ('C', 'F', 2),
+          ('D', 'E', 4),
+          ('D', 'G', 3),
+          ('D', 'H', 6),
+          ('E', 'F', 1),
+          ('E', 'H', 2),
+          ('G', 'H', 1),
+      ], 'A')
+
+  dijkstra(graph, source)
+
+  wrong_distance = copy.deepcopy(graph)
+  wrong_distance[3].distance -= 2
+  wrong_distance_big = copy.deepcopy(graph)
+  wrong_distance_big[3].distance += 2
+  wrong_parent = copy.deepcopy(graph)
+  for v in wrong_parent:
+      if v.id == 'E':
+          for v2 in wrong_parent:
+              if v2.id == 'D':
+                  v.parent = v2
+  wrong_src_distance = copy.deepcopy(graph)
+  wrong_src_distance[0].distance = 3
+  wrong_src_parent = copy.deepcopy(graph)
+  wrong_src_parent[0].parent = 'I'
+
+  graphs = {
+      'correct': graph,
+      'bad_distance': wrong_distance,
+      'bad_distance_2': wrong_distance_big,
+      'bad_parent': wrong_parent,
+      'bad_src_distance': wrong_src_distance,
+      'bad_src_parent': wrong_src_pare
+
+test_fn: testdjikstras_validator
+
+test_cases:
+  - fn_args: ['correct']
+    expected: True
+  - fn_args: ['bad_distance']
+    expected: False
+  - fn_args: ['bad_distance_2']
+    expected: False
+  - fn_args: ['bad_parent']
+    expected: False
+  - fn_args: ['bad_src_distance']
+    expected: False
+  - fn_args: ['bad_src_parent']
+    expected: False

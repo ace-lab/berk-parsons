@@ -1,0 +1,84 @@
+- intro:
+  name: Problem Statement
+  components:
+    - type: problem_description
+      text: >
+        <h4> Problem </h4>
+        <b>Definition: </b>A <i>plus expression</i> for a non-negative integer <code>n</code> is made by
+        inserting <code>+</code> symbols in between digits of <code>n</code>, such
+        that there are <b>never more than two consecutive digits</b> in the
+        resulting expression. For example, one plus expression for <code>2018</code>
+        is <code>20+1+8</code>, and its value is <code>29</code>. Assume that a
+        two-digit number starting with <code>0</code> evaluates to its one's digit.
+        For example, another plus expression for <code>2018</code> is <code>2+01+8</code>,
+        and its value is <code>11</code>.
+        <br><br>
+        <b>Definition: </b>A <i>k-odd plus expression</i> is a plus expression, as defined above, except that
+        <b>only odd numbers count towards the sum</b> and <b>at most k numbers count towards the sum</b>.
+        For example, a 5-odd plus expression of <code>2018</code> is <code><strike>(2)</strike>+01+<strike>(8)</strike></code> and its
+        value is <code>1</code> as <code>2</code> and <code>8</code> do not contribute to the sum.
+        As another examle, a 5-odd plus expression of
+        <code>1529</code> is <code>1+5+29</code> with a value of 35.
+        A 1-odd plus expression of <code>1529</code> could be <code><strike>(15)</strike>+29</code> with a value of 29, as
+        only one number can count towards the sum.
+        <br><br>
+        Implement <code>max_k_odd_plus(n, k)</code>, which takes non-negative integers <code>n</code> and <code>k</code>.
+        It returns the largest value of any k-odd plus expression for <code>n</code>.
+        <br><br>
+        <pre><code>
+
+        >>> max_k_odd_plus(1529, 100)    # 15 + 29 = 44
+
+        44
+
+        >> max_k_odd_plus(1529, 1)    # (15) + 29 = 29
+
+        29
+
+        >>> max_k_odd_plus(1953, 3)    # 1 + 95 + 3 = 99
+
+        99
+
+        >>> max_k_odd_plus(2018, 1)    # (2) + 01 + (8) = 1
+
+        1
+
+        </code></pre>
+        <br><br>
+- questions:
+  name: Solution Description
+  components:
+    - type: problem_description
+      text: >
+        Please answer the questions below about a possible tree recursion solution
+        to the problem above.
+    - type: free_form_prompt_large
+      name: base_case
+      text: >
+        <b>What are the base cases for a solution to this problem?</b> Please specify
+        the conditions you would check in a code-like format.
+    - type: problem_description
+      text: >
+        Imagine <code>max_k_odd_plus(13579, 3)</code> is called. <b>What
+        recursive calls would be made <i>for that specific iteration</i>, and
+        how (if at all) would they be modified before aggregation?</b>
+        Please enter each below, though you will not need all the provided
+        lines.
+    - type: problem_description
+      text: >
+        max_k_odd_plus(<input type="text" name="recurse_1">)<input type="text" name="augment_1"><br>
+        max_k_odd_plus(<input type="text" name="recurse_2">)<input type="text" name="augment_2"><br>
+        max_k_odd_plus(<input type="text" name="recurse_3">)<input type="text" name="augment_3"><br>
+        max_k_odd_plus(<input type="text" name="recurse_4">)<input type="text" name="augment_4"><br>
+        max_k_odd_plus(<input type="text" name="recurse_5">)<input type="text" name="augment_5"><br>
+        max_k_odd_plus(<input type="text" name="recurse_6">)<input type="text" name="augment_6"><br>
+        max_k_odd_plus(<input type="text" name="recurse_7">)<input type="text" name="augment_7"><br>
+        max_k_odd_plus(<input type="text" name="recurse_8">)<input type="text" name="augment_8"><br>
+        max_k_odd_plus(<input type="text" name="recurse_9">)<input type="text" name="augment_9"><br>
+        max_k_odd_plus(<input type="text" name="recurse_10">)<input type="text" name="augment_10"><br>
+    - type: free_form_prompt_large
+      name: aggregate
+      text: >
+        <b>How would you aggregate the values from the calls above?</b> Please give a one-word
+        answer for the overall type of aggregation. You can also use English to further
+        describe any details of the aggregation.

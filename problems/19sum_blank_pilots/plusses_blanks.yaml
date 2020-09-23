@@ -1,0 +1,104 @@
+problem_name: plusses_blanks
+
+algorithm_description:
+
+
+
+problem_description: |
+  <h4> Problem </h4>
+  <b>Definition: </b>A <i>plus expression</i> for a non-negative integer <code>n</code> is made by
+  inserting <code>+</code> symbols in between digits of <code>n</code>, such
+  that there are <b>never more than two consecutive digits</b> in the
+  resulting expression. For example, one plus expression for <code>2018</code>
+  is <code>20+1+8</code>, and its value is <code>29</code>. Assume that a tw
+  two-digit number starting with <code>0</code> evaluates to its one's digit.
+  For example, another plus expression for <code>2018</code> is <code>2+01+8</code>,
+  and its value is <code>11</code>.
+  <br><br>
+  <b>Definition: </b>A <i>k-odd plus expression</i> is a plus expression, as defined above, except that
+  <b>only odd numbers count towards the sum</b> and <b>at most k numbers count towards the sum</b>.
+  For example, a 5-odd plus expression of <code>2018</code> is <code><strike>(2)</strike>+01+<strike>(8)</strike></code> and its
+  value is <code>1</code> as <code>2</code> and <code>8</code> do not contribute to the sum.
+  As another examle, a 5-odd plus expression of
+  <code>1529</code> is <code>1+5+29</code> with a value of 35.
+  A 1-odd plus expression of <code>1529</code> could be <code><strike>(15)</strike>+29</code> with a value of 29, as
+  only one number can count towards the sum.
+  <br><br>
+  Implement <code>max_k_odd_plus(n, k)</code>, which takes non-negative integers <code>n</code> and <code>k</code>.
+  It returns the largest value of any k-odd plus expression for <code>n</code>.
+  <br><br>
+
+  <pre><code>
+  >>> max_k_odd_plus(1529, 100)    # 15 + 29 = 44
+  44
+  >> max_k_odd_plus(1529, 1)    # (15) + 29 = 29
+  29
+  >>> max_k_odd_plus(1953, 3)    # 1 + 95 + 3 = 99
+  99
+  >>> max_k_odd_plus(2018, 3)    # (2) + 01 + (8) = 1
+  1
+  </code></pre>
+  <br><br>
+
+initial_code: >
+  def max_k_odd_plus(n, k):
+
+code_lines: |
+  def max_k_odd_plus(n, k):#0given
+  if !BLANK == 0:
+  return 0
+  if !BLANK == 0:
+  return 0
+  !BLANK = max_k_odd_plus(!BLANK // 10, !BLANK)
+  if !BLANK%2 == 0:
+  return !BLANK
+  !BLANK = max_k_odd_plus(!BLANK // 10, !BLANK-1) + !BLANK % 10
+  !BLANK = max_k_odd_plus(!BLANK // 100, !BLANK-1) + !BLANK % 100
+  return max(!BLANK, !BLANK, !BLANK)
+
+solution: |
+  def max_k_odd_plus(n, k):
+    # Base case 1: No digits left to consume
+    if n == 0:
+      return 0
+
+    # Base case 2: All k components already part of sum.
+    if k == 0:
+      return 0
+
+    # Exclude the current right-most digit from the sum.
+    # Note: We don't need to consider excluding the right-most 2
+    # digits, as that will be covered by excluding the right-most
+    # digit twice in a row.
+    skip = max_k_odd_plus(n // 10, k)
+
+    # If n is even, the right-most digit can't be included, so this
+    # is the only choice. That's because n%10 and n%100 will both be
+    # even.
+    if n%2 == 0:
+      return skip
+
+    # Take the right-most digit as a single-digit number in the sum.
+    take_one = max_k_odd_plus(n // 10, k-1) + n % 10
+
+    # Take the two right-most digits as a double-digit number in the sum.
+    take_two = max_k_odd_plus(n // 100, k-1) + n % 100
+
+    # Return the maximum of our 3 options.
+    return max(skip, take_one, take_two)
+
+test_fn: max_k_odd_plus
+
+test_cases:
+  - fn_args: [1529, 100]
+    expected: 44
+  - fn_args: [1529, 1]
+    expected: 29
+  - fn_args: [1953, 3]
+    expected: 99
+  - fn_args: [2018, 3]
+    expected: 1
+  - fn_args: [286428, 3]
+    expected: 0
+  - fn_args: [2818, 2]
+    expected: 81

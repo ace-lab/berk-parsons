@@ -1,0 +1,88 @@
+problem_name: trie_word_break
+
+algorithm_description: |
+  <h4> Trie (Prefix Tree) </h4>
+  Tries are a specific type of tree used to efficiently store and retrieve
+  structured data, such as words. Prefix Trees are a very common type of Trie.
+  Prefix Trees are a tree where every node represents an individual letter
+  (except the root, which represents the start of a word). To add a word to
+  a trie, each letter is added one at a time as a child of the previous letter,
+  starting at the root. Then the final letter of the word is marked with a flag
+  to indicate that in completes a word.<br><br>
+
+  The image below represents a prefix tree for the words
+  <code>in, inn, tea, to</code>. In this example, terminal nodes are marked
+  with a blue background. The nodes representing <code>in</code> are
+  highlighted with thicker borders. <br><br>
+
+  <img src="/static/images/tree1.png" />
+  <figcaption class="small text-muted">Created with https://www.draw.io</figcaption>
+
+problem_description: |
+  <h4> Problem </h4>
+  For this problem, you will be given a Prefix Tree of existing words and a
+  sentence without any spaces. Write a function that determines if the sentence
+  can possibly be made of the existing words represented by the Trie. If it is
+  possible, the function should return <code>True</code>. Otherwise, it should
+  return <code>False</code>.<br><br>
+
+  For example, if the existing words are <code>[i, like, ice, icecream]</code>:<br>
+  - <code>iiiiiilikeicecream</code> is a possible sentence.<br>
+  - <code>iiilikeicelike</code> is a possible sentence.<br>
+  - <code>iiilikecreamlike</code> is NOT a possible sentence.<br><br>
+
+  <h4> Technical Specification </h4>
+  All characters will be lowercase. The <code>Trie</code> will consist of
+  <code>Nodes</code> with a dictionary of <code>children</code> and an
+  <code>end_of_word</code> property.
+  <br><br><pre>
+    class Node:
+      hasChild(letter):
+        "Returns True if the node has a child matching that letter"
+
+      getChild(letter):
+        "Returns a Node if the node has a child matching that letter, returns None otherwise"
+
+      isEndOfWord():
+        "Returns true if this node represents the end of a word"
+
+
+    class PrefixTree:
+      getRoot():
+        "Returns the root of the PrefixTree"
+  </pre>
+
+initial_code: |
+  def valid_sentence(existing_word_tree, sentence):
+    # existing_word_tree is a PrefixTree
+    # sentence is a string
+solution: |
+  """One way to solve this problem is recursively.
+
+  As we read through each character in the sentence, traverse the Trie matching
+  those letters. If at any point our current node doesn't have a child matching
+  the next character, that means that the sentence can't be formed. The
+  complication is when the algorithm hits a node representing the end of a
+  word. In this case, it's possible that the sentence could be formed either
+  by continuing to traverse to the longer words, or it's possible that this
+  is indeed a word break. In this case, we explore both options, and return
+  True if either of them is successful."""
+
+  def valid_sentence(existing_word_tree, sentence):
+    return visit(existing_word_tree.getRoot(), sentence, existing_word_tree.getRoot())
+
+  def visit(root, remaining_sentence, curr_node):
+    # Base case: If we're at the end of the sentence, it's important to ensure
+    # we're also at the end of a wrod.
+    if len(remaining_sentence) == 0:
+      return curr_node.isEndOfWord() or curr_node == root
+    sentence_found = False
+    next_letter = remaining_sentence[0]
+    # If we can continue extending the current word, follow that path.
+    if curr_node.hasChild(next_letter):
+      sentence_found = visit(root, remaining_sentence[1:], curr_node.getChild(next_letter))
+    # If this is the end of a word and the root node matches the next letter, follow that path.
+    if curr_node.isEndOfWord() and root.hasChild(next_letter):
+      sentence_found = sentence_found or visit(root, remaining_sentence[1:], root.getChild(next_letter))
+    return sentence_found
+

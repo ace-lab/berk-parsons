@@ -1,0 +1,28 @@
+problem_name: demo
+
+
+
+problem_description: |
+  In this demo, complete a function that returns 3.
+
+initial_code: |
+  def return_three():
+  	# You can insert tabbed lines as well (necessary to Python)
+code_lines: |
+  def return_three():#0given
+  # You can insert tabbed lines as well (necessary to Python)#1given
+  !BLANK = 6
+  return !BLANK // 2
+  !BLANK += 0
+
+solution: |
+  def return_three():
+    x = 2
+    x = x + 1
+    return x
+
+test_cases:
+  - fn_args: []
+    expected: 3
+  - fn_args: []
+    expected: 3

@@ -1,0 +1,49 @@
+problem_name: smallest_diff
+
+problem_description: |
+  Write a function that takes in a list <code>li</code> of numbers and
+  returns the smallest absolute value difference between neighboring numbers.
+  The difference is always from the larger element to the smaller.
+
+  <pre><code>
+  >> smallest_diff([20, 18, 8]) # 20-18=2 is the minimum difference.
+  10
+  >> smallest_diff([5, 0, 1]) # 1-0=1 is the minimum difference.
+  5
+  >> smallest_diff([1,2,3]) # All differences are 1.
+  1
+  </code></pre>
+
+initial_code: >
+  def smallest_diff(li):
+
+solution: |
+  def smallest_diff(li):
+      last = li[0]
+      min_diff = abs(li[1] - li[0])
+      for curr in li[1:]:
+          min_diff = min(min_diff, abs(curr - last))
+          last = curr
+      return min_diff
+
+test_fn: smallest_diff
+
+test_cases:
+  - fn_args: [[20, 18, 8]]
+    expected: 2
+  - fn_args: [[5, 0, 1]]
+    expected: 1
+  - fn_args: [[1, 2, 3]]
+    expected: 1
+  - fn_args: [[10, 10]]
+    expected: 0
+  - fn_args: [[5, 0, 20, 10, 50, 48, 70]]
+    expected: 2
+
+hidden_tests:
+  - fn_args: [[1,3,5,6,7,8,9]]
+    expected: 1
+  - fn_args: [[36,0,56]]
+    expected: 36
+  - fn_args: [[36,20,15,04,34,93,27]]
+    expected: 5

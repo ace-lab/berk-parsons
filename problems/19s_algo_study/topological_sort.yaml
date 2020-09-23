@@ -1,0 +1,187 @@
+problem_name: topological_sort
+
+algorithm_description: |
+  <h4> Topoplogical sort. </h4>
+  Suppose we have a list of dependencies, and want to find a valid ordering for them, such as an order
+  to take a set of classes given all of their prerequisites. Topological sorts find such solutions.
+  <br>
+  There are many ways to implement a topological sort. We will implement it
+  with a modified DFS. Specifically, implement DFS with the following two
+  modifications.
+  <ul>
+    <li>Traverse edges in the reverse of their actual direction.
+    <li>When exiting a node, add it to the final topological sort ordering.
+  </ul>
+  For exmaple, for the graph below, a valid ordering could be
+  <code>[4, 5, 0, 2, 3, 1]</code>, though there are several others.<br><br>
+  <img src="https://www.geeksforgeeks.org/wp-content/uploads/graph.png" style="width: 30%; height: 30%">
+  <figcaption class="small text-muted"> Image credits to geeksforgeeks.org </figcaption>
+
+
+
+# pseudocode: |
+#   VISIT(vertex, edge_list, visited, sub_order)
+#     add vertex to visited
+#     add vertex to sub_order
+#     for each edge e
+#       if e leads into the current vertex and its source has not been visited
+#         VISIT(source of edge, edge_list, visited, sub_order)
+
+#   TOPOLOGICAL_SORT(vertices, edge_list)
+#     visited = empty sorted
+#     order = empty list
+#     for each vertex v
+#       if the v has been visited
+#         continue
+#       sub_order = empty list
+#       VISIT(v, edge_list, visited, sub_order)
+#       Add the reverse of sub_order to order
+#     return order
+
+problem_description: |
+  <h4> Problem </h4>
+  Write code to implement topological sort, returning a valid ordering as a list of labels.
+  <br><br>
+
+  <h4> Technical Specification </h4>
+  <br><pre>
+    class Node:
+      def getLabel():
+        "Returns the label of this node (e.g. 3)"
+
+      def getNeighbors():
+        "Returns a list of Nodes representing neighboring nodes"
+
+      def getReverseNeighbors():
+        "Returns a list of Nodes representing nodes for which this is a neighbor"
+
+      def getEnter():
+        "Returns the value of self.exited. This is initially set to False"
+
+      def getExit():
+        "Returns the value of self.exited. This is initially set to False"
+
+      def setEnter():
+        "Returns the value of self.exited. This is initially set to False"
+
+      def setExit():
+        "Sets self.exited to True"
+  </pre><br><br>
+  <h4>Reading test cases</h4>
+  The first argument is a list of all the nodes. The second argument is a list
+  of directed edges in the form <code>[src_node, target_node]</code>.
+
+initial_code: |
+  def topological_sort(graph):
+  	# graph is a list of Nodes
+code_lines: |
+  def topological_sort(graph):#0given
+  # graph is a list of Nodes #1given
+  order = []
+  for node in graph:
+  if not node.getExit():
+  visit(node, order)
+  return order
+  def visit(node, order):
+  node.setEnter()
+  for neighbor in node.getReverseNeighbors():
+  if not neighbor.getEnter():
+  visit(neighbor, order)
+  node.setExit()
+  order.append(node.getLabel())
+
+solution: |
+  def topological_sort(graph):
+    order = []
+    for node in graph:
+      if not node.getExit():
+        visit(node, order)
+    return order
+
+  def visit(node, order):
+    node.setEnter()
+    for neighbor in node.getReverseNeighbors():
+      if not neighbor.getEnter():
+        visit(neighbor, order)
+    node.setExit()
+    order.append(node.getLabel())
+
+
+test_code: |
+  class Node:
+    def __init__(self, label):
+      self.label = label
+      self.entered = False
+      self.exited = False
+      self.test_state = 0
+      self.neighbors = []
+      self.reverse_neighbors = []
+
+    def __repr__(self):
+      return str(self.label)
+
+    def getLabel(self):
+      return self.label
+
+    def addNeighbor(self, node):
+      self.neighbors.append(node)
+
+    def addReverseNeighbor(self, node):
+      self.reverse_neighbors.append(node)
+
+    def getNeighbors(self):
+      return self.neighbors
+
+    def getReverseNeighbors(self):
+      return self.reverse_neighbors
+
+    def getEnter(self):
+      return self.entered
+
+    def getExit(self):
+      return self.exited
+
+    def setEnter(self):
+      self.entered = True
+
+    def setExit(self):
+      self.exited = True
+
+  def construct_graph(node_names, edges):
+    nodes = {node_name: Node(node_name) for node_name in node_names}
+    for edge_start, edge_end in edges:
+      nodes[edge_start].addNeighbor(nodes[edge_end])
+      nodes[edge_end].addReverseNeighbor(nodes[edge_start])
+    return nodes
+
+  def topological_sort_test(node_names, edges):
+    graph = construct_graph(node_names, edges)
+    order = topological_sort(list(graph.values()))
+    for node_name in order:
+      if type(node_name) != type(node_names[0]):
+        return "Expected the returned ordering to be a list of labels, not of type {}".format(type(node_name).__name__)
+    for node_name in order:
+      if node_name not in graph:
+        return "{} was in your order {}, but is not a node in the graph".format(node_name, order)
+      graph[node_name].test_state = 1
+      for neighbor in graph[node_name].getNeighbors():
+        if neighbor.test_state:
+          return "{} was listed before {} in your order {}".format(neighbor, node_name, order)
+
+    for node in list(graph.values()):
+      if not node.test_state:
+        return "Expected all nodes to be part of the sort, but {} is not in your order {}".format(node.label, order)
+
+    return True
+
+test_fn: topological_sort_test
+
+test_cases:
+  - fn_args: [[0, 1, 2, 3, 4, 5], [[5, 0], [5, 2], [4, 0], [4, 1], [2, 3], [3, 1]]]
+    expected: True
+  - fn_args: [[0, 1, 2, 3, 4], [[0, 1], [1, 3], [0, 2], [2, 3], [4, 1]]]
+    expected: True
+  - fn_args: [[0, 1, 2, 3, 4, 5, 6, 7], [[0, 1], [0, 2], [1, 3], [1, 4], [2, 5], [3, 6], [3, 7]]]
+    expected: True
+  - fn_args: [[0, 1, 2, 3, 4], [[0, 3], [1, 0], [1, 3], [0, 2], [2, 4], [3, 4]]]
+    expected: True

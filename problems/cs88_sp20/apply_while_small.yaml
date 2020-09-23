@@ -1,0 +1,64 @@
+problem_name: apply_while_small
+
+problem_description: |
+  Write a function <code>apply_while_small(li, func)</code>
+  that sequentially appies <code>func</code> to every value
+  in the sequence <code>li</code> until it results in a
+  value 5 or more away from 0, at which point it stops. It
+  should return the function results up to that point in
+  a new list. If there is never a far from 0 result, return
+  'All Small'.
+  <br><br>
+
+  <pre><code>
+  >> apply_while_small([5, 3, 1, 2, 4], sub_two)
+  'All Small'
+  >> apply_while_small([-1, -2, 4, 8, 10], negate)
+  [1,2,-4, -8]
+  >> apply_while_small([-1, -2, 4, 8, 10], double)
+  [-2, -4, 8]
+  </code></pre>
+
+  <br><i>Reading test results:</i> The test cases below will take in
+  <code>func</code> as a string which takes in the function
+  name. There is hidden code that will evaluate that to call
+  your <code>apply_while_small(li, func)</code> with a function object.
+
+initial_code: >
+  def apply_while_small(li, func):
+
+solution: |
+  def apply_while_small(li, func):
+      new_li = []
+      for val in li:
+          new_li.append(func(val))
+          if abs(new_li[-1]) >= 5:
+              return new_li
+      return 'All Small'
+
+test_fn: test_function
+
+test_code: |
+  sub_two = lambda n: n - 2
+  negate = lambda n: -n
+  double = lambda n: n * 2
+
+  def test_function(li, func_str):
+    func = eval(func_str)
+    return apply_while_small(li, func)
+
+test_cases:
+  - fn_args: [[5,3,1,2,4], sub_two]
+    expected: 'All Small'
+  - fn_args: [[-1,-2,4,8,10], negate]
+    expected: [1,2,-4, -8]
+  - fn_args: [[-1,-2,4,8,10], double]
+    expected: [-2, -4, 8]
+
+hidden_tests:
+  - fn_args: [[-2,3,5,4], sub_two]
+    expected: 'All Small'
+  - fn_args: [[-1,-2,4,8,10], sub_two]
+    expected: [-3,-4,2,6]
+  - fn_args: [[-1,-2,4,8,10,2], double]
+    expected: [-2,-4,8]

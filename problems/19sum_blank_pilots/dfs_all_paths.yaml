@@ -1,0 +1,179 @@
+problem_name: dfs_all_paths
+
+algorithm_description:
+  <h4> DFS (Depth-First Search) </h4>
+  Suppose we have a graph of nodes and edges. Depth-First Search (DFS) is an
+  algorithm that visits each of these nodes in a particular order. It
+  starts at an arbitrary node in the graph, and recursively explores as far
+  as possible along each branch before backtracking. This is in contrast to
+  breadth-first search, which explores all 1st-level neighbors of the initial
+  node before any 2nd-level neighbors.<br><br>
+
+  As the DFS algorithm traverses the graph, it keeps track of when a node is
+  <code>entered</code>, or first visited, and when it is <code>exited</code>,
+  once all of its children have been visited.<br><br>
+
+  DFS is often implemented with a helper <code>visit</code> function that is recursively called, though
+  it can also be implemented with a (last-in-first-out) stack.<br><br>
+
+  For example, in the directed graph below, a possible DFS ordering would be <code>
+  Enter A, Enter B, Enter D, Exit D, Exit B, Enter C, Exit C, Exit A,
+  Enter E, Exit E</code><br><br>
+
+  <img src="/static/images/graph5.png" />
+  <figcaption class="small text-muted">Created with https://www.nctm.org/Classroom-Resources/Illuminations/Interactives/Graph-Creator/</figcaption>
+
+
+
+problem_description: |
+  <h4> Problem </h4>
+  Let's practice applying DFS to another new problem. This particular problem
+  will involve a few modifications to how DFS works<br><br>
+
+  For this question, you will be given a <code>source</code> and
+  <code>destination</code> node in a directed graph. Your task is to find all
+  paths from the <code>source</code> node to the <code>target</code> node.
+  The graph may contain cycles, but a given path can only visit
+  every node once (i.e. the paths you find should not have cycles).
+  You should return these paths as a list of strings, with each
+  string representing a path in the order of Nodes visited. For example,
+  in the graph above, if the <code>source</code> was <code>A</code> and
+  the <code>destination</code> was <code>D</code>, your function would
+  return <code>['ABD', 'ACD']</code>.<br><br>
+
+  Notice that there are a few differences from the initial implementation of
+  DFS. First off, we're now only interested in exploring from the <code>source</code> node,
+  so some nodes may never be visited. Additionally, our criteria for revisiting
+  nodes has changed. Before, we would never visit a node more than once. Now,
+  we can visit a node multiple times as long as each visit is part of a separate
+  path.<br><br>
+
+
+  <h4> Technical Specification </h4>
+  <pre>
+    class Node:
+      def getLabel()
+        "Returns the label of this node (e.g. 'C')"
+
+      def getNeighbors():
+        "Returns a list of Nodes representing neighboring nodes"
+
+      def getEnter():
+        "Returns the value of self.entered. This is initially set to False"
+
+      def setEnter(val):
+        "sets self.entered to val"
+  </pre>
+  <h4>Reading test cases</h4>
+  The first two arguments are the <code>source</code> and
+  <code>destination</code> labels. Your function
+  will receive the <code>Nodes</code> matching these labels. The third argument is a list of
+  all nodes in the graph. The fourth argument is a list of directed edges
+  in the form <code>[src_node, target_node]</code>.<br><br>
+  The results are a list of strings, each string representing a path. The test
+  will sort the list before comparing, so you don't need to worry about the
+  order you return the paths.
+
+initial_code: >
+  def find_paths(source, destination):
+  	# source and destination are both Nodes
+
+code_lines: |
+  def find_paths(source, destination): #0given
+  # source and destination are both Nodes #1given
+  curr_path = []
+  paths = []
+  visit(source, destination, curr_path, paths)
+  return paths
+  def visit(node, destination, curr_path, paths):
+  node.setEnter(True)
+  curr_path += node.getLabel()
+  if node == destination:
+  paths.append(''.join(curr_path))
+  else:
+  for neighbor in node.getNeighbors():
+  if neighbor.getEnter():
+  continue
+  visit(neighbor, destination, curr_path, paths)
+  del curr_path[-1]
+  node.setEnter(False)
+
+# del curr_path[-1] is actually unnecssary because strings are passed as copies,
+# not pointers in Python.
+solution: |
+  def find_paths(source, destination):
+    # Keep track of all paths found.
+    paths = []
+    # Keep track of the current path, effectively as a stack.
+    curr_path = []
+    # We only need to top-level visit the source node.
+    visit(source, destination, curr_path, paths)
+    return paths
+
+  def visit(node, destination, curr_path, paths):
+    # Mark this node as visited so it's not revisited in this path due to a cycle.
+    node.setEnter(True)
+    curr_path += node.getLabel()
+
+    if node == destination:
+      paths.append(''.join(curr_path))
+    else:
+      for neighbor in node.getNeighbors():
+        if neighbor.getEnter():
+          continue
+        visit(neighbor, destination, curr_path, paths)
+    del curr_path[-1]
+    # Unmark this node as visited so that other paths can visit it again.
+    node.setEnter(False)
+
+test_code: |
+  class Node:
+    def __init__(self, label):
+      self.label = label
+      self.entered = False
+      self.test_state = 0
+      self.neighbors = []
+
+    def __repr__(self):
+      return self.label
+
+    def getLabel(self):
+      return self.label
+
+    def addNeighbor(self, node):
+      self.neighbors.append(node)
+
+    def getNeighbors(self):
+      return self.neighbors
+
+    def getEnter(self):
+      return self.entered
+
+    def setEnter(self, val):
+      self.entered = val
+
+  def construct_graph(node_names, edges):
+    nodes = {node_name: Node(node_name) for node_name in node_names}
+    for edge_start, edge_end in edges:
+      nodes[edge_start].addNeighbor(nodes[edge_end])
+    return nodes
+
+  def dfs_all_paths_test(source, destination, node_names, edges):
+    graph = construct_graph(node_names, edges)
+    paths = find_paths(graph[source], graph[destination])
+    paths.sort()
+    return paths
+
+test_fn: dfs_all_paths_test
+
+test_cases:
+  - fn_args: ['A', 'D', ['A', 'B', 'C', 'D', 'E'], [['A', 'B'], ['B', 'D'], ['A', 'C'], ['C', 'D'], ['E', 'A']]]
+    expected: ['ABD', 'ACD']
+  - fn_args: ['Start', 'D', ['Start', 'B', 'C', 'D', 'E'], [['Start', 'B'], ['B', 'D'], ['B', 'C'], ['Start', 'C'], ['C', 'D'], ['E', 'Start']]]
+    expected: ['StartBCD', 'StartBD', 'StartCD']
+  - fn_args: ['D', 'A', 'ABCDE', [['A', 'B'], ['B', 'D'], ['A', 'C'], ['C', 'D'], ['E', 'A']]]
+    expected: []
+  - fn_args: ['C', 'D', 'ABCD', [['A', 'C'], ['C', 'A'], ['C', 'B'], ['A', 'B'], ['B', 'D'], ['A', 'D']]]
+    expected: ['CABD', 'CAD', 'CBD']
+  - fn_args: ['B', 'E', 'ABCDE', [['A', 'D'], ['B', 'A'], ['B', 'D'], ['A', 'C'], ['C', 'E'], ['D', 'E']]]
+    expected: ['BACE', 'BADE', 'BDE']

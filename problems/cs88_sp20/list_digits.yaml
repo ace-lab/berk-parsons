@@ -1,0 +1,45 @@
+problem_name: list_digits
+
+
+problem_description: |
+  Write a recursive function <code>list_digits(num)</code>
+  that returns the digits of <code>num</code> as a list.
+
+  <br><br>
+  <pre><code>
+  >>> list_digits(273)
+  [2, 7, 3]
+  </code></pre>
+
+code_lines: |
+  def list_digits(num): #0given
+  if !BLANK:
+  return [num]
+  return list_digits(!BLANK) + !BLANK
+
+solution: |
+  def list_digits(num):
+      # If the number is less than 10, it only has
+      # one digit.
+      if num < 10:
+          return [num]
+      # Otherwise, add the current right-most digit
+      # to the end of the list of the rest of the
+      # digits.
+      return list_digits(num // 10) + [num % 10]
+
+test_fn: list_digits
+
+test_cases:
+  - fn_args: [273]
+    expected: [2, 7, 3]
+  - fn_args: [123456]
+    expected: [1, 2, 3, 4, 5, 6]
+
+hidden_tests:
+  - fn_args: [654321]
+    expected: [6,5,4,3,2,1]
+  - fn_args: [340125]
+    expected: [3,4,0,1,2,5]
+  - fn_args: [1111111111111111]
+    expected: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]

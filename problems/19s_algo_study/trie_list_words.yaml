@@ -1,0 +1,179 @@
+problem_name: trie_list_words
+
+algorithm_description:
+  <h4> Trie (Prefix Tree) </h4>
+  Tries are a specific type of tree used to efficiently store and retrieve
+  structured data, such as words. Prefix Trees are a very common type of Trie.
+  Prefix Trees are a tree where every node represents an individual letter
+  (except the root, which represents the start of a word). To add a wordeto
+  a trie, each letter is added one at a time as a child of the previous letter,
+  starting at the root. Then the final letter of the word is marked with a flag
+  to indicate that in completes a word.<br><br>
+  The image below represents a prefix tree for the words
+  <code>in, inn, tea, to</code>. In this example, terminal nodes are marked
+  with a blue background. The nodes representing <code>in</code> are
+  highlighted with thicker borders. <br><br>
+  <img src="/static/images/tree1.png" />
+  <figcaption class="small text-muted">Created with https://www.draw.io</figcaption>
+
+
+
+problem_description: |
+  <h4> Problem </h4>
+  Ok, now let's get a little familiarity traversing Tries. For this problem,
+  you should write code that, given a Trie, returns the words that it encodes.
+  Specifically, these words should be returned in an alphabetical (or sorted)
+  order. For example, in the Trie above, it would return exactly <code>
+  ['in', 'inn', 'tea', 'to']</code>.<br><br>
+
+  The <code>Node</code> and <code>Trie</code> classes as described below are
+  already implemented for you.<br><br>
+
+  <h4> Technical Specification </h4>
+  <pre>
+    class Node:
+      def hasChild(chr):
+        "Returns True if the node has a child matching character chr"
+
+      def getChild(chr):
+        "Returns a Node if the node has a child matching chr, returns None otherwise"
+
+      def childrenDict():
+        "Returns a dictionary representing the children of this node. The key is a letter, and the value is a node"
+
+      def isEndOfWord():
+        "Returns True if this node represents the end of a word, False otherwise"
+
+    class Trie:
+      def getRoot():
+        "Returns the root Node of this Trie"
+  </pre>
+  <h4>Reading test cases</h4>
+  The first argument is the list of words that were used to create the Trie, in
+  alphabetical order.
+
+initial_code: |
+  def extract_words(trie):
+  	# trie is a Trie that has already been filled with words.
+
+code_lines: |
+  def extract_words(trie): #0given
+  # trie is a Trie that has already been filled with words. #1given
+  words = []
+  visit(trie.getRoot(), words, '')
+  return words
+
+  def visit(node, words, word_so_far):
+  if node.isEndOfWord():
+  words.append(word_so_far)
+  children = node.childrenDict()
+  children = sorted(children.items())
+  for chr, node in children:
+  visit(node, words, word_so_far + chr)
+
+
+solution: |
+  def extract_words(trie):
+    words = []
+    visit(trie.getRoot(), words, '')
+    return words
+
+  def visit(node, words, word_so_far):
+    if node.isEndOfWord():
+      words.append(word_so_far)
+    children = node.childrenDict()
+    children = sorted(children.items())
+    for chr, node in children:
+      visit(node, words, word_so_far + chr)
+
+
+
+test_code: |
+  class Node:
+    def __init__(self, label):
+      self.label = label
+      self.end_of_word = False
+      self.children = {}
+
+    def __repr__(self):
+      return "Path to node: {}".format(self.label)
+
+    def hasChild(self, chr):
+      return chr in self.children
+
+    def getChild(self, chr):
+      return self.children.get(chr, None)
+
+    def childrenDict(self):
+      return self.children
+
+    def addChild(self, chr):
+      if len(chr) != 1:
+        raise Exception("Expect all edges in a Trie to be a single character, got '{}'".format(chr))
+      if chr in self.children:
+        raise Exception("{} path is already specified in this Trie".format(self.label + chr))
+      self.children[chr] = Node(self.label + chr)
+
+    def setEndOfWord(self):
+      self.end_of_word = True
+
+    def isEndOfWord(self):
+      return self.end_of_word
+
+  class Trie:
+    def getRoot(self):
+      return self.root
+
+    def addWord(self, word):
+      curr_node = self.getRoot()
+      for chr in word:
+        if not curr_node.hasChild(chr):
+          curr_node.addChild(chr)
+        curr_node = curr_node.getChild(chr)
+      curr_node.setEndOfWord()
+
+    def getNode(self, str):
+      curr_node = self.getRoot()
+      for chr in str:
+        curr_node = curr_node.getChild(chr)
+        if not curr_node:
+          return None
+      return curr_node
+
+    def isPrefix(self, str):
+      return bool(self.getNode(str))
+
+    def isWord(self, word):
+      node = self.getNode(word)
+      if not node:
+        return False
+      return node.isEndOfWord()
+
+  def construct_trie(words):
+    trie = Trie()
+    trie.root = Node('')
+    for word in words:
+      trie.addWord(word)
+    return trie
+
+  from random import shuffle
+
+  def extract_words_test(words):
+    if words:
+      words_copy = words[:]
+      while words == words_copy:
+        shuffle(words)
+    trie = construct_trie(words)
+    return extract_words(trie)
+
+test_fn: extract_words_test
+
+test_cases:
+  - fn_args: [['in', 'inn', 'tea', 'to']]
+    expected: ['in', 'inn', 'tea', 'to']
+  - fn_args: [['apple', 'banana']]
+    expected: ['apple', 'banana']
+  - fn_args: [['biggest', 'had', 'not', 'of', 'our', 'so', 'some', 'the', 'this', 'very', 'was', 'were']]
+    expected: ['biggest', 'had', 'not', 'of', 'our', 'so', 'some', 'the', 'this', 'very', 'was', 'were']
+  - fn_args: [[]]
+    expected: []

@@ -1,0 +1,6 @@
+- intro:
+  name: Study Start
+  components:
+    - type: problem_description
+      text: >
+        Please hit the button below when you are instructed to begin the study.

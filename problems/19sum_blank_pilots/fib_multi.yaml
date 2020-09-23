@@ -1,0 +1,79 @@
+- intro:
+  name: Problem Statement
+  components:
+    - type: problem_description
+      text: >
+        <h4>Problem</h4>
+        <a href=https://docs.google.com/presentation/d/1IR2i9UA5hyCQzHJ3cObHeMG7Yzmb8Fs8dGmEbPcwj80/edit#slide=id.g5ced57cc67_0_927>
+        Fibonacci explanation: </a>
+        <br><br>
+        <pre><code>
+
+        >>> fib(0)
+
+        0
+
+        >>> fib(1)
+
+        1
+
+        >>> fib(2)
+
+        1
+
+        >>> fib(3)
+
+        2
+
+        >>> fib(4)
+
+        3
+
+
+        </code></pre>
+- questions:
+  name: Solution Description
+  components:
+    - type: problem_description
+      text: >
+        Please answer the questions below about a possible tree recursion solution
+        to the problem above.
+    - type: free_form_prompt_large
+      name: base_case
+      text: >
+        <b>What are the base cases for a solution to this problem?</b> Please specify
+        the conditions you would check in a code-like format.
+      default_text: |
+        n == 0 # return 0
+        n == 1 # return 1
+        - OR -
+        n <= 1 # return n
+        - OR -
+        n <= 2 # return min(n, 1)
+    - type: problem_description
+      text: >
+        Imagine <code>fib(5)</code> is called. <b>What
+        recursive calls would be made <i>for that specific iteration</i>, and
+        how (if at all) would they be modified before aggregation?</b>
+        Please enter each below, though you will not need all the provided
+        lines.
+    - type: problem_description
+      text: >
+        fib(<input type="text" name="recurse_1" value="4">)<input type="text" name="augment_1"><br>
+        fib(<input type="text" name="recurse_2" value="3">)<input type="text" name="augment_2"><br>
+        fib(<input type="text" name="recurse_3">)<input type="text" name="augment_3"><br>
+        fib(<input type="text" name="recurse_4">)<input type="text" name="augment_4"><br>
+        fib(<input type="text" name="recurse_5">)<input type="text" name="augment_5"><br>
+        fib(<input type="text" name="recurse_6">)<input type="text" name="augment_6"><br>
+        fib(<input type="text" name="recurse_7">)<input type="text" name="augment_7"><br>
+        fib(<input type="text" name="recurse_8">)<input type="text" name="augment_8"><br>
+        fib(<input type="text" name="recurse_9">)<input type="text" name="augment_9"><br>
+        fib(<input type="text" name="recurse_10">)<input type="text" name="augment_10"><br>
+    - type: free_form_prompt_large
+      name: aggregate
+      text: >
+        <b>How would you aggregate the values from the calls above?</b> Please give a one-word
+        answer for the overall type of aggregation. You can also use English to further
+        describe any details of the aggregation.
+      default_text: >
+        Sum. You would add the two values from the previous calls.

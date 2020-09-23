@@ -1,0 +1,110 @@
+problem_name: account
+
+algorithm_description:
+
+
+
+problem_description: |
+  <h4>Problem</h4>
+  In this problem, we'll be working on a problem from HW 11.<br><br>
+
+  We'll work on a constructing code for a bank account that allows
+  deposits and withdrawals. It should satisfy the below docstring.<br><br>
+
+  Deposits add money to a balance. Withdrawals subtract money from the
+  balance if enough is present. If a deposit or withdrawal is successful,
+  it should return the remaining balance.
+
+  <pre><code>
+  class Account(object):
+    """A bank account that allows deposits and withdrawals.
+
+    >>> sophia_account = Account('Sophia')
+    >>> nate_account = Account('Nate')
+    >>> nate_account.balance
+    0
+    >>> nate_account.deposit(100) # Depositing a check
+    100
+    >>> nate_account.deposit(20) # Depositing another check
+    120
+    >>> nate_account.balance
+    120
+    >>> nate_account.withdraw(80)
+    40
+    >>> nate_account.withdraw(80)
+    'Insufficient funds'
+    >>> sophia_account.balance
+    0
+    >>> sophia_account.holder
+    'sophia'
+    """
+  </code></pre>
+
+initial_code: >
+  def coin_winner(row1, row2, curr, other):
+
+code_lines: |
+  class Account(object):#0given
+  def __init__(self, holder):
+  self.balance = 0
+  self.holder = holder
+  def deposit(self, amount):
+  self.balance += amount
+  return self.balance
+  def withdraw(self, amount):
+  if amount > self.balance:
+  return 'Insufficient funds'
+  self.balance -= amount
+  return self.balance
+
+
+solution: |
+  class Account(object):#0given
+      def __init__(self, holder):
+          self.balance = 0
+          self.holder = holder
+      def deposit(self, amount):
+          self.balance += amount
+          return self.balance
+      def withdraw(self, amount):
+          if amount > self.balance:
+              return 'Insufficient funds'
+          self.balance -= amount
+          return self.balance
+
+test_code: |
+  def test_method(*args):
+    global nate_account, sophia_account
+    if 'nate_account' not in globals():
+      nate_account = Account('nate')
+      sophia_account = Account('sophia')
+    # print(globals())
+    account = globals()[args[0]]
+    fn_name = args[1]
+    if len(args) > 2:
+      fn_args = args[2:]
+      return getattr(account, fn_name)(*fn_args)
+    else:
+      return getattr(account, fn_name)
+
+test_fn: test_method
+
+test_cases:
+  - fn_args: ['nate_account', 'balance']
+    expected: 0
+  - fn_args: ['nate_account', 'deposit', 100]
+    expected: 100
+  - fn_args: ['nate_account', 'deposit', 20]
+    expected: 120
+  - fn_args: ['nate_account', 'balance']
+    expected: 120
+  - fn_args: ['nate_account', 'withdraw', 80]
+    expected: 40
+  - fn_args: ['nate_account', 'withdraw', 80]
+    expected: 'Insufficient funds'
+  - fn_args: ['sophia_account', 'balance']
+    expected: 0
+  - fn_args: ['sophia_account', 'holder']
+    expected: 'sophia'
+  - fn_args: ['nate_account', 'holder']
+    expected: 'nate'

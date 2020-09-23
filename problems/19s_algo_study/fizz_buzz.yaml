@@ -1,0 +1,90 @@
+problem_name: fizz_buzz
+
+
+
+problem_description: |
+  <h4>Problem</h4>
+  Fizz buzz is a special type of counting, replacing any number divisible by 3 with the word
+  "fizz", any number divisible by 5 with the word "buzz", and any number divisible by both
+  with "fizzbuzz"<br><br>
+
+  Implement <code>fizz_buzz(n)</code> to count from <code>1</code> to <code>n</code> inclusive.
+  Your implementation should return a list of the first <code>n</code> numbers of fizzbuzz in order.
+  <br><br>
+  <pre><code>
+  >>> fizz_buzz(5)
+  [1, 2, 'fizz', 4, 'buzz']
+  </code></pre>
+
+  <br><br>
+  <i>Hint:</i> This problem is much easier to solve without using recursion. You do not need to use
+  recursion for this question.
+#   A solution to this is the following:
+  # <pre>
+  # def fizz_buzz(n):
+  #     result = []
+  #     for i in range(1, n+1):
+  #         if i % 15 == 0:
+  #             result.append("fizzbuzz")
+  #         elif i % 3 == 0:
+  #             result.append("fizz")
+  #         elif i % 5 == 0:
+  #             result.append("buzz")
+  #         else:
+  #             result.append(i)
+  #     return result
+  # </pre>
+
+
+# TODO: More (or better) test cases
+pseudocode: |
+  fizz_buzz(n):
+    initialize a result array
+    for i in 1 to n:
+      if i mod 15 == 0:
+        add "fizzbuzz" to result
+      else if i mod 3 == 0:
+        add "fizz" to result
+      else if i mod 5 == 0:
+        add "buzz" to result
+      else:
+        add i to result
+    return result
+
+initial_code: |
+  def fizz_buzz(n):
+code_lines: |
+  def fizz_buzz(n): #0given
+  result = []
+  for i in range(1, n+1):
+  if i % 15 == 0:
+  result.append("fizzbuzz")
+  elif i % 3 == 0:
+  result.append("fizz")
+  elif i % 5 == 0:
+  result.append("buzz")
+  else:
+  result.append(i)
+  return result
+
+solution: |
+  def fizz_buzz(n):
+      result = []
+      for i in range(1, n+1):
+          if i % 15 == 0:
+              result.append("fizzbuzz")
+          elif i % 3 == 0:
+              result.append("fizz")
+          elif i % 5 == 0:
+              result.append("buzz")
+          else:
+              result.append(i)
+      return result
+
+test_fn: fizz_buzz
+
+test_cases:
+  - fn_args: [5]
+    expected: [1, 2, 'fizz', 4, 'buzz']
+  - fn_args: [20]
+    expected: [1, 2, 'fizz', 4, 'buzz', 'fizz', 7, 8, 'fizz', 'buzz', 11, 'fizz', 13, 14, 'fizzbuzz', 16, 17, 'fizz', 19, 'buzz']

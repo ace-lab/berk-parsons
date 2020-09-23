@@ -1,0 +1,254 @@
+problem_name: trie_impl
+
+algorithm_description:
+  <h4> Trie (Prefix Tree) </h4>
+  Tries are a specific type of tree used to efficiently store and retrieve
+  structured data, such as words. Prefix Trees are a very common type of Trie.
+  Prefix Trees are a tree where every node represents an individual letter
+  (except the root, which represents the start of a word). To add a word to
+  a trie, each letter is added one at a time as a child of the previous letter,
+  starting at the root. Then the final letter of the word is marked with a flag
+  to indicate that in completes a word.<br><br>
+  The image below represents a prefix tree for the words
+  <code>in, inn, tea, to</code>. In this example, terminal nodes are marked
+  with a blue background. The nodes representing <code>in</code> are
+  highlighted with thicker borders. <br><br>
+  <img src="/static/images/tree1.png" />
+  <figcaption class="small text-muted">Created with https://www.draw.io</figcaption>
+
+
+
+problem_description: |
+  <h4> Problem </h4>
+  Write code to add words and check for prefixes or words in a Trie. Your
+  code should implement <code>addWord(word)</code>, <code>isPrefix(str)</code>,
+  and <code>isWord(word)</code> in the <code>Trie</code> class. You are welcome
+  to define <code>getNode(str)</code> as defined below. For example, <code>
+  getNode('app')</code> would return the node from following <code>a</code>, <code>
+  p</code>, then <code>p</code> from the root node of the Trie.<br><br>
+
+  The <code>Node</code> class as described below is already implemented for you,
+  as is <code>Trie.getRoot()</code><br><br>
+
+  <h4> Technical Specification </h4>
+  <pre>
+    class Node:
+      def hasChild(chr):
+        "Returns True if the node has a child matching character chr"
+
+      def getChild(chr):
+        "Returns a Node if the node has a child matching chr, returns None otherwise"
+
+      def addChild(chr):
+        "Creates a new Node as a child of this and sets its lookup to character chr"
+
+      def setEndOfWord():
+        "Marks this node as representing the end of a word"
+
+      def isEndOfWord():
+        "Returns True if this node represents the end of a word, False otherwise"
+
+    class Trie:
+      def getRoot():
+        "Returns the root Node of this Trie"
+
+      def getNode(str):
+        "This is NOT implemented yet, but may be helpful. Returns the Node from "
+        "following the path for str, None if that path does not exist in the Trie."
+
+  </pre>
+  <h4>Reading test cases</h4>
+  The first argument is a list of words. Your Trie will have <code>addWord(word)</code>
+  called on it for each of these words. The second argument is a list of values which will be
+  checked for <code>isPrefix(str)</code> and <code>isWord(word)</code>. Lastly, the structure
+  of the Trie will be compared against the expected structure.<br><br>
+  The test cases will first check the correctness of <code>addWord(word)</code>, then
+  <code>isWord(word)</code>, then <code>isPrefix(str)</code>.<br><br>
+  <h4>Starting Code</h4>
+  <pre>class Trie:
+      def addWord(self, word):
+          # Adds word to the Trie.
+
+      def isPrefix(self, str):
+          # Returns True if this prefix exists in the Trie, False otherwise.
+
+      def isWord(self, word):
+          # Returns True if this word exists in the Trie, False otherwise.</pre>
+
+initial_code: |
+  class Trie:
+  	def addWord(self, word):
+  		# Adds word to the Trie.
+
+  	def isPrefix(self, str):
+  		# Returns True if this prefix exists in the Trie, False otherwise.
+
+  	def isWord(self, word):
+  		# Returns True if this word exists in the Trie, False otherwise.
+
+code_lines: |
+  class Trie: #0given
+  def addWord(self, word): #1given
+  # Adds word to the Trie. #2given
+  curr_node = self.getRoot()
+  for chr in word:
+  if not curr_node.hasChild(chr):
+  curr_node.addChild(chr)
+  curr_node = curr_node.getChild(chr)
+  curr_node.setEndOfWord()
+
+  def getNode(self, str):
+  curr_node = self.getRoot()
+  for chr in str:
+  curr_node = curr_node.getChild(chr)
+  if not curr_node:
+  return None
+  return curr_node
+
+  def isPrefix(self, str): #1given
+  # Returns True if this prefix exists in the Trie, False otherwise. #2given
+  return bool(self.getNode(str))
+
+  def isWord(self, word): #1given
+  # Returns True if this word exists in the Trie, False otherwise. #2given
+  node = self.getNode(word)
+  if not node:
+  return False
+  return node.isEndOfWord()
+
+solution: |
+  class Trie:
+    def addWord(self, word):
+      curr_node = self.getRoot()
+      for chr in word:
+        if not curr_node.hasChild(chr):
+          curr_node.addChild(chr)
+        curr_node = curr_node.getChild(chr)
+      curr_node.setEndOfWord()
+
+    def getNode(self, str):
+      curr_node = self.getRoot()
+      for chr in str:
+        curr_node = curr_node.getChild(chr)
+        if not curr_node:
+          return None
+      return curr_node
+
+    def isPrefix(self, str):
+      return bool(self.getNode(str))
+
+    def isWord(self, word):
+      node = self.getNode(word)
+      if not node:
+        return False
+      return node.isEndOfWord()
+
+
+test_code: |
+  class Node:
+    def __init__(self, label):
+      self.label = label
+      self.end_of_word = False
+      self.children = {}
+
+    def __repr__(self):
+      return "Path to node: {}".format(self.label)
+
+    def hasChild(self, chr):
+      return chr in self.children
+
+    def getChild(self, chr):
+      return self.children.get(chr, None)
+
+    def addChild(self, chr):
+      if len(chr) != 1:
+        raise Exception("Expect all edges in a Trie to be a single character, got '{}'".format(chr))
+      if chr in self.children:
+        raise Exception("{} path is already specified in this Trie".format(self.label + chr))
+      self.children[chr] = Node(self.label + chr)
+
+    def setEndOfWord(self):
+      self.end_of_word = True
+
+    def isEndOfWord(self):
+      return self.end_of_word
+
+  def getRoot(self):
+    return self.root
+  Trie.getRoot = getRoot
+
+  class TrueTrie:
+    def getRoot(self):
+      return self.root
+
+    def addWord(self, word):
+      curr_node = self.getRoot()
+      for chr in word:
+        if not curr_node.hasChild(chr):
+          curr_node.addChild(chr)
+        curr_node = curr_node.getChild(chr)
+      curr_node.setEndOfWord()
+
+    def getNode(self, str):
+      curr_node = self.getRoot()
+      for chr in str:
+        curr_node = curr_node.getChild(chr)
+        if not curr_node:
+          return None
+      return curr_node
+
+    def isPrefix(self, str):
+      return bool(self.getNode(str))
+
+    def isWord(self, word):
+      node = self.getNode(word)
+      if not node:
+        return False
+      return node.isEndOfWord()
+
+  def construct_trie(words):
+    trie = Trie()
+    trie.root = Node('')
+    true_trie = TrueTrie()
+    true_trie.root = Node('')
+    for word in words:
+      trie.addWord(word)
+      true_trie.addWord(word)
+    return trie, true_trie
+
+  def check_trie_structure(trie, true_trie, trie_node = None, true_trie_node = None):
+    if not trie_node:
+      trie_node = trie.getRoot()
+    if not true_trie_node:
+      true_trie_node = true_trie.getRoot()
+    if set(trie_node.children.keys()) != set(true_trie_node.children.keys()):
+      return 'Expected node at path {} to have {} children, but it had {}'.format(true_trie_node.label, list(true_trie_node.children.keys()), list(trie_node.children.keys()))
+    for chr in trie_node.children.keys():
+      test_msg = check_trie_structure(trie, true_trie, trie_node.getChild(chr), true_trie_node.getChild(chr))
+      if test_msg:
+        return test_msg
+
+  def trie_test(words, word_checks):
+    trie, true_trie = construct_trie(words)
+
+    test_msg = check_trie_structure(trie, true_trie)
+    if test_msg:
+      return test_msg
+    for word in word_checks:
+      if trie.isWord(word) != true_trie.isWord(word):
+        return 'Expected isWord("{}") to return {}'.format(word, true_trie.isWord(word))
+    for word in word_checks:
+      if trie.isPrefix(word) != true_trie.isPrefix(word):
+        return 'Expected isPrefix("{}") to return {}'.format(word, true_trie.isPrefix(word))
+
+    return True
+
+
+
+test_fn: trie_test
+
+test_cases:
+  - fn_args: [['in', 'inn', 'tea', 'to'], ['i', 'in', 'inn', 't', 'to', 'te', 'tea', 'b', 'app']]
+    expected: True
+  - fn_args: [['apple', 'ban', 'banana'], ['app', 'apple', 'ban', 'banana', 'appleb', 'bandana']]
+    expected: True

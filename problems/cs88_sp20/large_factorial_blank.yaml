@@ -1,0 +1,63 @@
+problem_name: large_factorial
+
+problem_description: |
+  A factorial is the product of an integer with all the positive integers below it.
+  For example, 4! = 1 * 2 * 3 * 4 = 24.<br><br>
+
+  Write a function that returns the first factorial larger than some number
+  <code>k</code>. <br><br>
+
+  <pre><code>
+  >> large_factorial(20) # 4! = 24
+  24
+  >> large_factorial(24) # 5! = 120
+  120
+  >> large_factorial(1)  # 2! = 2
+  2
+  </code></pre>
+
+initial_code: >
+  def large_factorial(k):
+
+code_lines: |
+  def large_factorial(k): #0given
+  !BLANK = 1
+  !BLANK = 1
+  while !BLANK <= !BLANK:
+  !BLANK = !BLANK + 1
+  !BLANK = !BLANK * !BLANK
+  return !BLANK
+
+solution: |
+  def large_factorial(k):
+      # Keep track of the number to multiply by for the next factorial.
+      index = 1
+      # Keep track of the current factorial so far.
+      factorial = 1
+      # Until the factorial is large enough...
+      while factorial <= k:
+          # Update the index and compute the next factorial.
+          index = index + 1
+          factorial = factorial * index
+      return factorial
+
+obscure_code: |
+  def function(k):
+    index = 1
+    factorial = 1
+    while factorial <= k:
+      index = index + 1
+      factorial = factorial * index
+    return factorial
+
+test_fn: large_factorial
+
+test_cases:
+  - fn_args: [20]
+    expected: 24
+  - fn_args: [24]
+    expected: 120
+  - fn_args: [1]
+    expected: 2
+  - fn_args: [50000000000]
+    expected: 87178291200

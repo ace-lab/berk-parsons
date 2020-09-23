@@ -1,0 +1,94 @@
+problem_name: dfs_mark_nodes_in_cycle
+
+algorithm_description: |
+  <h4> DFS (Depth-First Search) </h4>
+  Suppose we have a graph of nodes and edges. Depth-First Search (DFS) is an
+  algorithm that visits each of these nodes in a particular order. It
+  starts at an arbitrary node in the graph, and recursively explores as far
+  as possible along each branch before backtracking. This is in contrast to
+  breadth-first search, which explores all 1st-level neighbors of the initial
+  node before any 2nd-level neighbors.<br><br>
+
+  As the DFS algorithm traverses the graph, it keeps track of when a node is
+  <code>entered</code>, or first visited, and when it is <code>exited</code>,
+  once all of its children have been visited.<br><br>
+
+  DFS is often implemented with a helper <code>visit</code> function that is recursively called, though
+  it can also be implemented with a (last-in-first-out) stack.<br><br>
+
+  For example, in the graph below, a possible DFS ordering would be: <code>
+  Enter A, Enter B, Enter C, Enter w, Exit E, Enter D, Exit D, Exit C, Exit B,
+  Exit A</code><br><br>
+
+  <img src="/static/images/graph4.png" />
+  <figcaption class="small text-muted">Created with https://www.nctm.org/Classroom-Resources/Illuminations/Interactives/Graph-Creator/</figcaption>
+
+problem_description: |
+  <h4> Problem </h4>
+  A cycle in a graph occurs when there is a path visiting a group of vertices
+  that ends where it begins. For example, in the graph above, <code>ABCD</code>
+  form a cycle.
+
+  For this problem, write a function that marks all nodes that are part of a
+  cycle in a given graph using the provide <code>Node.markCycle()</code>
+  method. Note that this is more information than the previous question which
+  only asked about the presence of a cycle.<br><br>
+
+  <h4> Technical Specification </h4>
+  <code>graph</code> will be represented as a list of <code>Nodes</code> that have
+  <code>children</code> pointing to other <code>Nodes</code> with which they share
+  an edge.
+
+  <br><br><pre>
+    class Node:
+      getNeighbors():
+        "Returns a list of Nodes representing neighboring nodes"
+
+      def getEnter():
+        "Returns the value of self.entered. This is initially set to False"
+
+      def getExit():
+        "Returns the value of self.exited. This is initially set to False"
+
+      def setEnter():
+        "sets self.entered to True"
+
+      def setExit():
+        "Sets self.exited to True"
+
+      def markCycle():
+        "Sets self.part_of_cycle, marking this Node as part of a cycle in the graph."
+  </pre>
+
+initial_code: |
+  def mark_cycle_nodes(graph):
+    # graph is a list of Nodes
+solution: |
+  """Before we found that a DFS has a cycle if it visits a node htat has been
+  entered but not exited during the traversal.
+
+  More specifically, the nodes in the cycle are those that have been visited in
+  the current traversal since that already-visited-neighbor and the current
+  node. We can keep track of this by also keeping track of the current
+  traversal path."""
+
+  def mark_cycle_nodes(graph):
+    for node in graph:
+      if not node.getExit():
+        visit(node, [])
+
+  def visit(node, path):
+    node.setEnter()
+    path.append(node)
+    for neighbor in node.getNeighbors():
+      if neighbor.getExit():
+        continue
+      if neighbor.getEnter():
+        start_of_cycle_i = path.index(neighbor)
+        for node in path[start_of_cycle_i:]:
+          node.markCycle()
+        continue
+      visit(neighbor, path)
+    path = path[:-1]
+    node.setExit()
+

@@ -1,0 +1,76 @@
+- intro:
+  name: Demographic Survey
+  components:
+    - type: problem_description
+      text: >
+        Please answer the following questions.
+    - type: multiple_choice
+      name: swe_interview
+      text: Have you ever interviewed for a company with live coding?
+      choices:
+        - "No"
+        - "Yes"
+    - type: multiple_choice
+      name: swe_offer
+      text: If so, has it resulted in receiving an offer?
+      choices:
+        - "No"
+        - "Yes"
+        - "I don't know yet"
+        - "I have not interviewed for a company with live coding"
+    - type: multiple_choice
+      name: classes_data_structures
+      text: Have you formally learned data structures such as hashmaps (e.g. CS61B at Berkeley)?
+      choices:
+        - "No"
+        - I am currently enrolled in a class covering this
+        - "Yes"
+        - Not sure
+    - type: multiple_choice
+      name: classes_algorithms
+      text: Have you formally written code that implements algorithms such as Dijkstra's shortest path (e.g. end of CS61B at Berkeley)?
+      choices:
+        - "No"
+        - I am currently enrolled in a class covering this
+        - "Yes"
+        - Not sure
+    - type: multiple_choice
+      name: classes_advanced_algorithms
+      text: Have you formally learned algorithms and proven their properties (e.g. CS170 at Berkeley)?
+      choices:
+        - "No"
+        - I am currently enrolled in a class covering this
+        - "Yes"
+        - Not sure
+    - type: multiple_choice
+      name: programming_team
+      text: Have you taken part in a class or activity that focuses on rapidly solving short problems (e.g. programming competitions)?
+      choices:
+        - "No"
+        - "Yes"
+    - type: multiple_choice
+      name: gender
+      text: What is your gender identity?
+      choices:
+        - Male
+        - Female
+        - Other <input type="text" name="gender">
+        - Prefer not to Disclose
+    - type: multiple_choice # Long right now, maybe dropdown, collapse grad
+      name: year
+      text: What year are you?
+      choices:
+        - First Year (Undergrad)
+        - Second Year (Undergrad)
+        - Third Year (Undergrad)
+        - Fourth Year (Undergrad)
+        - Fifth+ Year (Undergrad)
+        - Graduate student
+        - Other <input type="text" name="year">
+    - type: multiple_choice
+      name: program
+      text: Which program are you enrolled in?
+      choices:
+        - I School
+        - EECS/L&S
+        - Other <input type="text" name="program">

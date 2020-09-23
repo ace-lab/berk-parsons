@@ -1,0 +1,194 @@
+problem_name: dfs_impl
+
+algorithm_description:
+  <h4> DFS (Depth-First Search) </h4>
+  Suppose we have a graph of nodes and edges. Depth-First Search (DFS) is an
+  algorithm that visits each of these nodes in a particular order. It
+  starts at an arbitrary node in the graph, and recursively explores as far
+  as possible along each branch before backtracking. This is in contrast to
+  breadth-first search, which explores all 1st-level neighbors of the initial
+  node before any 2nd-level neighbors.<br><br>
+
+  As the DFS algorithm traverses the graph, it keeps track of when a node is
+  <code>entered</code>, or first visited, and when it is <code>exited</code>,
+  once all of its children have been visited.<br><br>
+
+  DFS is often implemented with a helper <code>visit</code> function that is recursively called, though
+  it can also be implemented with a (last-in-first-out) stack.<br><br>
+
+  For example, in the directed graph below, a possible DFS ordering would be <code>
+  Enter A, Enter B, Enter D, Exit D, Exit B, Enter C, Exit C, Exit A,
+  Enter E, Exit E</code><br><br>
+
+  <img src="/static/images/graph5.png" />
+  <figcaption class="small text-muted">Created with https://www.nctm.org/Classroom-Resources/Illuminations/Interactives/Graph-Creator/</figcaption>
+
+
+
+problem_description: |
+  <h4> Problem </h4>
+  Write code to implement depth first search on a list of <code>Nodes</code>,
+  described below. Your algorithm should <code>setEnter()</code> and
+  <code>setExit()</code> when appropriate.
+  If you have fully explored all descendants of a node but have not fully
+  explored the graph, you should continue by exploring an unvisited node.
+  By doing so, all nodes will be visited by the completion of the algorithm
+  <br><br>
+
+  For this question, you can assume the graph is directed.<br><br>
+
+  <h4> Technical Specification </h4>
+  <pre>
+    class Node:
+      def getNeighbors():
+        "Returns a list of Nodes representing neighboring nodes"
+
+      def getEnter():
+        "Returns the value of self.entered. This is initially set to False"
+
+      def getExit():
+        "Returns the value of self.exited. This is initially set to False"
+
+      def setEnter():
+        "sets self.entered to True"
+
+      def setExit():
+        "Sets self.exited to True"
+  </pre>
+  <h4>Reading test cases</h4>
+  The first argument is a list of all the nodes. The second argument is a list
+  of directed edges in the form <code>[src_node, target_node]</code>.
+
+initial_code: |
+  def dfs(graph):
+  	# graph is a list of Nodes
+
+code_lines: |
+  def dfs(!BLANK): #0given #blankgraph
+  # graph is a list of Nodes #1given
+  for !BLANK in !BLANK:
+  if not !BLANK.getExit():
+  visit(!BLANK)
+
+  def visit(!BLANK):
+  !BLANK.setEnter()
+  for !BLANK in !BLANK.getNeighbors():
+  if !BLANK.getEnter():
+  continue
+  visit(!BLANK)
+  !BLANK.setExit()
+
+solution: |
+  def dfs(graph):
+    for node in graph:
+      if not node.getExit():
+        visit(node)
+
+  def visit(node):
+    node.setEnter()
+    for neighbor in node.getNeighbors():
+      if neighbor.getEnter():
+        continue
+      visit(neighbor)
+    node.setExit()
+
+test_code: |
+  class Node:
+    ordering = []
+
+    def __init__(self, label):
+      self.label = label
+      self.entered = False
+      self.exited = False
+      self.test_state = 0
+      self.neighbors = []
+
+    def __repr__(self):
+      return self.label
+
+    def addNeighbor(self, node):
+      self.neighbors.append(node)
+
+    def getNeighbors(self):
+      return self.neighbors
+
+    def getEnter(self):
+      return self.entered
+
+    def getExit(self):
+      return self.exited
+
+    def setEnter(self):
+      self.entered = True
+      Node.ordering.append('Enter {}'.format(self.label))
+
+    def setExit(self):
+      self.exited = True
+      Node.ordering.append('Exit {}'.format(self.label))
+
+  def construct_graph(node_names, edges):
+    nodes = {node_name: Node(node_name) for node_name in node_names}
+    for edge_start, edge_end in edges:
+      nodes[edge_start].addNeighbor(nodes[edge_end])
+    return nodes
+
+  def dfs_test(node_names, edges):
+    Node.ordering = []
+    graph = construct_graph(node_names, edges)
+    dfs(list(graph.values()))
+    order = Node.ordering
+    errors = []
+    for node_name in node_names:
+      if 'Enter {}'.format(node_name) not in order:
+        errors.append("Expected {} to be entered".format(node_name))
+      if 'Exit {}'.format(node_name) not in order:
+        errors.append("Expected {} to be exited".format(node_name))
+    if len(set(order)) != len(order):
+      errors.append("Expected all nodes to be entered and exited exactly once.")
+    if errors:
+      errors = ["Ordering: {}".format(order)] + errors
+      return '<br>'.join(errors)
+    curr_stack = []
+    for vst in order:
+      node_name = vst.split(' ')[1]
+      if vst.startswith('Exit'):
+        if graph[node_name].test_state != 1:
+          errors.append("Expected {} to be entered before exiting".format(node_name))
+        for neighbor in graph[node_name].getNeighbors():
+          if neighbor.test_state != 2 and neighbor.label not in curr_stack:
+            errors.append("Expected all neighbors of {} to be fully visted before exiting {}".format(node_name, node_name))
+            continue
+        if node_name != curr_stack[-1]:
+          errors.append("Expected {} to be exited before {}".format(curr_stack[-1], node_name))
+        graph[node_name].test_state = 2
+        curr_stack = curr_stack[:-1]
+      else:
+        if graph[node_name].test_state != 0:
+          errors.append("Expected {} to not be unvisited before entering".format(node_name))
+        if curr_stack:
+          node_name_found = False
+          for neighbor in graph[curr_stack[-1]].getNeighbors():
+            if neighbor.label == node_name:
+              node_name_found = True
+          if not node_name_found:
+            errors.append("Expected children of {} to be entered before {}".format(curr_stack[-1], node_name))
+        graph[node_name].test_state = 1
+        curr_stack += node_name
+      Node.ordering = []
+    if errors:
+      errors = ["Ordering: {}".format(order)] + errors
+      return '<br>'.join(errors)
+
+test_fn: dfs_test
+
+test_cases:
+  - fn_args: ['ABCDE', [['A', 'B'], ['B', 'D'], ['A', 'C'], ['C', 'D'], ['E', 'A']]]
+    expected: NULL
+  - fn_args: ['ABCDEFG', [['A', 'D'], ['D', 'A'], ['E', 'A'], ['A', 'B'], ['B', 'F'], ['F', 'G'], ['A', 'C'], ['C', 'G']]]
+    expected: NULL
+  - fn_args: ['ABCDEFGH', [['A', 'B'], ['A', 'C'], ['B', 'D'], ['B', 'E'], ['C', 'F'], ['D', 'G'], ['D', 'H']]]
+    expected: NULL
+  - fn_args: ['ABCDE', [['A', 'B'], ['B', 'C'], ['C', 'D'], ['D', 'A'], ['D', 'E'], ['C', 'E']]]
+    expected: NULL
+  - fn_args: ['ABCDE', [['A', 'D'], ['B', 'A'], ['B', 'D'], ['A', 'C'], ['C', 'E'], ['D', 'E']]]
+    expected: NULL

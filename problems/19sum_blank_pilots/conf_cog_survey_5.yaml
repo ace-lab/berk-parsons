@@ -1,0 +1,43 @@
+- intro:
+  name: Problem Survey
+  components:
+    - type: problem_description
+      text: >
+        Please answer the following questions given that this is the third time you've worked on this problem
+        in this study. Please comment specifically on the helpfulness of this repetition of working on the
+        problem.
+    - type: free_form_prompt_large
+      name: understanding
+      text: >
+        How, if at all, did this third attempt in a different format at this problem affect your undertsanding of how to write code
+        for this particular problem, for recursion problems in general, and for programming in Python?
+    - type: free_form_prompt
+      name: time_needed
+      text: >
+        Approximately how many more minutes would you need to complete the question unassisted? If you completed it, please
+        enter "0". If you think you would need some assistance to complete it (e.g. section or Office Hours),
+        please enter "N/A".
+    - type: multiple_choice
+      name: understand_approach
+      text: Did working on this problem a third time in a different format help you learn or better understand a particular way to write code for problems very similar to this?
+      choices:
+        - "No"
+        - "Yes"
+    - type: multiple_choice
+      name: understand_approach
+      text: Did working on this problem a third time in a different format help you learn or better understand multiple ways to write code for problems very similar to this?
+      choices:
+        - "No"
+        - "Yes"
+    - type: multiple_choice
+      name: understand_approach
+      text: Did working on this problem a third time in a different format help you learn or better understand how recursion can be used to solve problems?
+      choices:
+        - "No"
+        - "Yes"
+    - type: multiple_choice
+      name: understand_approach
+      text: Did working on this problem a third time in a different format help you learn or better understand the Python programming language?
+      choices:
+        - "No"
+        - "Yes"

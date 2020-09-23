@@ -1,0 +1,50 @@
+problem_name: topological_sort_comprehension
+
+algorithm_description:
+  <h4> Topoplogical sort. </h4>
+  Suppose we have a list of dependencies, and want to find a valid ordering for them, such as an order
+  to take a set of classes given all of their prerequisites. Topological sorts find such solutions.
+  <br>
+  There are many ways to implement a topological sort. We will implement it with a modified Depth
+  First Search. Specifically, the approach looks something like
+  <ol>
+    <li>Visit every vertex exactly once (either at the top-level or as part of the recursion
+    described in step 2)</li>
+    <li>For each visited vertex, recursively visit reverse neighbors, or vertices with edges 
+    leading <b>into</b> the current vertex</li>
+    <li>After exhausting the current chain of visits, reverse the order nodes were visited and append
+    that to the full visit order</li>
+  </ol>
+
+problem_description: |
+  <img src="https://www.geeksforgeeks.org/wp-content/uploads/graph.png" style="width: 30%; height: 30%">
+  <figcaption class="small text-muted"> Gif credits to geeksforgeeks.org </figcaption>
+  <br><br>
+  Consider the graph above. Say that you are currently visiting node <code>2</code> and have already
+  visited nodes <code>1</code> and <code>4</code>. Which node would you visit next?
+
+
+pseudocode: |
+  BINARY_SEARCH(target, arr)
+    low = 0
+    high = length(arr) - 1
+    while low <= high
+      mid = floor((low+high)/2)
+        if arr[mid] > target
+          high = mid - 1
+      else if arr[mid] < target
+        low = mid + 1
+      else
+        return mid
+    return not_found
+
+choices:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+
+# Note: This is the index, not the text of the actual solution
+correct_answer: 5

@@ -1,0 +1,24 @@
+- intro:
+  name: Pre-Benchmark Demographic Survey
+  components:
+    - type: problem_description
+      text: >
+        Please answer the following questions.
+    - type: multiple_choice
+      name: prepared
+      text: On a scale from 1 (not at all) to 5 (very), how PREPARED do you feel for Software Engineering interviews?
+      choices:
+        - "1 (not at all prepared)"
+        - "2"
+        - "3"
+        - "4"
+        - "5 (very prepared)"
+    - type: multiple_choice
+      name: concerned
+      text: On a scale from 1 (not at all) to 5 (very), how CONCERNED do you feel for Software Engineering interviews?
+      choices:
+        - "1 (not at all concerned)"
+        - "2"
+        - "3"
+        - "4"
+        - "5 (very concerned)"

@@ -1,0 +1,18 @@
+- intro:
+  name: Pre-Study Experience Survey
+  components:
+    - type: problem_description
+      text: >
+        Please answer the following questions.
+    - type: free_form_prompt_large
+      name: more_practice
+      text: >
+        CS61A covers many topics in a short amount of time. What are some topics or
+        problems that have been covered in your class for which you would benefit
+        from more practice? This will help us prioritize which topics to cover in
+        future studies.
+    - type: free_form_prompt_large
+      name: recursion_problems
+      text: >
+        Are there any particularly interesting problems on recursion that you remember?
+        Challenging problems?

@@ -1,0 +1,32 @@
+problem_name: fizz_buzz_comprehension
+
+algorithm_description:
+  <h4> Fizz Buzz </h4>
+  Fizz buzz is a special type of counting, replacing any number divisible by 3 with the word
+  "fizz", any number divisible by 5 with the word "buzz", and any number divisible by both
+  with "fizzbuzz"
+
+problem_description:
+  For the number 15, what would you output?
+
+pseudocode: |
+  fizz_buzz(n):
+    initialize a result array
+    for i in 1 to n:
+      if i % 15 == 0:
+        add fizzbuzz to result
+      else if i % 3 == 0:
+        add fizz to result
+      else if i % 5 == 0:
+        add buzz to result
+      else:
+        add i to result
+    return result
+
+choices:
+  - fizz
+  - buzz
+  - fizzbuzz
+
+# Note: This is the index, not the text of the actual solution
+correct_answer: 2

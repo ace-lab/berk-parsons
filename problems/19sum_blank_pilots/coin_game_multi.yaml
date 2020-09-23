@@ -1,0 +1,79 @@
+- intro:
+  name: Problem Statement
+  components:
+    - type: problem_description
+      text: >
+        <h4>Problem</h4>
+        Alice and Bob are playing a game with coins on a table in 2 distinct rows. In this game,
+        they take turns removing any non-zero number of coins from one of the rows.
+        Whoever takes the last coin on the table wins the game. For example, if there are 2 coins
+        on the table in a single row and Alice starts, Alice could take both coins to win. However,
+        if the 2 coins were in 2 different rows, Alice would have to take one of them, then Bob would
+        take the remaining coin to win the game. As a final example, if there are 5 coins in one row
+        and 2 coins in another, Alice could take 4 coins from the first row as her turn, though that
+        might not be the optimal move.<br><br>
+        Implement <code>coin_winner(row1, row2, current_player, other_player)</code>, which takes in the number of coins
+        in each row as integers and the starting player and other player as strings, and returns who would win
+        <b>if both players played optimally</b>. For example, if there were 5 coins in a single row the table, the starting player
+        would take all 5; if they took any less, they would lose as their opponent could take all the remaining coins.
+        <br><br>
+        <pre><code>
+
+        >>> coin_winner(1, 0, 'Alice', 'Bob')  # Alice takes 1 coin
+
+        'Alice'
+
+        >>> coin_winner(0, 5, 'Alice', 'Bob')  # Alice takes 5 coins
+
+        'Alice'
+
+        >>> coin_winner(1, 1, 'Alice', 'Bob')  # Alice takes 1 coin from either row.
+                                               # Bob takes the remaining 1 coin.
+        'Bob'
+
+        </code></pre>
+        <br><br>
+        <i>Hint:</i> These types of problems can often be solved with a recursive
+        solution. The key observation is as follows: If current_player can make <b>any move
+        </b> such that they will always win from the resulting board, then they
+        have a winning strategy for that board. In this game, one player always
+        has a winning strategy from any board, but not all moves necessarily
+        lead to that winning strategy.<br>
+        <i>Hint:</i> <code>coin_winner</code> should always returns a string.<br>
+- questions:
+  name: Solution Description
+  components:
+    - type: problem_description
+      text: >
+        Please answer the questions below about a possible tree recursion solution
+        to the problem above.
+    - type: free_form_prompt_large
+      name: base_case
+      text: >
+        <b>What are the base cases for a solution to this problem?</b> Please specify
+        the conditions you would check in a code-like format.
+    - type: problem_description
+      text: >
+        Imagine <code>coin_winner(4,2,'A','B')</code> is called. <b>What
+        recursive calls would be made <i>for that specific iteration</i>, and
+        how (if at all) would they be modified before aggregation?</b>
+        Please enter each below, though you will not need all the provided
+        lines.
+    - type: problem_description
+      text: >
+        coin_winner(<input type="text" name="recurse_1">)<input type="text" name="augment_1"><br>
+        coin_winner(<input type="text" name="recurse_2">)<input type="text" name="augment_2"><br>
+        coin_winner(<input type="text" name="recurse_3">)<input type="text" name="augment_3"><br>
+        coin_winner(<input type="text" name="recurse_4">)<input type="text" name="augment_4"><br>
+        coin_winner(<input type="text" name="recurse_5">)<input type="text" name="augment_5"><br>
+        coin_winner(<input type="text" name="recurse_6">)<input type="text" name="augment_6"><br>
+        coin_winner(<input type="text" name="recurse_7">)<input type="text" name="augment_7"><br>
+        coin_winner(<input type="text" name="recurse_8">)<input type="text" name="augment_8"><br>
+        coin_winner(<input type="text" name="recurse_9">)<input type="text" name="augment_9"><br>
+        coin_winner(<input type="text" name="recurse_10">)<input type="text" name="augment_10"><br>
+    - type: free_form_prompt_large
+      name: aggregate
+      text: >
+        <b>How would you aggregate the values from the calls above?</b> Please give a one-word
+        answer for the overall type of aggregation. You can also use English to further
+        describe any details of the aggregation.

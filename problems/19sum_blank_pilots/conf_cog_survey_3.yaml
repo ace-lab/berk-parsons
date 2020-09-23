@@ -1,0 +1,75 @@
+- likert:
+  name: Post-Problem Survey
+  components:
+    - type: problem_description
+      text:
+        Please answer the following questions about the most recent exercise on a scale of
+        1 (very low) to 7 (very high).
+    - type: free_form_prompt
+      name: tlx_mental
+      text: How mentally demanding was the task? (1-7)
+    - type: free_form_prompt
+      name: tlx_temporal
+      text: How hurried or rushed was the pace of the task? (1-7)
+    - type: free_form_prompt
+      name: tlx_performance
+      text: How successful were you in accomplishing what you were asked to do? (1-7)
+    - type: free_form_prompt
+      name: tlx_effort
+      text: How hard did you have to work to accomplish your level of performance? (1-7)
+    - type: free_form_prompt
+      name: tlx_frustration
+      text: How insecure, discouraged, irritated, stressed, and annoyed were you? (1-7)
+    - type: problem_description
+      text: " "
+    - type: problem_description
+      text: >
+        Please rate how much you agree with the following statements.
+    - type: multiple_choice
+      name: conf_similar
+      text: I am confident that I could write code for other game-winning tree recursion problems of similar difficulty.
+      choices:
+        - "1 (strongly disagree)"
+        - "2"
+        - "3"
+        - "4"
+        - "5 (strongly agree)"
+    - type: multiple_choice
+      name: conf_explain
+      text: (If you answered the question:) I am confident that I could explain my solution to a fellow CS61A student.
+      choices:
+        - "1 (strongly disagree)"
+        - "2"
+        - "3"
+        - "4"
+        - "5 (strongly agree)"
+    - type: problem_description
+      text: " "
+    - type: problem_description
+      text: >
+        Please answer the following yes/no questions.<br><br>Did working on this last exercise help you learn
+        or better understand...
+    - type: multiple_choice
+      name: learn_this
+      text: ...how to write code to solve this problem?
+      choices:
+        - "Yes"
+        - "No"
+    - type: multiple_choice
+      name: learn_recursion
+      text: ...how to write code that uses tree recursion to solve a problem?
+      choices:
+        - "Yes"
+        - "No"
+    - type: multiple_choice
+      name: learn_python
+      text: ...how others write code using Python?
+      choices:
+        - "Yes"
+        - "No"
+    - type: multiple_choice
+      name: learn_syntax
+      text: ...Python syntax and language features?
+      choices:
+        - "Yes"
+        - "No"

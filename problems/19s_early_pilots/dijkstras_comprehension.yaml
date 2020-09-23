@@ -1,0 +1,57 @@
+problem_name: dijkstras_comprehension
+
+algorithm_description:
+  <h4> Dijkstra's </h4>
+  Suppose we have a graph of nodes and edges with distances, e.g. locations and roads
+  with commute times. We want to find the shortest amount of time it will take to get
+  to any of the nodes (or locations) from a source. Dijkstra’s algorithm is a popular
+  way to do this. <br><br>Dijkstra’s algorithm maintains a set of vertices whose final
+  shortest-paths have not yet been determined. At the start, this is every single vertex
+  besides the source.
+  <br><br>
+  It repeatedly selects the vertex <code>v</code> in that set with
+  the minimum shortest-path and removes it from the set (as we now know it is indeed the
+  shortest path). It then updates all edges leaving that vertex <code>v</code> to
+  determine if there is a shorter path to them passing through <code>v</code> and
+  updates the shortest-path estimate for them if so.
+  <br />
+  <img id="gif-desc" src="https://upload.wikimedia.org/wikipedia/commons/5/57/Dijkstra_Animation.gif" />
+  <figcaption class="small text-muted"> Gif credits to Wikipedia </figcaption>
+  <button type="button" class="btn btn-primary"
+  onclick=document.getElementById('gif-desc').src='https://upload.wikimedia.org/wikipedia/commons/5/57/Dijkstra_Animation.gif'>Restart gif</button>
+
+problem_description: |
+  Say that <code>A</code> is the source node in the following graph.
+  For which nodes would the distance be updated in the first step, before visiting the following node?
+  <br />
+  <img width=40% src="/static/images/dijkstras_comprehension.png" />
+  <figcaption class="small text-muted"> Graph credits to F17 CS61B</figcaption>
+
+pseudocode: |
+  DIJKSTRA(graph, source)
+  	create vertex list vertices
+
+  for every vertex v in graph
+  	vertex.distance = INFINITY
+  	vertex.parent = UNDEFINED
+  	add v to vertices
+
+  source.distance = 0
+
+  while vertices is not empty
+  	next_closest_vertex <← vertex in vertices with minimum distance
+  	remove next_closest_vertex from vertices
+  	for every neighbor n of next_closest_vertex
+  		new_distance = next_closest_vertex.distance + distance(next_closest_vertex, n)
+  		if new_distance < n.distance
+  			n.distance = new_distance
+  			n.parent = next_closest_vertex
+
+choices:
+  - A, B, D, G
+  - B, C, D, G
+  - A, B, C, D, G
+  - B, D, G
+
+# Note: This is the index, not the text of the actual solution
+correct_answer: 1

@@ -1,0 +1,66 @@
+- conditional_tree_recursion:
+  name: Conditional Tree Recursion
+  components:
+    - type: problem_description
+      text: >
+        For the following questions, please rate how much you agree or disagree with them.
+    - type: multiple_choice
+      name: cond_write_code
+      text: I could write code for a "conditional tree recursion" problem if I had a lot of time.
+      choices:
+        - "1 (not at all able)"
+        - "2"
+        - "3"
+        - "4"
+        - "5 (very able)"
+    - type: multiple_choice
+      name: cond_read_code
+      text: I could understand what a program does that uses "conditional tree recursion".
+      choices:
+        - "1 (not at all able)"
+        - "2"
+        - "3"
+        - "4"
+        - "5 (very able)"
+    - type: multiple_choice
+      name: cond_help_friend
+      text: I could explain "conditional tree recursion" to another student in CS61A to help them better understand it.
+      choices:
+        - "1 (not at all able)"
+        - "2"
+        - "3"
+        - "4"
+        - "5 (very able)"
+- game_winner_tree_recursion:
+  name: Game-Winner Tree Recursion
+  components:
+    - type: problem_description
+      text: >
+        For the following questions, please rate how much you agree or disagree with them.
+    - type: multiple_choice
+      name: game_write_code
+      text: I could write code for a "game-winner tree recursion" problem if I had a lot of time.
+      choices:
+        - "1 (not at all able)"
+        - "2"
+        - "3"
+        - "4"
+        - "5 (very able)"
+    - type: multiple_choice
+      name: game_read_code
+      text: I could understand what a program does that uses "game-winner tree recursion".
+      choices:
+        - "1 (not at all able)"
+        - "2"
+        - "3"
+        - "4"
+        - "5 (very able)"
+    - type: multiple_choice
+      name: game_help_friend
+      text: I could explain "game-winner tree recursion" to another student in CS61A to help them better understand it.
+      choices:
+        - "1 (not at all able)"
+        - "2"
+        - "3"
+        - "4"
+        - "5 (very able)"

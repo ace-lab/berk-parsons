@@ -1,0 +1,74 @@
+problem_name: abbreviation
+
+algorithm_description:
+
+
+
+problem_description: |
+  <h4>Problem</h4>
+  In this problem, we'll be working to create an Abbreviation class to help
+  find and shorten words.<br><br>
+
+  We'll work on a <code>complete</code> method. The <code>Abbreviation</code>
+  object is constructed with a list of full words. Below is the docstring for
+  <code>complete</code><br><br>
+
+  <pre><code>
+  def complete(self, cmnd):
+    """The member of my word list that the string cmnd
+    abbreviates, if it exists and is unique. cmnd abbreviates
+    a string S in my word list if cmnd == S, or cmnd is a
+    prefix of S and of no other command in my word list.
+    Returns an error string if there is no such S.
+
+    >>> a = Abbreviation(['continue', 'catch', 'next',
+    ...                   'st', 'step', 'command'])
+    >>> a.complete('ne')
+    'next'
+    >>> a.complete('co')
+    'error: not unique'
+    >>> a.complete('st')
+    'st'
+    >>> a.complete('foo')
+    'error: foo not found'
+    """
+  </code></pre>
+
+initial_code: >
+  def coin_winner(row1, row2, curr, other):
+
+code_lines: |
+  class Abbreviation:#0given
+  def __init__(self, full_words):#1given
+  self.__words = list(full_words)#2given
+  def complete(self, cmnd):#1given
+  found_word = None
+  for word in self.__words:
+  if cmnd == word:
+  return word
+  if cmnd == word[:len(cmnd)]:
+  if found_word is not None:
+  return 'error: not unique'
+  found_word = word
+  if found_word is None:
+  return 'error: {0} not found'.format(cmnd)
+  return found_word
+
+solution: |
+
+test_code: |
+  abbreviation = Abbreviation(['continue', 'catch', 'next', 'st', 'step', 'command'])
+  def test_complete(cmnd):
+    return abbreviation.complete(cmnd)
+
+test_fn: test_complete
+
+test_cases:
+  - fn_args: ['ne']
+    expected: 'next'
+  - fn_args: ['co']
+    expected: 'error: not unique'
+  - fn_args: ['st']
+    expected: 'st'
+  - fn_args: ['foo']
+    expected: 'error: foo not found'

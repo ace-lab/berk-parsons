@@ -1,0 +1,51 @@
+problem_name: maze_paths
+
+algorithm_description:
+
+
+
+problem_description: |
+  <h4> Problem </h4>
+  Consider an insect in an M by N grid. The insect starts at the bottom left corner, (0, 0),
+  and wants to end up at the top right corner, (M-1, N-1). The insect is only capable of
+  moving right or up. Write a function paths that takes a grid length and width and returns
+  the number of different paths the insect can take from the start to the goal. (There is a
+  closed-form solution to this problem, but try to answer it procedurally using recursion.)
+  <br><br>
+  For example, a 2x2 grid has a total of 2 ways for the insect to move from start to goal:
+  right, up or up, right
+
+initial_code: >
+  def paths(m, n):
+
+code_lines: |
+  def paths(m, n): #0given
+  if m == 1 or n == 1:
+  return 1
+  return paths(m-1, n) + paths(m, n-1)
+
+solution: |
+  def paths(m, n):
+    if m == 1 or n == 1:
+      return 1
+    return paths(m-1, n) + paths(m, n-1)
+
+
+test_code: pass
+
+test_fn:
+  paths
+
+test_cases:
+  - fn_args: [2, 2]
+    expected: 2
+  - fn_args: [3, 3]
+    expected: 6
+  - fn_args: [1, 1000]
+    expected: 1
+  - fn_args: [1000, 1]
+    expected: 1
+  - fn_args: [5, 2]
+    expected: 5
+  - fn_args: [5, 3]
+    expected: 15

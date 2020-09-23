@@ -1,0 +1,44 @@
+problem_name: sum_digits
+
+
+problem_description: |
+  Write a recursive function <code>sum_digits(num)</code>
+  that returns the sum of the digits of <code>num</code>.
+
+  <br><br>
+  <pre><code>
+  >>> sum_digits(273) # 2 + 7 + 3 == 12
+  12
+  </code></pre>
+
+code_lines: |
+  def sum_digits(num): #0given
+  if !BLANK:
+  return num
+  return sum_digits(!BLANK) + !BLANK
+
+solution: |
+  def sum_digits(num):
+      # If the number is less than 10, it only has
+      # one digit.
+      if num < 10:
+          return num
+      # Otherwise, add the current right-most digit to
+      # the sum of digits of the rest of the number.
+      return sum_digits(num // 10) + num % 10
+
+test_fn: sum_digits
+
+test_cases:
+  - fn_args: [273]
+    expected: 12
+  - fn_args: [123456]
+    expected: 21
+
+hidden_tests:
+  - fn_args: [654321]
+    expected: 21
+  - fn_args: [340125]
+    expected: 15
+  - fn_args: [1111111111111111]
+    expected: 16

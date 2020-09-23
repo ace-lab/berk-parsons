@@ -1,0 +1,73 @@
+problem_name: dfs_impl_id2
+
+algorithm_description:
+  <h4> DFS (Depth-First Search) </h4>
+  Suppose we have a graph of nodes and edges. Depth-First Search (DFS) is an
+  algorithm that visits each of these nodes in a particular order. It
+  starts at an arbitrary node in the graph, and recursively explores as far
+  as possible along each branch before backtracking. This is in contrast to
+  breadth-first search, which explores all 1st-level neighbors of the initial
+  node before any 2nd-level neighbors.<br><br>
+
+  As the DFS algorithm traverses the graph, it keeps track of when a node is
+  <code>entered</code>, or first visited, and when it is <code>exited</code>,
+  once all of its children have been visited.<br><br>
+
+  DFS is often implemented with a helper <code>visit</code> function that is recursively called, though
+  it can also be implemented with a (last-in-first-out) stack.<br><br>
+
+  For example, in the directed graph below, a possible DFS ordering would be <code>
+  Enter A, Enter B, Enter D, Exit D, Exit B, Enter C, Exit C, Exit A,
+  Enter E, Exit E</code><br><br>
+
+  <img src="/static/images/graph5.png" />
+  <figcaption class="small text-muted">Created with https://www.nctm.org/Classroom-Resources/Illuminations/Interactives/Graph-Creator/</figcaption>
+
+
+
+problem_description: |
+  <h4> Problem </h4>
+  Write code to implement depth first search on a list of <code>Nodes</code>,
+  described below. Your algorithm should <code>setEnter()</code> and
+  <code>setExit()</code> when appropriate.
+  If you have fully explored all descendants of a node but have not fully
+  explored the graph, you should continue by exploring an unvisited node.
+  By doing so, all nodes will be visited by the completion of the algorithm
+  <br><br>
+
+  For this question, you can assume the graph is directed.<br><br>
+
+  <h4> Technical Specification </h4>
+  <pre>
+    class Node:
+      def getNeighbors():
+        "Returns a list of Nodes representing neighboring nodes"
+
+      def getEnter():
+        "Returns the value of self.entered. This is initially set to False"
+
+      def getExit():
+        "Returns the value of self.exited. This is initially set to False"
+
+      def setEnter():
+        "sets self.entered to True"
+
+      def setExit():
+        "Sets self.exited to True"
+  </pre>
+  <h4>Reading test cases</h4>
+  The first argument is a list of all the nodes. The second argument is a list
+  of directed edges in the form <code>[src_node, target_node]</code>.
+solution: |
+  def dfs(graph):
+    for node in graph:
+      if not node.getExit():
+        visit(node)
+
+  def visit(node):
+    node.setEnter()
+    for neighbor in node.getNeighbors():
+      if node.getEnter():
+        continue
+      visit(neighbor)
+    node.setExit()

@@ -1,0 +1,82 @@
+problem_name: binary_search_2_blanks
+
+algorithm_description:
+  <h4> Binary Search </h4>
+  Suppose we’re searching for an element in a sorted array.
+  If an array <code>arr</code> is sorted, we can check the midpoint of the sequence against the <code>target</code> element we’re searching
+  for. Because the array is sorted, we can eliminate half of the sequence from further consideration as we continue our
+  search by updating the upper or lower bound to the midpoint. The binary search algorithm repeats this procedure,
+  halving the size of the remaining portion of the sequence each time.
+  <br>
+  <img id="gif-desc" src="/static/images/binary_search.gif"/>
+  <figcaption class="small text-muted"> Gif credits to mathworks.com </figcaption>
+  <button type="button" class="btn btn-primary"
+  onclick=document.getElementById('gif-desc').src='/static/images/binary_search.gif'>Restart gif</button>
+
+
+
+problem_description: |
+  Suppose a sorted array has been rotated. That is, it was cut into two
+  pieces and the piece on the end was put in front, e.g. <code>[12,13,2,4,7,9]</code>.
+  In this case, we would say that the "pivot" is at index <code>1</code>, where the end of the sorted
+  array is represented.<br><br>
+  We will write a program that finds the index of the pivot. We can use something like binary
+  search to find this effectively, with a few modifications.<br><br>
+  Firstly, we will use different conditions to determine if we'll continue
+  the search on the left or right.<br><br>
+  Also, there are a couple changes needed because we're looking for a boundary between
+  numbers, not for a target explicitly.
+  <br><br>
+  <pre>
+  >>> binary_search_pivot([12,13,2,4,7,9])
+  1
+  >>> binary_search_pivot([7,9,12,13,2,4])
+  3
+  >>> binary_search_pivot([2,4,7,9,12,13])
+  5
+  </pre>
+
+initial_code: |
+  def binary_search_pivot(arr):
+code_lines: |
+  def binary_search_pivot(arr): #0given
+  low = 0
+  high = len(arr) - 1
+  while !BLANK:
+  mid = (low + high)//2
+  if arr[!BLANK] !BLANK arr[!BLANK + 1]:
+  return mid
+  elif arr[!BLANK] !BLANK arr[!BLANK]:
+  return high
+  elif arr[!BLANK] !BLANK arr[!BLANK]:
+  low = mid + 1
+  elif arr[!BLANK] !BLANK arr[!BLANK]:
+  high = mid - 1
+
+# TODO: Fix indents
+solution: |
+  def binary_search_pivot(arr):
+    low = 0
+    high = len(arr) - 1
+    while low <= high:
+      mid = (low + high)//2
+      if arr[mid] > arr[mid + 1]:
+        return mid
+      elif arr[low] < arr[high]:
+        return high
+      elif arr[mid] > arr[high]:
+        low = mid + 1
+      elif arr[low] > arr[mid]:
+        high = mid - 1
+
+test_fn: binary_search_pivot
+
+test_cases:
+  - fn_args: [[12,13,2,4,7,9]]
+    expected: 1
+  - fn_args: [[7,9,12,13,2,4]]
+    expected: 3
+  - fn_args: [[2,4,7,9,12,13]]
+    expected: 5
+  - fn_args: [[11, 13, 2, 3, 5, 6, 8, 9, 10]]
+    expected: 1

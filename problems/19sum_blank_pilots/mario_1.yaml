@@ -1,0 +1,73 @@
+problem_name: mario_1
+
+algorithm_description:
+
+
+
+problem_description: |
+  <h4> Problem </h4>
+  Mario needs to jump over a sequence of Piranha plants, represented as an array of
+  1s (no plants) and 0s (plant!). He only moves forward, and he can either step
+  (move forward one space) or jump (move forward two spaces) from each position.
+  How many different ways can Mario traverse a level without stepping or jumping
+  into a Piranha plant? Assume that every level begins with a space (where Mario
+  starts) and ends with a space (where Mario must end up):
+  <br><br>
+  Hint: You can trim the first <code>i</code> characters of a list <code>li</code>
+  by using <code>li[i:]</code>.
+  <br>
+  Hint: You can find the number of elements in a list with the built-in <code>len
+  </code> function by using <code>len(li)</code>
+  <br><br>
+  <code><pre>
+  def mario(mario_map):
+    pass
+
+  >>> mario([1,1,1]) # jump or step, step
+  2
+  >>> mario([1,0,1,0,1]) # jump, jump
+  1
+  >>> mario([1,1,0,1,0,1]) # step, jump, jump
+  1
+
+  <pre><code>
+  def mario
+
+initial_code: >
+  def mario(mario_map):
+
+code_lines: |
+  def mario(mario_map): #0given
+  if len(mario_map) <= 1:
+  return int(mario_map == [1])
+  if mario_map[0] == 0:
+  return 0
+  return mario(mario_map[1:]) + mario(mario_map[2:])
+
+solution: |
+  def mario(mario_map):
+    if len(mario_map) <= 1:
+      return int(mario_map == [1])
+    if mario_map[0] == 0:
+      return 0
+    return mario(mario_map[1:]) + mario(mario_map[2:])
+
+test_fn: mario
+
+test_cases:
+  - fn_args: [[1,1,1]]
+    expected: 2
+  - fn_args: [[1,0,1,0,1]]
+    expected: 1
+  - fn_args: [[1,1,0,1,0,1]]
+    expected: 1
+  - fn_args: [[1,0,1,0,1,1]]
+    expected: 1
+  - fn_args: [[1,1,1,0,1,0,1]]
+    expected: 2
+  - fn_args: [[1,0,1,0,1,0,1,0,0,1]]
+    expected: 0
+  - fn_args: [[1,1,1,1,0,1,0,1,1,1,1,0,1,1,1,1,0,1,0,1]]
+    expected: 27
+  - fn_args: [[1,1,1,1,1,1]]
+    expected: 8

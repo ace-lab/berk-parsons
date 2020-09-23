@@ -1,0 +1,91 @@
+problem_name: coin_game_2
+
+algorithm_description:
+
+
+
+problem_description: |
+  <h4>Problem</h4>
+  Alice and Bob are playing a game with coins on a table in a single row. In this game,
+  they take turns removing 1-3 coins from the row.
+  Whoever takes the last coin on the table wins the game. For example, if there are 2 coins
+  on the table and Alice starts, Alice could take both coins to win. However,
+  if Alice took only one coin, Bob would take the remaing one coin and win.<br><br>
+
+  Implement <code>coin_winner(num_coins, current_player, other_player)</code>, which takes in the number of coins
+  as an integer and the starting player and other player as strings, and returns who would win
+  <b>if both players played optimally</b>. For example, if there were 2 coins on the table, the starting player
+  would take all 2; if they took just one, they would lose when their opponent took the other one.
+
+  <br><br>
+  <pre><code>
+  >>> coin_winner(1, 'Alice', 'Bob')  # Alice takes 1 coin
+  'Alice'
+  >>> coin_winner(3, 'Alice', 'Bob')  # Alice takes 3 coins
+  'Alice'
+  >>> coin_winner(3, 'Bob', 'Alice')  # Bob takes 3 coins
+  'Bob'
+  </code></pre>
+
+  <br><br>
+  <i>Hint:</i> These types of problems can often be solved with a recursive
+  solution. The key observation is as follows: If current_player can make <b>any move
+  </b> such that they will always win from the resulting board, then they
+  have a winning strategy for that board. In this game, one player always
+  has a winning strategy from any board, but not all moves necessarily
+  lead to that winning strategy.<br>
+  <i>Hint:</i> <code>coin_winner</code> should always returns a string.<br>
+
+initial_code: >
+  def coin_winner(num_coins, curr, other):
+
+code_lines: |
+  def coin_winner(num_coins, curr, other): #0given
+  if num_coins <= 3:
+  return curr
+  take_one = coin_winner(num_coins - 1, other, curr)
+  take_two = coin_winner(num_coins - 2, other, curr)
+  take_three = coin_winner(num_coins - 3, other, curr)
+  if take_one == curr or take_two == curr or take_three == curr:
+  return curr
+  return other
+
+solution: |
+  def coin_winner(row1, row2, curr, other):
+    # Base case: If there are no coins left, that means the other
+    # player just took the last coin.
+    if row1 == 0 and row2 == 0:
+      return other
+
+    # Consider taking some number of coins from row 1.
+    for i in range(row1):
+      # If any way of doing this results in winning the game, then curr
+      # has a winning move.
+      if coin_winner(i, row2, other, curr) == curr:
+        return curr
+
+    # Do the same with row 2.
+    for i in range(row2):
+      if coin_winner(row1, i, other, curr) == curr:
+        return curr
+
+    # If the function hasn't returned yet, then all possible moves lead
+    # to other being able to win, so curr has no winning moves.
+    return other
+test_fn: coin_winner
+
+test_cases:
+  - fn_args: [1, 'Alice', 'Bob']
+    expected: 'Alice'
+  - fn_args: [2, 'Alice', 'Bob']
+    expected: 'Alice'
+  - fn_args: [3, 'Alice', 'Bob']
+    expected: 'Alice'
+  - fn_args: [1, 'Bob', 'Alice']
+    expected: 'Bob'
+  - fn_args: [8, 'Alice', 'Bob']
+    expected: 'Bob'
+  - fn_args: [17, 'Alice', 'Bob']
+    expected: 'Alice'
+  - fn_args: [24, 'Alice', 'Bob']
+    expected: 'Bob'

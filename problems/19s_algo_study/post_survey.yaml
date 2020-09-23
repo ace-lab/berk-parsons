@@ -1,0 +1,24 @@
+- intro:
+  name: Pre-Benchmark Demographic Survey
+  components:
+    - type: problem_description
+      text: >
+        Please answer the following question.
+    - type: multiple_choice
+      name: challenging_approach
+      text: How challenging was it to create an approach to the problems compared to three weeks ago?
+      choices:
+        - "1 (significantly less challenging)"
+        - "2"
+        - "3"
+        - "4"
+        - "5 (significantly more challenging)"
+    - type: multiple_choice
+      name: challenging_code
+      text: How challenging was it to write code to the problems compared to three weeks ago?
+      choices:
+        - "1 (significantly less challenging)"
+        - "2"
+        - "3"
+        - "4"
+        - "5 (significantly more challenging)"

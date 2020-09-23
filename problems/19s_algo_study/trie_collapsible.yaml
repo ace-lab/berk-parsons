@@ -1,0 +1,134 @@
+problem_name: trie_collapsible
+
+algorithm_description: |
+  <h4> Trie (Prefix Tree) </h4>
+  Tries are a specific type of tree used to efficiently store and retrieve
+  structured data, such as words. Prefix Trees are a very common type of Trie.
+  Prefix Trees are a tree where every node represents an individual letter
+  (except the root, which represents the start of a word). To add a wordeto
+  a trie, each letter is added one at a time as a child of the previous letter,
+  starting at the root. Then the final letter of the word is marked with a flag
+  to indicate that in completes a word.<br><br>
+
+  The image below represents a prefix tree for the words
+  <code>in, inn, tea, to</code>. In this example, terminal nodes are marked
+  with a blue background. The nodes representing <code>in</code> are
+  highlighted with thicker borders. <br><br>
+
+  <img src="/static/images/tree1.png" />
+  <figcaption class="small text-muted">Created with https://www.draw.io</figcaption>
+
+problem_description: |
+  <h4> Problem </h4>
+  A common optimization of the Prefix Tree is a Collapsible Prefix Tree. The
+  main difference is that edges, instead of representing a single letter, can
+  represent a sequence of letters. In the example above, this would combine
+  the <code>E</code> and <code>A</code> from <code>tea</code> into
+  <code>EA</code>. However,
+  the <code>T</code> would not be collapsed, as it has multiple children. The
+  first <code>N</code> would not be collapsed either, as it represents the
+  end of <code>in</code>.<br><br>
+
+  For this problem, you will be implementing the <code>addWord(word)</code>
+  method of the <code>CollapsibleTree</code> class to implement a Collapsible
+  Prefix Tree as described above.<br><br>
+
+  <h4> Technical Specification </h4>
+
+  All characters will be lowercase. <code>Nodes</code> will have a dictionary
+  of <code>children</code> and an <code>end_of_word</code> property.
+
+  <br><br><pre>
+    class Node:
+      hasChild(str):
+        "Returns True if the node has a child matching str"
+
+      getChild(str):
+        "Returns a Node if the node has a child matching str, returns None otherwise"
+
+      allChildren():
+        "Returns a dictionary which maps strings to Nodes representing the current Node's children"
+
+      popChild(str):
+        "If a child matches str, return that child Node and remove it from this Node's list of children. Otherwise, returns None"
+
+      addChild(str):
+        "Creates a new Node as a child of this and sets it to str. Returns None if a child already exists matching str"
+
+      isEndOfWord():
+        "Returns true if this node represents the end of a word"
+
+    class PrefixTree:
+      getRoot():
+        "Returns the root of the PrefixTree"
+  </pre>
+
+initial_code: |
+  # class PrefixTree:
+  def addWord(self, word):
+    # self is a reference to the current PrefixTree object.
+    # word is a string.
+    root = self.getRoot()
+solution: |
+  """I slightly messed up the given API, which would have made this much more
+  challenging, so sorry about that. I forgot to expose setEndOfWord() and
+  addChildNode(), which would allow us to add a child with an existing node.
+
+  That out of the way, this is generally solved by traversing the Trie and adding
+  or splitting nodes when necessary. The main complication compared to a classic
+  Trie is that we know must consider turning a single edge representing multiple
+  letters into a new node with 2 children. Below is the general approach used
+  in the code.
+
+  While we haven't fully consumed the new word being added:
+    Check if there are any children edges that start with the next letters
+    we'll use. In this case, we'll either:
+      - Traverse that edge fully and continue on handling the word.
+      - Traverse that edge partially, and insert a node in the middle
+        of that path where the first difference is. e.g., if adding
+        'tea' after 'to' is already present, a node would be inserted
+        between 't' and 'o', and then 'ea' would be added as a child so
+        that 't'->'ea', and 't'->'o' are both represented."""
+
+  def addWord(self, word):
+    curr_node = self.getRoot()
+    # We'll keep updating and consuming word as we traverse the tree.
+    while len(word):
+      for s, child in curr_node.allChildren().items():
+        if s[0] == word[0]:
+          max_matching_prefix_i = 1
+          while True:
+            if s[:max_matching_prefix_i+1] != word[:max_matching_prefix_i+1]:
+              break
+            max_matching_prefix_i += 1
+          # Update word to remove the matched letters that we will immediately
+          # traverse.
+          word = word[max_matching_prefix_i:]
+          if max_matching_prefix_i == len(s):
+            # In this case we need to mark the child as EndOfWord as the while
+            # loop will terminate.
+            if max_matching_prefix_i == len(word):
+              child.setEndOfWord()
+            # Otherwise, we can simply continue traversing the tree.
+            curr_node = child
+            break
+          # If this matching prefix consumed the rest of the word
+          # In this case we'll need to add a split in the middle of this
+          # path to lead to the new word or the old word.
+          # rip out the old child, and replace it with a new one
+          # and add a child. If word had not been completed,
+          # in the next iteration we'll add a child as appropriate.
+          old_child = curr_node.popChild(s)
+          new_child = curr_node.addChild(s[:max_matching_prefix_i])
+          new_child.addChildNode(s[max_matching_prefix_i:], old_child)
+          curr_node = new_child
+          if not len(word):
+            new_child.setEndOfWord()
+          break
+      else:
+        # If no match was found, add a new child to this node to finish
+        # off the word
+        node = curr_node.addChild(word)
+        node.setEndOfWord()
+        break
+

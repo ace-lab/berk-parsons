@@ -1,0 +1,310 @@
+problem_name: huffman_impl
+
+algorithm_description: |
+  <h4> Huffman Tree </h4>
+  A Huffman Code is an optimal prefix code that can be used for lossless
+  data compression. In other words, it can efficiently convert characters
+  to compact the size of a message.<br><br>
+
+  <i>Extra background info</i><br>
+  For example, on a standard computer, any letter in English is represented
+  by 8 bits. However, if we only considered lower-case letters, we'd only
+  need 5 bits (allowing for 32 letters, though we only need 26). If the
+  sender and receiver of a message agreed that this would be used, it could
+  make messages 5/8 the size.<br><br>
+
+  A Huffman Code is more general and often more efficient than the method
+  described above. For example, 'e' is much more common letter than 'x'
+  in English. So it would be great to encode 'e' with less than 5 bits since
+  it occurs so often, even if that means 'x' ends up taking more than 5
+  bits. But, that might cause ambiguity, since now there's no
+  clear "space" between characters. We won't get into the proof here, but
+  Huffman coding allows for an unambiguous compression and decompression
+  even though characters are represented by different lengths.<br>
+  <i>End extra background info</i><br><br>
+
+  A Huffman Code requires that you have a frequency for each letter. It
+  begins by creating nodes for each letter and adds them to a list (or
+  priority queue for efficiency). Then, in each iteration, it
+  will remove two nodes from the list and put a new one back, following
+  the steps below.
+  <ol>
+    <li>Take the 2 nodes in the list with the lowest frequencies</li>
+    <li>Create a new node with each of them as children (combining them into a single tree)</li>
+    <li>Set the frequency of the new node to be the sum of the frequencies of the 2 nodes from step 1</li>
+    <li>Insert the new node back into the list (Note that the two nodes from Step 1 are no longer in the list)</li>
+  </ol>
+  By doing this repeatedly, the list ends up with a
+  single node that is the root of a tree. In the image below, (a), (b), ..., (e) each represent
+  one iteration of the sequence above. The nodes that are connected to the horizontal line for
+  each of those are the nodes that are currently in the list being selected from. Nodes not
+  touching that line, e.g. 'E' in iteration (b), can no longer be selected from the list for
+  future iterations. In this image, the steps are ordered as follows:
+  <ol>
+    <li>Take 'E' and 'D', the lowest frequency nodes, combine them, and add back a new node ('DE') with frequency 11.</li>
+    <li>Take 'C' and 'B', now the lowest frequency nodes, combine them, and add back a new node ('BC') with frequency 13.</li>
+    <li>Take 'DE' and 'BC', now the lowest frequency nodes, combine them, and add back a new node ('BCDE') with frequencey 24.</li>
+    <li>Take 'A' and 'BCDE', now the lowest frequency nodes, combine them, and add back a final new node ('ABCDE') with frequency 39.</li>
+  </ol>
+
+  <img src="/static/images/huffman1.png" />
+  <figcaption class="small text-muted">By Andreas.Roever, CC BY-SA 3.0, https://commons.wikimedia.org/w/index.php?curid=3000007</figcaption>
+  <br>
+  Finally, the tree shown above can be used to encode the message. To encode a letter, we follow the path from
+  the root of the tree to that letter. Whenever we follow the left child, we add a <code>0</code> to the representation
+  of the character. Whenever we follow the right child, we add a <code>1</code>. For example, <code>A</code> would be
+  encoded as <code>0</code>, while <code>C</code> would be coded as <code>101</code>
+
+
+
+problem_description: |
+  <h4> Problem </h4>
+  Write code that creates a Huffman Tree, which is used for a Huffman Code.
+  Your function will receive two arguments. The first will be a dictionary
+  (or hashmap) of characters to their frequency for the Huffman code. The
+  second will be a message to encode. Your function should return the
+  encoded message. For our purposes, the encoded message will be a
+  string of '0's and '1's, so you won't be working with bits directly.<br><br>
+
+  <b>For consistency, your function should always put the less frequent of
+  the two nodes as the right child, and the more frequent as the left.</b>
+  The image above follows this except the final step <code>(e)</code>, where
+  <code>A</code> should be on the right and the other subtree should be on the left.
+  You can assume that there will never be a tie in frequencies.<br><br>
+
+  The <code>Node</code> and <code>NodeList</code>
+  classes as described below are already implemented for you.
+  An explicit <code>Tree</code> class is not necessary for this
+  problem.<br><br>
+
+  <h4> Technical Specification </h4>
+  <pre>
+    class Node:
+      def setLabel(str):
+        "Sets the label of this node to str"
+
+      def setFrequency(freq):
+        "Sets the frequency of this node to freq"
+
+      def getFrequency(freq):
+        "Gets the frequency of this node"
+
+      def addLeftChild(child_node):
+        "Adds child_node as the left child of this Node"
+
+      def addRightChild(child_node):
+        "Adds child_node as the right child of this Node"
+
+      def pathToStr(str):
+        "Returns a list of strings 'Left' or 'Right', representing the path from this Node to the node with label str. Returns None if there is no path."
+
+    class NodeList:
+      def size():
+        "Returns the number of nodes at the top-level of this NodeList"
+
+      def popTwoLeastFrequent():
+        "Removes the two nodes with lowest frequencies from this NodeList and returns them as a tuple. It will return the lowest frequnecy one first."
+
+      def insertNode(node):
+        "Adds node to this NodeList"
+  </pre>
+  <h4>Reading test cases</h4>
+  The first argument is a dictionary mapping letters to their frequencies. The
+  second argument is the message to be encoded.<br><br>
+  <h4>Starting Code</h4>
+    <pre>def huffman_encode(letters_to_frequency, message):
+      # letters_to_frequency is a dictionary of characters to integers, message is a string
+      node_list = NodeList()</pre>
+
+initial_code: |
+  def huffman_encode(letters_to_frequency, message):
+  	node_list = NodeList()
+
+code_lines: |
+  def huffman_encode(letters_to_frequency, message): #0given
+  node_list = NodeList() #1given
+  for letter, freq in letters_to_frequency.items():
+  node = Node()
+  node.setLabel(letter)
+  node.setFrequency(freq)
+  node_list.insertNode(node)
+  node = None
+  while node_list.size() > 1:
+  min_node, next_min_node = node_list.popTwoLeastFrequent()
+  node = Node()
+  node.addRightChild(min_node)
+  node.addLeftChild(next_min_node)
+  freq = min_node.getFrequency() + next_min_node.getFrequency()
+  node.setFrequency(freq)
+  node_list.insertNode(node)
+  output = ''
+  for chr in message:
+  path = node.pathToStr(chr)
+  for edge in path:
+  if edge == 'Left':
+  output += '0'
+  else:
+  output += '1'
+  return output
+
+solution: |
+  def huffman_encode(letters_to_frequency, message):
+    # letters_to_frequency is a dictionary of characters to integers, message is a string
+    node_list = NodeList()
+    # Add every letter to the NodeList to begin
+    for letter, freq in letters_to_frequency.items():
+      node = Node()
+      node.setLabel(letter)
+      node.setFrequency(freq)
+      node_list.insertNode(node)
+
+    node = None # Not strictly necessary in Python, but makes explicit that node
+                # will exist outside the scope of the while loop.
+    while node_list.size() > 1:
+      # Step 1: Take the 2 nodes in the list with the lowest frequencies
+      min_node, next_min_node = node_list.popTwoLeastFrequent()
+      # Step 2: Create a new node with each of them as children.
+      node = Node()
+      # Make sure we add the smallest frequency node as the right child.
+      node.addRightChild(min_node)
+      node.addLeftChild(next_min_node)
+      # Step 3: Set the frequency of the new node to be the sum of their frequencies.
+      freq = min_node.getFrequency() + next_min_node.getFrequency()
+      node.setFrequency(freq)
+      # Step 4: Insert the new node back into the list.
+      node_list.insertNode(node)
+
+    # Construct the encoded message.
+    output = ''
+    for chr in message:
+      path = node.pathToStr(chr)
+      for edge in path:
+        # Append the appropriate character based on which child was followed.
+        if edge == 'Left':
+          output += '0'
+        else:
+          output += '1'
+    return output
+
+test_code: |
+  class Node:
+    def __init__(self):
+      self.label = ''
+      self.path = []
+      self.frequency = 0
+      self.left_child = None
+      self.right_child = None
+
+    def __repr__(self):
+      return "Path to node {}: {}".format(self.label, self.path)
+
+    def setLabel(self, label):
+      self.label = label
+
+    def setFrequency(self, freq):
+      self.frequency = freq
+
+    def getFrequency(self):
+      return self.frequency
+
+    def addLeftChild(self, child_node):
+      if self.left_child:
+        raise Exception("Node {} already has a left child {} but is trying to add new one {}".format(
+          self.label, self.left_child.label, child_node.label))
+      self.left_child = child_node
+      self.left_child.path = ['Left'] + self.left_child.path
+
+    def addRightChild(self, child_node):
+      if self.right_child:
+        raise Exception("Node {} already has a right child {} but is trying to add new one {}".format(
+          self.label, self.right_child.label, child_node.label))
+      self.right_child = child_node
+      self.right_child.path = ['Right'] + self.right_child.path
+
+    def isLeaf(self):
+      if self.left_child and not self.right_child:
+        raise Exception("Node {} has a left child {} but no right child".format(node.label, node.left_child.label))
+      if not self.left_child and self.right_child:
+        raise Exception("Node {} has a right child {} but no left child".format(node.label, node.right_child.label))
+      return not self.left_child and not self.right_child
+
+    def pathToStr(self, str):
+      def visit(node, path, str):
+        if node.label == str:
+          return path
+        if node.isLeaf():
+          return None
+        return visit(node.left_child, path + ['Left'], str) or visit(node.right_child, path + ['Right'], str)
+
+      return visit(self, [], str)
+
+  class NodeList:
+    def __init__(self):
+      self.nodes = []
+
+    def size(self):
+      return len(self.nodes)
+
+    def insertNode(self, node):
+      self.nodes.append(node)
+
+    def popTwoLeastFrequent(self):
+      min_node = min(self.nodes, key=lambda node: node.frequency)
+      self.nodes.remove(min_node)
+      next_min_node = min(self.nodes, key=lambda node: node.frequency)
+      self.nodes.remove(next_min_node)
+      return min_node, next_min_node
+
+  def true_huffman_encode(letters_to_frequency, message):
+    node_list = NodeList()
+
+    for letter, freq in letters_to_frequency.items():
+      node = Node()
+      node.setLabel(letter)
+      node.setFrequency(freq)
+      node_list.insertNode(node)
+
+    node = None # Not strictly necessary in Python
+    while node_list.size() > 1:
+      min_node, next_min_node = node_list.popTwoLeastFrequent()
+      node = Node()
+      node.addLeftChild(next_min_node)
+      node.addRightChild(min_node)
+      freq = min_node.getFrequency() + next_min_node.getFrequency()
+      node.setFrequency(freq)
+      node_list.insertNode(node)
+
+    output = ''
+    for chr in message:
+      path = node.pathToStr(chr)
+      for edge in path:
+        if edge == 'Left':
+          output += '0'
+        else:
+          output += '1'
+    return output
+
+  def huffman_encode_test(letters_to_frequency, message):
+    true_out = true_huffman_encode(letters_to_frequency, message)
+    out = huffman_encode(letters_to_frequency, message)
+    if out != true_out:
+      return "Expected encoded message {}, but received {}".format(true_out, out)
+    return True
+
+test_fn: huffman_encode_test
+
+test_cases:
+  - fn_args: [{'a': 15, 'b': 7, 'c': 6, 'd': 5, 'e': 4}, 'a']
+    expected: True
+  - fn_args: [{'a': 15, 'b': 7, 'c': 6, 'd': 5, 'e': 4}, 'b']
+    expected: True
+  - fn_args: [{'a': 15, 'b': 7, 'c': 6, 'd': 5, 'e': 4}, 'c']
+    expected: True
+  - fn_args: [{'a': 15, 'b': 7, 'c': 6, 'd': 5, 'e': 4}, 'd']
+    expected: True
+  - fn_args: [{'a': 15, 'b': 7, 'c': 6, 'd': 5, 'e': 4}, 'e']
+    expected: True
+  - fn_args: [{'a': 15, 'b': 7, 'c': 6, 'd': 5, 'e': 4}, 'abcdedcba']
+    expected: True
+  - fn_args: [{'a': 1, 'b': 2, 'c': 4, 'd': 8, 'e': 11, 'f': 13, 'g': 17, 'h': 19, 'i': 23, 'j': 29, 'k': 31, 'l': 37, 'm': 41}, 'abcdefghijklm']
+    expected: True

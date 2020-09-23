@@ -1,0 +1,233 @@
+problem_name: trie_prefix_suffix
+
+algorithm_description:
+  <h4> Trie (Prefix Tree) </h4>
+  Tries are a specific type of tree used to efficiently store and retrieve
+  structured data, such as words. Prefix Trees are a very common type of Trie.
+  Prefix Trees are a tree where every node represents an individual letter
+  (except the root, which represents the start of a word). To add a wordeto
+  a trie, each letter is added one at a time as a child of the previous letter,
+  starting at the root. Then the final letter of the word is marked with a flag
+  to indicate that in completes a word.<br><br>
+  The image below represents a prefix tree for the words
+  <code>in, inn, tea, to</code>. In this example, terminal nodes are marked
+  with a blue background. The nodes representing <code>in</code> are
+  highlighted with thicker borders. <br><br>
+  <img src="/static/images/tree1.png" />
+  <figcaption class="small text-muted">Created with https://www.draw.io</figcaption>
+
+
+
+problem_description: |
+  <h4> Problem </h4>
+  Tries are very powerful because they provide quick prefix lookups. They can
+  also be effective when used in creative ways, which we'll explore in this
+  next problem.<br><br>
+
+  For this problem, write a function that takes a list of words, a prefix
+  (start of a word) and a suffix (end of a word), and returns any words
+  in the list of words that match that prefix and suffix. You can do this
+  efficiently with a creative use of a Trie.<br><br>
+
+  For example, <code>prefix_suffix_lookup(['in', 'inn', 'tea', 'to'], 't', 'a')</code>
+  would return <code>['tea']</code>, since <code>tea</code> starts with the prefix
+  <code>t</code> and ends with the suffix <code>a</code>. Note that prefixes and
+  suffixes can be more than one letter long. Also, the prefix and suffix can overlap
+  (that is, <code>prefix_suffix_lookup(['in', 'inn', 'tea', 'to'], 'in', 'nn')</code>
+  would return <code>['inn']</code>).<br><br>
+
+  A space and time efficient solution to this problem uses a <code>Trie</code>.
+  However, instead of adding the words themselves, it adds a modified form of them.
+  One version will involve adding multiple entries for every word (instead of a standard
+  prefix tree, which adds only one, the word itself). You may find the following line
+  of code helpful (or something like it): <code>entry = word[i:] + '#' + word</code><br><br>
+
+  You can assume all letters will be lowercase and in the English alphabet.<br><br>
+
+  This question is possible to get correct without a Trie (e.g. with a dictionary/
+  hashmap), but you should try to use the Trie in your solution<br><br>
+
+  The <code>Trie</code> class as described below is
+  already implemented for you.<br><br>
+
+  <h4> Technical Specification </h4>
+  <pre>
+    class Trie:
+      def addWord(str):
+        "Adds str to this Trie"
+
+      def isPrefix(str):
+        "Returns True if str is in this Trie, False otherwise"
+
+      def isWord(str):
+        "Returns True if str is in this Trie and is a word, False otherwise"
+
+      def wordsFromPrefix(str):
+        "Returns a list of all words in this Trie that begin with the prefix str. If the prefix is not in the Trie, returns []"
+        "For example, in the Trie above, wordsFromPrefix('t') would return ['tea', 'to']."
+
+  </pre>
+  <h4>Reading test cases</h4>
+  The first argument is the list of words in this custom dictionary. The second argument
+  is the prefix being used for lookup, and the third argument is the suffix being used
+  for lookup.<br><br>
+  <h4>Starting Code</h4>
+  <pre>def prefix_suffix_lookup(valid_words, prefix_query, suffix_query):
+      trie = Trie()</pre>
+
+initial_code: |
+  def prefix_suffix_lookup(valid_words, prefix_query, suffix_query):
+  	# valid_words is a list of strings, prefix_query and suffix_query are both string
+  	trie = Trie()
+
+code_lines: |
+  def trie_entries(word):
+  entries = []
+  for i in range(len(word) + 1):
+  entry = word[i:] + '#' + word
+  entries.append(entry)
+  return entries
+  def prefix_suffix_lookup(valid_words, prefix_query, suffix_query): #0given
+  # valid_words is a list of strings, prefix_query and suffix_query are both string #1given
+  trie = Trie() #1given
+  for word in valid_words:
+  entries = trie_entries(word)
+  for entry in entries:
+  trie.addWord(entry)
+  word_matches = trie.wordsFromPrefix(suffix_query + '#' + prefix_query)
+  for i in range(len(word_matches)):
+  word = word_matches[i]
+  word_matches[i] = word.split('#')[1]
+  return word_matches
+
+solution: |
+  # Helper function for "encrypting" words so that they're convenient for the trie.
+  def trie_entries(word):
+    entries = []
+    # For every possible suffix of the word, encode it as "suffix#word". This means
+    # that looking up "suffix#prefix" in the Trie will result in a smaller tree
+    # which contains all words matching that suffix and prefix.
+    # If this is still confusing, it's because "suffix#word" is also
+    # "suffix#prefixREST_OF_WORD"
+    for i in range(len(word) + 1):
+      entry = word[i:] + '#' + word
+      entries.append(entry)
+    return entries
+
+  def prefix_suffix_lookup(valid_words, prefix_query, suffix_query):
+    # valid_words is a list of strings, prefix_query and suffix_query are both string
+    trie = Trie()
+    # Add specialized entries to the Trie for easier lookup.
+    for word in valid_words:
+      entries = trie_entries(word)
+      for entry in entries:
+        trie.addWord(entry)
+
+    # Get all the words matching the prefix and suffix, but still in the form
+    # "suffix#word"
+    word_matches = trie.wordsFromPrefix(suffix_query + '#' + prefix_query)
+    # For each of these, extract just word
+    for i in range(len(word_matches)):
+      word = word_matches[i]
+      word_matches[i] = word.split('#')[1]
+    return word_matches
+
+test_code: |
+  used_trie = False
+
+  class Node:
+    def __init__(self, label):
+      self.label = label
+      self.end_of_word = False
+      self.children = {}
+
+    def __repr__(self):
+      return "Path to node: {}".format(self.label)
+
+    def hasChild(self, chr):
+      return chr in self.children
+
+    def getChild(self, chr):
+      return self.children.get(chr, None)
+
+    def childrenDict(self):
+      return self.children
+
+    def addChild(self, chr):
+      if len(chr) != 1:
+        raise Exception("Expect all edges in a Trie to be a single character, got '{}'".format(chr))
+      if chr in self.children:
+        raise Exception("{} path is already specified in this Trie".format(self.label + chr))
+      self.children[chr] = Node(self.label + chr)
+
+    def setEndOfWord(self):
+      self.end_of_word = True
+
+    def isEndOfWord(self):
+      return self.end_of_word
+
+  class Trie:
+    def __init__(self):
+      self.root = Node('')
+
+    def getRoot(self):
+      return self.root
+
+    def addWord(self, word):
+      curr_node = self.getRoot()
+      for chr in word:
+        if not curr_node.hasChild(chr):
+          curr_node.addChild(chr)
+        curr_node = curr_node.getChild(chr)
+      curr_node.setEndOfWord()
+
+    def getNode(self, str):
+      curr_node = self.getRoot()
+      for chr in str:
+        curr_node = curr_node.getChild(chr)
+        if not curr_node:
+          return None
+      return curr_node
+
+    def isPrefix(self, str):
+      return bool(self.getNode(str))
+
+    def isWord(self, word):
+      node = self.getNode(word)
+      if not node:
+        return False
+      return node.isEndOfWord()
+
+    def wordsFromPrefix(self, str):
+      global used_trie
+      used_trie = True
+      node = self.getNode(str)
+      if not node:
+        return []
+      def visit(node, words):
+        if node.isEndOfWord():
+          words.append(node.label)
+        for child in node.childrenDict().values():
+          visit(child, words)
+        return words
+      return visit(node, [])
+
+  def prefix_suffix_lookup_test(valid_words, prefix_query, suffix_query, expected_words):
+    their_words = prefix_suffix_lookup(valid_words, prefix_query, suffix_query)
+    if not used_trie:
+      return "Expected your solution to use Trie.wordsFromPrefix()"
+    if len(set(their_words)) != len(set(expected_words)) or set(their_words) != set(expected_words):
+      return "Expected {}, got {}".format(set(expected_words), set(their_words))
+    return True
+
+test_fn: prefix_suffix_lookup_test
+
+test_cases:
+  - fn_args: [['in', 'inn', 'tea', 'to'], 't', 'a', ['tea']]
+    expected: True
+  - fn_args: [['in', 'inn', 'tea', 'to'], 'in', 'nn', ['inn']]
+    expected: True
+  - fn_args: [['in', 'inn', 'tea', 'to'], 'i', 'n', ['in', 'inn']]
+    expected: True
+  - fn_args: [['in', 'inn', 'tea', 'to'], '', '', ['in', 'inn', 'tea', 'to']]
+    expected: True

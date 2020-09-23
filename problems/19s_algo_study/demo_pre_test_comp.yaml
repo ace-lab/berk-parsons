@@ -1,0 +1,40 @@
+- intro:
+  name: Instructions
+  components:
+    - type: problem_description
+      text: >
+        For the following questions, please answer them to the best of your
+        ability. It is not expected that you'll be able to answer all of the
+        questions within the time limit. You will have a maximum of 10 minutes
+        for this section, and can answer the questions in any order. If you 
+        would like to move on before then, you may, but you will be unable to
+        revisit these questions.
+- fizzbuzz:
+  name: FizzBuzz
+  components:
+    - type: problem_description
+      text: >
+        Fizz Buzz is a classic interview question. It returns a list of
+        numbers, but those that are divisible by 3 are replaced with 'fizz',
+        those divisible by 5 are replaced with 'buzz', and those divisible
+        by both are replaced with 'fizzbuzz'
+    - type: problem_description
+      text: >
+        For the following numbers, please enter how they would be rendered by
+        Fizz Buzz.
+    - type: free_form_prompt
+      name: fizzbuzz_9
+      text: "9"
+      ans: fizz
+    - type: free_form_prompt
+      name: fizzbuzz_13
+      text: "13"
+      ans: 13
+    - type: multiple_choice
+      name: fizzbuzz_15
+      text: "15"
+      choices:
+        - fizz 
+        - buzz 
+        - fizzbuzz 
+        - "15"

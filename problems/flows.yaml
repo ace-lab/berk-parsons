@@ -1,0 +1,613 @@
+# Store flow name and flow index inside each session?
+
+flow1:
+  - type: comprehension
+    problem_name: 19s_algo_study/fizz_buzz_comprehension
+  - type: parsons
+    problem_name: 19s_algo_study/fizz_buzz
+  - type: coding
+    problem_name: 19s_algo_study/fizz_buzz
+  - type: solution
+    problem_name: 19s_algo_study/fizz_buzz
+  - type: comprehension
+    problem_name: 19s_early_pilots/binary_search_comprehension
+  - type: parsons
+    problem_name: 19s_algo_study/binary_search_1
+  - type: solution
+    problem_name: 19s_algo_study/binary_search_1
+  - type: coding
+    problem_name: 19s_algo_study/binary_search_2
+  - type: comprehension
+    problem_name: 19s_early_pilots/dijkstras_comprehension
+  - type: coding
+    problem_name: 19s_early_pilots/dijkstras_1
+  - type: solution
+    problem_name: 19s_early_pilots/dijkstras_1
+  - type: coding
+    problem_name: 19s_early_pilots/dijkstras_2
+
+flow2:
+  - type: comprehension
+    problem_name: 19s_algo_study/fizz_buzz_comprehension
+  - type: parsons
+    problem_name: 19s_algo_study/fizz_buzz
+  - type: coding
+    problem_name: 19s_algo_study/fizz_buzz
+  - type: solution
+    problem_name: 19s_algo_study/fizz_buzz
+  - type: comprehension
+    problem_name: 19s_early_pilots/binary_search_comprehension
+  - type: coding
+    problem_name: 19s_algo_study/binary_search_1
+  - type: solution
+    problem_name: 19s_algo_study/binary_search_1
+  - type: coding
+    problem_name: 19s_algo_study/binary_search_2
+  - type: comprehension
+    problem_name: 19s_early_pilots/dijkstras_comprehension
+  - type: parsons
+    problem_name: 19s_early_pilots/dijkstras_1
+  - type: solution
+    problem_name: 19s_early_pilots/dijkstras_1
+  - type: coding
+    problem_name: 19s_early_pilots/dijkstras_2
+
+flow3:
+  - type: comprehension
+    problem_name: 19s_algo_study/fizz_buzz_comprehension
+  - type: parsons
+    problem_name: 19s_algo_study/fizz_buzz
+  - type: solution
+    problem_name: 19s_algo_study/fizz_buzz
+  - type: comprehension
+    problem_name: 19s_early_pilots/binary_search_comprehension
+  - type: parsons
+    problem_name: 19s_early_pilots/binary_search_1_blanks
+  - type: solution
+    problem_name: 19s_early_pilots/binary_search_1_blanks
+  - type: parsons
+    problem_name: 19s_algo_study/binary_search_2
+  - type: solution
+    problem_name: 19s_algo_study/binary_search_2
+  - type: coding
+    problem_name: 19s_early_pilots/binary_search_2_blanks
+  - type: solution
+    problem_name: 19s_early_pilots/binary_search_2_blanks
+  # - type: comprehension
+    # problem_name: topological_sort_comprehension
+  # - type: parsons
+    # problem_name: topological_sort
+  # - type: coding
+    # problem_name: topological_sort
+
+workshop_session_1_demo:
+  - type: multi
+    problem_name: 19s_algo_study/pre_demographics
+  - type: multi
+    problem_name: 19s_algo_study/pre_test_comp
+  - type: coding_comp
+    problem_name: 19s_algo_study/fizz_buzz
+
+workshop_session_1:
+  - type: multi
+    problem_name: 19s_algo_study/pre_demographics
+  - type: multi
+    problem_name: 19s_algo_study/pre_test_comp_2
+  - type: coding_comp
+    problem_name: 19s_algo_study/dfs_detect_cycle
+  - type: coding_comp
+    problem_name: 19s_algo_study/trie_word_break # Moving through the trie.
+  - type: coding_comp
+    problem_name: 19s_algo_study/trie_fuzzy_match #implementing trie itself - hard
+  - type: coding_comp
+    problem_name: 19s_algo_study/trie_collapsible
+  - type: coding_comp
+    problem_name: 19s_algo_study/dfs_mark_nodes_in_cycle
+  - type: multi
+    problem_name: 19s_algo_study/post_survey
+  # - type: multi
+    # problem_name: demographics
+
+workshop_session_2_coding:
+  - type: coding
+    problem_name: 19s_algo_study/dfs_impl
+  - type: solution
+    problem_name: 19s_algo_study/dfs_impl
+  - type: coding
+    problem_name: 19s_algo_study/dfs_num_islands
+  - type: solution
+    problem_name: 19s_algo_study/dfs_num_islands
+  - type: coding
+    problem_name: 19s_algo_study/dfs_all_paths
+  - type: solution
+    problem_name: 19s_algo_study/dfs_all_paths
+  - type: coding
+    problem_name: 19s_algo_study/topological_sort
+  - type: solution
+    problem_name: 19s_algo_study/topological_sort
+  - type: coding
+    problem_name: 19s_algo_study/topological_sort_alphabet
+  - type: solution
+    problem_name: 19s_algo_study/topological_sort_alphabet
+  - type: multi
+    problem_name: 19s_algo_study/post_workshop_survey
+
+workshop_session_2_coding_demo:
+  - type: coding
+    problem_name: 19s_algo_study/fizz_buzz
+  - type: solution
+    problem_name: 19s_algo_study/fizz_buzz
+
+workshop_session_2_code_arrangement:
+  - type: code_arrangement
+    problem_name: 19s_algo_study/dfs_impl
+  - type: solution
+    problem_name: 19s_algo_study/dfs_impl
+  - type: code_arrangement
+    problem_name: 19s_algo_study/dfs_num_islands
+  - type: solution
+    problem_name: 19s_algo_study/dfs_num_islands
+  - type: code_arrangement
+    problem_name: 19s_algo_study/dfs_all_paths
+  - type: solution
+    problem_name: 19s_algo_study/dfs_all_paths
+  - type: code_arrangement
+    problem_name: 19s_algo_study/topological_sort
+  - type: solution
+    problem_name: 19s_algo_study/topological_sort
+  - type: code_arrangement
+    problem_name: 19s_algo_study/topological_sort_alphabet
+  - type: solution
+    problem_name: 19s_algo_study/topological_sort_alphabet
+  - type: multi
+    problem_name: 19s_algo_study/post_workshop_survey_code_arrangement
+
+workshop_session_2_code_arrangement_demo:
+  - type: code_arrangement
+    problem_name: 19s_algo_study/fizz_buzz
+  - type: solution
+    problem_name: 19s_algo_study/fizz_buzz
+  - type: multi
+    problem_name: 19s_algo_study/post_workshop_survey_code_arrangement
+
+workshop_session_3_code_arrangement:
+  - type: code_arrangement
+    problem_name: 19s_algo_study/trie_impl
+  - type: solution
+    problem_name: 19s_algo_study/trie_impl
+  - type: code_arrangement
+    problem_name: 19s_algo_study/trie_list_words
+  - type: solution
+    problem_name: 19s_algo_study/trie_list_words
+  - type: code_arrangement
+    problem_name: 19s_algo_study/trie_prefix_suffix
+  - type: solution
+    problem_name: 19s_algo_study/trie_prefix_suffix
+  - type: code_arrangement
+    problem_name: 19s_algo_study/huffman_impl
+  - type: solution
+    problem_name: 19s_algo_study/huffman_impl
+  - type: code_arrangement
+    problem_name: 19s_algo_study/huffman_saved_bits
+  - type: solution
+    problem_name: 19s_algo_study/huffman_saved_bits
+  - type: code_arrangement
+    problem_name: 19s_algo_study/binary_search_1
+  - type: solution
+    problem_name: 19s_algo_study/binary_search_1
+  - type: code_arrangement
+    problem_name: 19s_algo_study/binary_search_2
+  - type: solution
+    problem_name: 19s_algo_study/binary_search_2
+  - type: multi
+    problem_name: 19s_algo_study/post_workshop_survey_code_arrangement
+
+workshop_session_3_coding:
+  - type: coding
+    problem_name: 19s_algo_study/trie_impl
+  - type: solution
+    problem_name: 19s_algo_study/trie_impl
+  - type: coding
+    problem_name: 19s_algo_study/trie_list_words
+  - type: solution
+    problem_name: 19s_algo_study/trie_list_words
+  - type: coding
+    problem_name: 19s_algo_study/trie_prefix_suffix
+  - type: solution
+    problem_name: 19s_algo_study/trie_prefix_suffix
+  - type: coding
+    problem_name: 19s_algo_study/huffman_impl
+  - type: solution
+    problem_name: 19s_algo_study/huffman_impl
+  - type: coding
+    problem_name: 19s_algo_study/huffman_saved_bits
+  - type: solution
+    problem_name: 19s_algo_study/huffman_saved_bits
+  - type: coding
+    problem_name: 19s_algo_study/binary_search_1
+  - type: solution
+    problem_name: 19s_algo_study/binary_search_1
+  - type: coding
+    problem_name: 19s_algo_study/binary_search_2
+  - type: solution
+    problem_name: 19s_algo_study/binary_search_2
+  - type: multi
+    problem_name: 19s_algo_study/post_workshop_survey
+
+pilot_study_v1:
+  - type: code_arrangement
+    problem_name: 19s_algo_study/dfs_impl
+  - type: solution
+    problem_name: 19s_early_pilots/dfs_impl_id1
+  - type: code_arrangement
+    problem_name: 19s_early_pilots/dfs_impl_1
+  - type: code_arrangement
+    problem_name: 19s_early_pilots/dfs_impl_3
+  - type: solution
+    problem_name: 19s_early_pilots/dfs_impl_id2
+
+demo:
+  - type: code_arrangement
+    problem_name: demo
+
+simple_flow:
+  - type: code_arrangement
+    problem_name: 19s_algo_study/binary_search_1
+  - type: solution
+    problem_name: 19s_algo_study/binary_search_1
+  - type: coding
+    problem_name: 19s_algo_study/dfs_all_paths
+  - type: solution
+    problem_name: 19s_algo_study/dfs_all_paths
+
+blanks_pilot:
+  # - type: comprehension
+  #   problem_name: 19s_early_pilots/binary_search_comprehension
+  # - type: code_arrangement
+  #   problem_name: 19sum_blank_pilots/binary_search_impl
+  # - type: code_arrangement
+  #   problem_name: 19sum_blank_pilots/binary_search_impl
+  # - type: solution
+  #   problem_name: 19sum_blank_pilots/binary_search_impl
+  # - type: code_arrangement
+  #   problem_name: 19sum_blank_pilots/binary_search_rotate
+  # - type: solution
+  #   problem_name: 19sum_blank_pilots/binary_search_rotate
+  # - type: code_arrangement
+  #   problem_name: 19sum_blank_pilots/binary_search_one_miss
+  # - type: solution
+  #   problem_name: 19sum_blank_pilots/binary_search_one_miss
+  - type: multi
+    problem_name: 19s_algo_study/pre_test_comp
+  - type: code_arrangement
+    problem_name: 19sum_blank_pilots/dfs_impl
+  - type: solution
+    problem_name: 19sum_blank_pilots/dfs_impl
+  - type: code_arrangement
+    problem_name: 19sum_blank_pilots/dfs_impl_blanks
+  - type: solution
+    problem_name: 19sum_blank_pilots/dfs_impl_blanks
+  - type: coding
+    problem_name: 19sum_blank_pilots/dfs_impl
+  - type: solution
+    problem_name: 19sum_blank_pilots/dfs_impl
+  - type: code_arrangement
+    problem_name: 19sum_blank_pilots/dfs_num_islands
+  - type: solution
+    problem_name: 19sum_blank_pilots/dfs_num_islands
+  - type: code_arrangement
+    problem_name: 19sum_blank_pilots/dfs_num_islands_blanks
+  - type: coding
+    problem_name: 19sum_blank_pilots/dfs_num_islands_blanks
+  - type: solution
+    problem_name: 19sum_blank_pilots/dfs_num_islands_blanks
+
+blanks_explr_pilot:
+  - type: multi
+    problem_name: 19sum_blank_pilots/pre_survey
+  # - type: multi
+    # problem_name: 19sum_blank_pilots/topic_confidence
+  - type: coding
+    problem_name: demo
+  - type: code_arrangement
+    problem_name: demo
+  - type: code_arrangement
+    problem_name: demo_blanks
+  - type: multi
+    problem_name: 19sum_blank_pilots/start
+  - type: code_arrangement
+    problem_name: 19sum_blank_pilots/plusses_blanks
+  - type: multi
+    problem_name: 19sum_blank_pilots/conf_cog_survey
+  - type: code_arrangement
+    problem_name: 19s_algo_study/fizz_buzz_blanks
+  # - type: multi
+  #   problem_name: 19sum_blank_pilots/conf_cog_survey_2
+  # - type: coding
+  #   problem_name: 19sum_blank_pilots/plusses
+  - type: multi
+    problem_name: 19sum_blank_pilots/conf_cog_survey_3
+  - type: code_arrangement
+    problem_name: 19sum_blank_pilots/coin_game_blanks
+  - type: multi
+    problem_name: 19sum_blank_pilots/conf_cog_survey_4
+  - type: code_arrangement
+    problem_name: 19sum_blank_pilots/plusses
+  - type: multi
+    problem_name: 19sum_blank_pilots/conf_cog_survey_5
+  - type: multi
+    problem_name: 19sum_blank_pilots/post_survey_pt_1
+  - type: multi
+    problem_name: 19sum_blank_pilots/post_survey_pt_2 # includes demo
+
+blanks_explr_pilot_0:
+  - type: multi
+    problem_name: 19sum_blank_pilots/pre_survey
+  - type: coding
+    problem_name: demo
+  - type: code_arrangement
+    problem_name: demo
+  - type: code_arrangement
+    problem_name: demo_blanks
+  - type: multi
+    problem_name: 19sum_blank_pilots/start
+  - type: code_arrangement
+    problem_name: 19sum_blank_pilots/plusses
+  - type: multi
+    problem_name: 19sum_blank_pilots/conf_cog_survey
+  - type: code_arrangement
+    problem_name: 19s_algo_study/fizz_buzz_blanks
+  - type: multi
+    problem_name: 19sum_blank_pilots/conf_cog_survey_2
+  - type: coding
+    problem_name: 19sum_blank_pilots/coin_game
+  - type: multi
+    problem_name: 19sum_blank_pilots/conf_cog_survey_3
+  - type: coding
+    problem_name: 19sum_blank_pilots/plusses
+  - type: multi
+    problem_name: 19sum_blank_pilots/conf_cog_survey_4
+  - type: multi
+    problem_name: 19sum_blank_pilots/post_survey_pt_1
+  - type: multi
+    problem_name: 19sum_blank_pilots/post_survey_pt_2
+blanks_explr_pilot_1:
+  - type: multi
+    problem_name: 19sum_blank_pilots/pre_survey
+  - type: coding
+    problem_name: demo
+  - type: code_arrangement
+    problem_name: demo
+  - type: code_arrangement
+    problem_name: demo_blanks
+  - type: multi
+    problem_name: 19sum_blank_pilots/start
+  - type: code_arrangement
+    problem_name: 19sum_blank_pilots/plusses
+  - type: multi
+    problem_name: 19sum_blank_pilots/conf_cog_survey
+  - type: coding
+    problem_name: 19s_algo_study/fizz_buzz
+  - type: multi
+    problem_name: 19sum_blank_pilots/conf_cog_survey_2
+  - type: code_arrangement
+    problem_name: 19sum_blank_pilots/coin_game_blanks
+  - type: multi
+    problem_name: 19sum_blank_pilots/conf_cog_survey_3
+  - type: coding
+    problem_name: 19sum_blank_pilots/plusses
+  - type: multi
+    problem_name: 19sum_blank_pilots/conf_cog_survey_4
+  - type: multi
+    problem_name: 19sum_blank_pilots/post_survey_pt_1
+  - type: multi
+    problem_name: 19sum_blank_pilots/post_survey_pt_2
+blanks_explr_pilot_2:
+  - type: multi
+    problem_name: 19sum_blank_pilots/pre_survey
+  - type: coding
+    problem_name: demo
+  - type: code_arrangement
+    problem_name: demo
+  - type: code_arrangement
+    problem_name: demo_blanks
+  - type: multi
+    problem_name: 19sum_blank_pilots/start
+  - type: code_arrangement
+    problem_name: 19sum_blank_pilots/plusses_blanks
+  - type: multi
+    problem_name: 19sum_blank_pilots/conf_cog_survey
+  - type: code_arrangement
+    problem_name: 19s_algo_study/fizz_buzz
+  - type: multi
+    problem_name: 19sum_blank_pilots/conf_cog_survey_2
+  - type: coding
+    problem_name: 19sum_blank_pilots/coin_game
+  - type: multi
+    problem_name: 19sum_blank_pilots/conf_cog_survey_3
+  - type: coding
+    problem_name: 19sum_blank_pilots/plusses
+  - type: multi
+    problem_name: 19sum_blank_pilots/conf_cog_survey_4
+  - type: multi
+    problem_name: 19sum_blank_pilots/post_survey_pt_1
+  - type: multi
+    problem_name: 19sum_blank_pilots/post_survey_pt_2
+blanks_explr_pilot_3:
+  - type: multi
+    problem_name: 19sum_blank_pilots/pre_survey
+  - type: coding
+    problem_name: demo
+  - type: code_arrangement
+    problem_name: demo
+  - type: code_arrangement
+    problem_name: demo_blanks
+  - type: multi
+    problem_name: 19sum_blank_pilots/start
+  - type: code_arrangement
+    problem_name: 19sum_blank_pilots/plusses_blanks
+  - type: multi
+    problem_name: 19sum_blank_pilots/conf_cog_survey
+  - type: coding
+    problem_name: 19s_algo_study/fizz_buzz
+  - type: multi
+    problem_name: 19sum_blank_pilots/conf_cog_survey_2
+  - type: code_arrangement
+    problem_name: 19sum_blank_pilots/coin_game
+  - type: multi
+    problem_name: 19sum_blank_pilots/conf_cog_survey_3
+  - type: coding
+    problem_name: 19sum_blank_pilots/plusses
+  - type: multi
+    problem_name: 19sum_blank_pilots/conf_cog_survey_4
+  - type: multi
+    problem_name: 19sum_blank_pilots/post_survey_pt_1
+  - type: multi
+    problem_name: 19sum_blank_pilots/post_survey_pt_2
+blanks_explr_pilot_4:
+  - type: multi
+    problem_name: 19sum_blank_pilots/pre_survey
+  - type: coding
+    problem_name: demo
+  - type: code_arrangement
+    problem_name: demo
+  - type: code_arrangement
+    problem_name: demo_blanks
+  - type: multi
+    problem_name: 19sum_blank_pilots/start
+  - type: coding
+    problem_name: 19sum_blank_pilots/plusses_
+  - type: multi
+    problem_name: 19sum_blank_pilots/conf_cog_survey
+  - type: code_arrangement
+    problem_name: 19s_algo_study/fizz_buzz
+  - type: multi
+    problem_name: 19sum_blank_pilots/conf_cog_survey_2
+  - type: code_arrangement
+    problem_name: 19sum_blank_pilots/coin_game_blanks
+  - type: multi
+    problem_name: 19sum_blank_pilots/conf_cog_survey_3
+  - type: coding
+    problem_name: 19sum_blank_pilots/plusses
+  - type: multi
+    problem_name: 19sum_blank_pilots/conf_cog_survey_4
+  - type: multi
+    problem_name: 19sum_blank_pilots/post_survey_pt_1
+  - type: multi
+    problem_name: 19sum_blank_pilots/post_survey_pt_2
+blanks_explr_pilot_5:
+  - type: multi
+    problem_name: 19sum_blank_pilots/pre_survey
+  - type: coding
+    problem_name: demo
+  - type: code_arrangement
+    problem_name: demo
+  - type: code_arrangement
+    problem_name: demo_blanks
+  - type: multi
+    problem_name: 19sum_blank_pilots/start
+  - type: coding
+    problem_name: 19sum_blank_pilots/plusses_
+  - type: multi
+    problem_name: 19sum_blank_pilots/conf_cog_survey
+  - type: code_arrangement
+    problem_name: 19s_algo_study/fizz_buzz_blanks
+  - type: multi
+    problem_name: 19sum_blank_pilots/conf_cog_survey_2
+  - type: code_arrangement
+    problem_name: 19sum_blank_pilots/coin_game
+  - type: multi
+    problem_name: 19sum_blank_pilots/conf_cog_survey_3
+  - type: coding
+    problem_name: 19sum_blank_pilots/plusses
+  - type: multi
+    problem_name: 19sum_blank_pilots/conf_cog_survey_4
+  - type: multi
+    problem_name: 19sum_blank_pilots/post_survey_pt_1
+  - type: multi
+    problem_name: 19sum_blank_pilots/post_survey_pt_2
+
+blanks_explr_followup_0:
+  - type: multi
+    problem_name: 19sum_blank_pilots/fib_multi
+  - type: multi
+    problem_name: 19sum_blank_pilots/plusses_multi
+  - type: multi
+    problem_name: 19sum_blank_pilots/coin_game_multi
+blanks_explr_followup_1:
+  - type: multi
+    problem_name: 19sum_blank_pilots/fib_multi
+  - type: multi
+    problem_name: 19sum_blank_pilots/coin_game_multi
+  - type: multi
+    problem_name: 19sum_blank_pilots/plusses_multi
+
+semi_struct_int:
+  - type: multi
+    problem_name: 19sum_blank_pilots/start
+  - type: code_arrangement
+    problem_name: demo_blanks
+  - type: code_arrangement
+    problem_name: 19f_ssi/coin_game
+  - type: code_arrangement
+    problem_name: 19f_ssi/coin_game_it
+
+semi_struct_int_0:
+  - type: multi
+    problem_name: 19sum_blank_pilots/start
+  - type: code_arrangement
+    problem_name: demo_blanks
+  - type: code_arrangement
+    problem_name: demo
+  - type: diff_estimate_0
+    problem_name: 19f_ssi/coin_game
+
+semi_struct_int_1a:
+  - type: code_arrangement
+    problem_name: 19f_ssi/coin_game_blanks
+  - type: diff_estimate_1
+    problem_name: 19f_ssi/coin_game_it
+
+semi_struct_int_1b:
+  - type: code_arrangement
+    problem_name: 19f_ssi/coin_game
+  - type: diff_estimate_1
+    problem_name: 19f_ssi/coin_game_it
+
+semi_struct_int_2a:
+  - type: code_arrangement
+    problem_name: 19f_ssi/coin_game_it_blanks
+
+semi_struct_int_2b:
+  - type: code_arrangement
+    problem_name: 19f_ssi/coin_game_it
+
+semi_struct_int_5:
+  - type: multi
+    problem_name: 19sum_blank_pilots/start
+  - type: code_arrangement
+    problem_name: demo_blanks
+  - type: code_arrangement
+    problem_name: demo
+  - type: diff_estimate_5
+    problem_name: 19f_ssi/account
+
+semi_struct_int_6a:
+  - type: code_arrangement
+    problem_name: 19f_ssi/account_blanks
+  - type: diff_estimate_6
+    problem_name: 19f_ssi/account_2
+
+semi_struct_int_6b:
+  - type: code_arrangement
+    problem_name: 19f_ssi/account
+  - type: diff_estimate_6
+    problem_name: 19f_ssi/account_2
+
+semi_struct_int_7a:
+  - type: code_arrangement
+    problem_name: 19f_ssi/account_2_blanks
+
+semi_struct_int_7b:
+  - type: code_arrangement
+    problem_name: 19f_ssi/account_2

@@ -1,0 +1,209 @@
+problem_name: dijkstras_1
+
+algorithm_description:
+  <h4> Dijkstra's </h4>
+  Suppose we have a graph of nodes and edges with distances, e.g. locations and roads
+  with commute times. We want to find the shortest amount of time it will take to get
+  to any of the nodes (or locations) from a source. Dijkstra’s algorithm is a popular
+  way to do this. Dijkstra’s algorithm maintains a set of vertices whose final
+  shortest-paths have not yet been determined. At the start, this is every single vertex
+  besides the source. It repeatedly selects the vertex <code>v</code> in that set with
+  the minimum shortest-path and removes it from the set (as we now know it is indeed the
+  shortest path). It then updates all edges leaving that vertex <code>v</code> to
+  determine if there is a shorter path to them passing through <code>v</code> and
+  updates the shortest-path estimate for them if so.
+  <br />
+  <img id="gif-desc" src="https://upload.wikimedia.org/wikipedia/commons/5/57/Dijkstra_Animation.gif" />
+  <figcaption class="small text-muted"> Gif credits to Wikipedia </figcaption>
+  <button type="button" class="btn btn-primary"
+  onclick=document.getElementById('gif-desc').src='https://upload.wikimedia.org/wikipedia/commons/5/57/Dijkstra_Animation.gif'>Restart gif</button>
+
+
+is_algorithm_implementation: true
+
+problem_description: |
+  Write code that uses Dijkstra’s algorithm to determine the shortest distance to every node from a source node.
+  Every vertex stores the shortest distance in a <code>distance</code> attribute
+  as well as a <code>parent</code> attribute containing the previous node on the
+  shortest path to the current one.
+  <code>parent</code>s are helpful for reconstructing the actual shortest path later.
+  <br><br>
+
+  Running Djikstra's should mutate the input graph in place, setting
+  <code>vertex.distance</code> and <code>vertex.parent</code> as the algorithm progresses.
+  You can assume all vertices are reachable.
+
+  <br><br>
+  For your reference, the Vertex class starts with fully populated <code>id</code> for
+  unique identification and <code>neighbors</code> representing edges. <code>neighbors</code>
+  is a dictionary (hashmap) with a key of a neighboring <code>Vertex</code> object and a
+  value of the <code>distance</code> between them.
+  <br><br>
+  For the sample graph below:
+  <br><br>
+  <pre>
+  >>> len(graph)
+  8
+  >>> graph[0]
+  <__main__.Vertex object at 0x100ae6710>
+  >>> source
+  <__main__.Vertex object at 0x100ae6710>
+  >>> graph[0].id
+  'A'
+  >>> len(graph[0].neighbors)
+  4
+  >>> graph[0].neighbors
+  {<__main__.Vertex object at 0x100ae6748>: 2, ...}
+  >>> dijkstra(graph, graph[0])
+  >>> graph[2].id
+  'E'
+  >>> graph[2].parent
+  'B'
+  >>> graph[2].distance
+  5
+  >>> graph[0].parent   # None
+  >>> graph[0].distance
+  0
+  </pre>
+
+  Test cases are run on the following graph. For each vertex's <code>id</code> it checks that the 
+  <code>parent</code> and <code>distance</code> are correct.
+  <img width=40% src="/static/images/dijkstras_comprehension.png" />
+  <figcaption class="small text-muted"> Graph credits to F17 CS61B</figcaption>
+
+pseudocode: |
+  DIJKSTRA(graph, source)
+    create empty unfinished_vertices list
+
+    for every vertex v in graph
+      vertex.distance = INFINITY
+      add v to unfinished_vertices
+
+    source.distance = 0
+    source.parent = UNDEFINED
+
+    while unfinished_vertices is not empty
+      next_closest_vertex = vertex in vertices with minimum distance
+      remove next_closest_vertex from unfinisheD_vertices
+      for every neighbor n of next_closest_vertex
+        new_distance = next_closest_vertex.distance + distance(next_closest_vertex, n)
+        if new_distance < n.distance
+          n.distance = new_distance
+          n.parent = next_closest_vertex
+
+initial_code: |
+  def dijkstra(graph, source):
+code_lines: |
+  def dijkstra(graph, source): #0given
+  unfinished_vertices = []
+  for vertex in graph:
+  vertex.distance = float("inf")
+  source.parent = None
+  unfinished_vertices.append(vertex)
+  source.distance = 0
+  while len(unfinished_vertices) > 0:
+  next_closest_vertex = min(unfinished_vertices, key=lambda vertex: vertex.distance)
+  unfinished_vertices.remove(next_closest_vertex)
+  for neighbor, neighbor_distance in next_closest_vertex.neighbors.items():
+  new_distance = next_closest_vertex.distance + neighbor_distance
+  if new_distance < neighbor.distance:
+  neighbor.distance = new_distance
+  neighbor.parent = next_closest_vertex
+
+solution: |
+  def dijkstra(graph, source):
+    unfinished_vertices = []
+
+    for vertex in graph:
+      vertex.distance = float("inf")
+      unfinished_vertices.append(vertex)
+
+    source.distance = 0
+    source.parent = None
+
+    while len(unfinished_vertices) > 0:
+      next_closest_vertex = min(unfinished_vertices, key=lambda vertex: vertex.distance)
+      unfinished_vertices.remove(next_closest_vertex)
+      for neighbor, neighbor_distance in next_closest_vertex.neighbors.items():
+        new_distance = next_closest_vertex.distance + neighbor_distance
+        if new_distance < neighbor.distance:
+          neighbor.distance = new_distance
+          neighbor.parent = next_closest_vertex
+
+
+test_code: |
+  import json
+
+  def dijkstras_test(v_id):
+      def get_dist(v_id, graph, source):
+          dijkstra(graph, source)
+          for vertex in graph:
+              if vertex.id == v_id:
+                  if vertex.parent:
+                      return json.dumps([vertex.distance, vertex.parent.id])
+                  else:
+                      return json.dumps([vertex.distance, None])
+      return get_dist(v_id, graph, source)
+
+  class Vertex:
+    def __init__(self, vid):
+      self.id = vid
+      self.neighbors = {}
+
+    def __repr__(self):
+      return str(self.id)
+
+
+  def constructGraph(edges, source_id):
+    vertices = {}
+
+    for v1, v2, dst in edges:
+      if v1 not in vertices:
+        vertices[v1] = Vertex(v1)
+      if v2 not in vertices:
+        vertices[v2] = Vertex(v2)
+      vertices[v1].neighbors[vertices[v2]] = dst
+      vertices[v2].neighbors[vertices[v1]] = dst
+
+    return list(vertices.values()), vertices[source_id]
+
+  # Graph from end of https://inst.eecs.berkeley.edu/~cs61b/fa17/materials/lectures/lect33.pdf
+  graph, source = constructGraph([
+      ('A', 'C', 5),
+      ('A', 'B', 2),
+      ('A', 'D', 3),
+      ('A', 'G', 7),
+      ('B', 'C', 4),
+      ('B', 'D', 5),
+      ('B', 'E', 3),
+      ('C', 'E', 2),
+      ('C', 'F', 2),
+      ('D', 'E', 4),
+      ('D', 'G', 3),
+      ('D', 'H', 6),
+      ('E', 'F', 1),
+      ('E', 'H', 2),
+      ('G', 'H', 1),
+    ], 'A')
+
+test_fn: dijkstras_test
+
+# TODO: Add test cases!
+test_cases:
+  - fn_args: ['A']
+    expected: '[0, null]'
+  - fn_args: ['C']
+    expected: '[5, "A"]'
+  - fn_args: ['B']
+    expected: '[2, "A"]'
+  - fn_args: ['D']
+    expected: '[3, "A"]'
+  - fn_args: ['G']
+    expected: '[6, "D"]'
+  - fn_args: ['E']
+    expected: '[5, "B"]'
+  - fn_args: ['F']
+    expected: '[6, "E"]'
+  - fn_args: ['H']
+    expected: '[7, "E"]'
+

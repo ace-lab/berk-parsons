@@ -1,0 +1,90 @@
+problem_name: binary_search_1
+
+algorithm_description:
+  <h4> Binary Search </h4>
+  Suppose we’re searching for an element in a sorted array.
+  If an array <code>arr</code> is sorted, we can check the midpoint of the sequence against the <code>target</code> element we’re searching
+  for. Because the array is sorted, we can eliminate half of the sequence from further consideration as we continue our
+  search by updating the upper or lower bound to the midpoint. The binary search algorithm repeats this procedure,
+  halving the size of the remaining portion of the sequence each time.
+  <br>
+  <img id="gif-desc" src="/static/images/binary_search.gif"/>
+  <figcaption class="small text-muted"> Gif credits to mathworks.com </figcaption>
+  <button type="button" class="btn btn-primary"
+  onclick=document.getElementById('gif-desc').src='/static/images/binary_search.gif'>Restart gif</button>
+
+
+
+problem_description: |
+  Binary search isn't necessarily a tree problem, but it shares many similarities in that
+  you traverse down the left or right half (almost like the left or right branch of a tree).
+  Write code to implement binary search, returning the index of the target value if it’s present and -1 if
+  it is not.
+  <br><br>
+  <pre>
+  >>> binary_search(3, [1,2,3])
+  2
+  >>> binary_search(6, [1,2,3])
+  -1
+  </pre>
+
+pseudocode: |
+  BINARY_SEARCH(target, arr)
+    low = 0
+    high = end of arr
+    while low <= high
+      mid = halfway between low and high
+        if arr[mid] > target
+          high = mid - 1
+      else if arr[mid] < target
+        low = mid + 1
+      else
+        return mid
+    return not_found
+
+initial_code: |
+  def binary_search(target, arr):
+code_lines: |
+  def binary_search(target, arr):#0given
+  low = 0
+  high = len(arr) - 1
+  while low <= high:
+  mid = (low+high) // 2
+  if arr[mid] > target:
+  high = mid - 1
+  elif arr[mid] < target:
+  low = mid + 1
+  else:
+  return mid
+  return -1
+
+# TODO: Fix indents
+solution: |
+  def binary_search(target, arr):
+    low = 0
+    high = len(arr) - 1
+    while low <= high:
+      mid = (low+high) // 2
+      if arr[mid] > target:
+        high = mid - 1
+      elif arr[mid] < target:
+        low = mid + 1
+      else:
+        return mid
+    return -1
+
+
+test_fn: binary_search
+
+# TODO: More (or better) test cases
+test_cases:
+  - fn_args: [3, [1, 2, 3]]
+    expected: 2
+  - fn_args: [5, [1, 2, 3, 4]]
+    expected: -1
+  - fn_args: [2, [1, 2, 3, 4, 5]]
+    expected: 1
+  - fn_args: [3, [1, 2, 3, 4, 5]]
+    expected: 2
+  - fn_args: [4, [1, 2, 3, 4, 5]]
+    expected: 3

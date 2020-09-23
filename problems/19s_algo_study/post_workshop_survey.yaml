@@ -1,0 +1,77 @@
+- intro:
+  name: Post-Workshop Survey - Part 1
+  components:
+    - type: multiple_choice
+      name: continue_practice
+      text: >
+        If given the opportunity to use this tool again, for how long
+        would you want to use it?
+      choices:
+        - Many hours
+        - Same amount of time
+        - Not interested in using it again
+    - type: free_form_prompt_large
+      name: other_tool
+      text: Any other comments about the tool?
+- agreement:
+  name: Post-Workshop Survey - Part 2
+  components:
+    - type: problem_description
+      text: For the following questions, please rate how much you agree or disagree with each statement.
+    - type: multiple_choice
+      name: create_algo-tree
+      text: I could organize and design a tree-based algorithm.
+      choices:
+        - 1 (Not at all able)
+        - "2"
+        - "3"
+        - "4"
+        - 5 (Very able)
+    - type: multiple_choice
+      name: help_start_algo-tree
+      text: I could come up with a tree-based algorithm once someone helped me get started.
+      choices:
+        - 1 (Not at all able)
+        - "2"
+        - "3"
+        - "4"
+        - 5 (Very able)
+    - type: multiple_choice
+      name: comprehend-tree
+      text: I could comprehend a program using a tree-based algorithm.
+      choices:
+        - 1 (Not at all able)
+        - "2"
+        - "3"
+        - "4"
+        - 5 (Very able)
+    - type: multiple_choice
+      name: complex
+      text: The topics covered in the activity were very complex.
+      choices:
+        - 1 (Not at all complex)
+        - "2"
+        - "3"
+        - "4"
+        - 5 (Very complex)
+    - type: multiple_choice
+      name: instructions_ineffective
+      text: The instructions and/or explanations during the activity were, in terms of learning, very ineffective.
+      choices:
+        - 1 (Not at all ineffective)
+        - "2"
+        - "3"
+        - "4"
+        - 5 (Very ineffective)
+    - type: multiple_choice
+      name: understanding_topic
+      text: The activity really enhanced my understanding of the topics covered. 
+      choices:
+        - 1 (Not at all enhanced)
+        - "2"
+        - "3"
+        - "4"
+        - 5 (Very enhanced)
+    - type: free_form_prompt_large
+      name: other
+      text: Any other comments about your experience today

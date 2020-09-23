@@ -1,0 +1,236 @@
+problem_name: topological_sort_alphabet
+
+algorithm_description: |
+  <h4> Topoplogical sort. </h4>
+  Suppose we have a list of dependencies, and want to find a valid ordering for them, such as an order
+  to take a set of classes given all of their prerequisites. Topological sorts find such solutions.
+  <br>
+  There are many ways to implement a topological sort. We will implement it
+  with a modified DFS. Specifically, implement DFS with the following two
+  modifications.
+  <ul>
+    <li>Traverse edges in the reverse of their actual direction.
+    <li>When exiting a node, add it to the final topological sort ordering.
+  </ul>
+  For exmaple, for the graph below, a valid ordering could be
+  <code>[4, 5, 0, 2, 3, 1]</code>, though there are several others.<br><br>
+  <img src="https://www.geeksforgeeks.org/wp-content/uploads/graph.png" style="width: 30%; height: 30%">
+  <figcaption class="small text-muted"> Image credits to geeksforgeeks.org </figcaption>
+
+
+
+problem_description: |
+  <h4> Problem </h4>
+  We're now going to explore how to apply topological sort. For this question,
+  we've recently
+  uncovered a list of words in a new language that are sorted alphabetically.
+  However, we don't actually know the alphabet for that language. Your task
+  is to come up with a possible alphabetical ordering for this language
+  based on the list of words.<br><br>
+
+  Use the Node class below to create a graph. Running
+  <code>topological_sort()</code> on this graph should return a valid
+  alphabetical ordering for this language. For example, if the words
+  are <code>['bat', 'cat']</code>, one possible ordering would be
+  <code>'bcat'</code>. Your function should return a <code>list of Nodes</code>
+  representing the graph.
+  <br><br>
+
+  You can assume all letters are lowercase, and that every letter
+  is present in at least one word. You should not make assumptions
+  on the letters of the alphabet being based on English.<br><br>
+
+  <h4> Technical Specification </h4>
+  <pre>
+    class Node:
+      def setLabel(label):
+        "Sets the label of self (the current node) to label"
+
+      def addNeighbor(node):
+        "Adds node as a neighbor of self"
+
+      def addReverseNeighbor(node):
+        "Adds node as a reverse neighbor of self"
+  </pre>
+  <h4>Reading test cases</h4>
+  The first argument is a list of words sorted alphabetically.
+
+initial_code: |
+  def alphabet_graph(words):
+  	# words is a list of Strings
+code_lines: |
+  def alphabet_graph(words): #0given
+  # words is a list of Strings #1given
+  last_word = None
+  graph_dict = {}
+  for word in words:
+  for letter in word:
+  if letter not in graph_dict:
+  graph_dict[letter] = Node()
+  graph_dict[letter].setLabel(letter)
+  if last_word:
+  for i in range(len(word)):
+  if i >= len(last_word):
+  break
+  last_word_letter = last_word[i]
+  curr_word_letter = word[i]
+  last_word_node = graph_dict[last_word[i]]
+  curr_word_node = graph_dict[word[i]]
+  if last_word_letter != curr_word_letter:
+  last_word_node.addNeighbor(curr_word_node)
+  curr_word_node.addReverseNeighbor(last_word_node)
+  break
+  last_word = word
+  return list(graph_dict.values())
+
+
+solution: |
+  def alphabet_graph(words):
+    last_word = None
+    # Keep track of all the nodes in an easy-to-look-up way.
+    graph_dict = {}
+    # We'll compare sequential pairs of words to find ordering information.
+    for word in words:
+      # Make sure we have a node for every letter that is seen
+      for letter in word:
+        if letter not in graph_dict:
+          graph_dict[letter] = Node()
+          graph_dict[letter].setLabel(letter)
+      if last_word:
+        for i in range(len(word)):
+          # If the 2nd word is longer, it gives us no letter ordering information.
+          # e.g. ('foot', 'football') doesn't tell us anything about where b is
+          # in the alphabet.
+          if i >= len(last_word):
+            break
+          last_word_letter = last_word[i]
+          curr_word_letter = word[i]
+          last_word_node = graph_dict[last_word[i]]
+          curr_word_node = graph_dict[word[i]]
+          # Find the first letter that is different between the current and previous word.
+          if last_word_letter != curr_word_letter:
+            last_word_node.addNeighbor(curr_word_node)
+            curr_word_node.addReverseNeighbor(last_word_node)
+            # We shouldn't look at further letters, as we don't learn anything about ordering
+            # from them.
+            break
+      last_word = word
+    return list(graph_dict.values())
+
+test_code: |
+  class Node:
+    def __init__(self, label=None):
+      self.label = label
+      self.entered = False
+      self.exited = False
+      self.test_state = 0
+      self.neighbors = []
+      self.reverse_neighbors = []
+
+    def __repr__(self):
+      return str(self.label)
+
+    def setLabel(self, label):
+      self.label = label
+
+    def getLabel(self):
+      return self.label
+
+    def addNeighbor(self, node):
+      self.neighbors.append(node)
+
+    def addReverseNeighbor(self, node):
+      self.reverse_neighbors.append(node)
+
+    def getNeighbors(self):
+      return self.neighbors
+
+    def getReverseNeighbors(self):
+      return self.reverse_neighbors
+
+    def getEnter(self):
+      return self.entered
+
+    def getExit(self):
+      return self.exited
+
+    def setEnter(self):
+      self.entered = True
+
+    def setExit(self):
+      self.exited = True
+
+  def true_alphabet_graph(words):
+    last_word = None
+    graph_dict = {}
+    for word in words:
+      for letter in word:
+        if letter not in graph_dict:
+          graph_dict[letter] = Node()
+          graph_dict[letter].setLabel(letter)
+      if last_word:
+        for i in range(len(word)):
+          if i >= len(last_word):
+            break
+          last_word_letter = last_word[i]
+          curr_word_letter = word[i]
+          last_word_node = graph_dict[last_word[i]]
+          curr_word_node = graph_dict[word[i]]
+          if last_word_letter != curr_word_letter:
+            last_word_node.addNeighbor(curr_word_node)
+            curr_word_node.addReverseNeighbor(last_word_node)
+            break
+      last_word = word
+    return graph_dict
+
+
+  def construct_graph(node_names, edges):
+    nodes = {node_name: Node(node_name) for node_name in node_names}
+    for edge_start, edge_end in edges:
+      nodes[edge_start].addNeighbor(nodes[edge_end])
+      nodes[edge_end].addReverseNeighbor(nodes[edge_start])
+    return nodes
+
+  def topological_sort_alphabet_test(words):
+    true_graph = true_alphabet_graph(words)
+    graph = alphabet_graph(words)
+    graph_map = {}
+    for node in graph:
+      if node.getLabel() in graph_map:
+        return "Expected only one node representing {}".format(node.getLabel())
+      graph_map[node.getLabel()] = node
+    if len(graph_map) != len(true_graph):
+      return "Expected {} nodes, your graph only contained {} nodes".format(len(true_graph), len(graph_map))
+    for letter in graph_map.keys():
+      true_node = true_graph[letter]
+      their_node = graph_map[letter]
+      for true_neighbor in true_node.getReverseNeighbors():
+        neighbor_found = False
+        for their_neighbor in their_node.getReverseNeighbors():
+          if true_neighbor.getLabel() == their_neighbor.getLabel():
+            neighbor_found = True
+        if not neighbor_found:
+          return "Expected {} to have a reverse neighbor of {}".format(true_node.getLabel(), true_neighbor.getLabel())
+      for their_neighbor in their_node.getReverseNeighbors():
+        neighbor_found = False
+        for true_neighbor in true_node.getReverseNeighbors():
+          if true_neighbor.getLabel() == their_neighbor.getLabel():
+            neighbor_found = True
+        if not neighbor_found:
+          return "Expected {} not to have a reverse neighbor of {}".format(true_node.getLabel(), their_neighbor.getLabel())
+    return True
+
+test_fn: topological_sort_alphabet_test
+
+# TODO: More (or better) test cases
+test_cases:
+  - fn_args: [['bat', 'cat']]
+    expected: True
+  - fn_args: [['baa', 'abcd', 'abca', 'cab', 'cad']]
+    expected: True
+  - fn_args: [['baa', 'abcd', 'abca', 'abcae', 'cab', 'cad']]
+    expected: True
+  - fn_args: [['caa', 'aaa', 'aab']]
+    expected: True
+  - fn_args: [['aardvårk', 'apple', 'banana', 'bandana', 'cat', 'catty', 'foo']]
+    expected: True

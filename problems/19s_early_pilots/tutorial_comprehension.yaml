@@ -1,0 +1,32 @@
+problem_name: tutorial_comprehension
+
+algorithm_description: |
+  The general structure of this experiment is: <br />
+  <b> Multiple Choice Comprehension Question -> Algorithm Implementation -> Algorithm Solution -> Coding Question </b>
+  <br />
+  <br />
+  For each step, clicking the <b> submit code </b> button will test your code.
+  <br />
+  <br />
+
+  For the tutorial, the algorithm you are defining is related to absolute value: define an algorithm to find a + |b|,
+  where a and b are both integers. As a reminder, the absolute value of a number is the magnitude of the number, ignoring the sign.
+
+
+problem_description:
+  What would 3 + |-5| return?
+
+pseudocode: |
+  A_PLUS_ABS_B(a, b):
+      if b < 0
+          Make B positive
+      return a + b
+
+choices:
+  - -2
+  - 2
+  - 8
+  - 0
+
+# Note: This is the index, not the text of the actual solution
+correct_answer: 2

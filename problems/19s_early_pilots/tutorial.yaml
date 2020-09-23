@@ -1,0 +1,56 @@
+problem_name: tutorial
+
+algorithm_description:
+  Define an algorithm to find <b> a + |b| </b> where a and b are both integers. As a reminder, the absolute
+  value of a number is the magnitude of the number, ignoring the sign.
+
+  <br />
+  <br />
+  This algorithm should invert the sign of b if it is negative, then add together a and b.
+
+is_algorithm_implementation: true
+
+problem_description:
+  Write code to implement A_PLUS_ABS_B, such that it fulfills the algorithm description.
+
+  <br />
+  <br />
+  Please <b> do not click "Move On" </b> until you have been instructed to do so. Click <b> submit </b> when you would like your code to be
+  tested by the autograder; the testing results should appear soon after.
+
+
+# TODO: More (or better) test cases
+pseudocode: |
+  A_PLUS_ABS_B(a, b):
+      if b < 0
+          Make B positive
+      return a + b
+
+initial_code: |
+  def a_plus_abs_b(a, b):
+code_lines: |
+  def a_plus_abs_b(a, b): #0given
+  if b < 0:
+  b *= -1
+  return a + b
+  print("Hover over me to see all my text! I am a very long line of code.")
+
+solution: |
+  def a_plus_abs_b(a,  b):
+      if b < 0:
+          b *= -1
+      return a + b
+
+test_fn: a_plus_abs_b
+
+test_cases:
+  - fn_args: [3, -5]
+    expected: 8
+  - fn_args: [3, 5]
+    expected: 8
+  - fn_args: [0, -3]
+    expected: 3
+  - fn_args: [-5, -3]
+    expected: -2
+
+

@@ -1,0 +1,30 @@
+- agreement:
+  name: Survey
+  components:
+    - type: multiple_choice
+      name: complex
+      text: The topics covered in the activity were very complex.
+      choices:
+        - 1 (Not at all complex)
+        - "2"
+        - "3"
+        - "4"
+        - 5 (Very complex)
+    - type: multiple_choice
+      name: instructions_ineffective
+      text: The instructions and/or explanations during the activity were, in terms of learning, very ineffective.
+      choices:
+        - 1 (Not at all ineffective)
+        - "2"
+        - "3"
+        - "4"
+        - 5 (Very ineffective)
+    - type: multiple_choice
+      name: understanding_topic
+      text: The activity really enhanced my understanding of the topics covered.
+      choices:
+        - 1 (Not at all enhanced)
+        - "2"
+        - "3"
+        - "4"
+        - 5 (Very enhanced)

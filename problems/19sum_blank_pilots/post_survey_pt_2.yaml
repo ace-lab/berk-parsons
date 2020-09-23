@@ -1,0 +1,49 @@
+- demographics:
+  name: Demographic Survey
+  components:
+    - type: multiple_choice
+      name: gender
+      text: What is your gender identity?
+      choices:
+        - Male
+        - Female
+        - Other <input type="text" name="gender">
+        - Prefer not to Disclose
+    - type: multiple_choice # Long right now, maybe dropdown, collapse grad
+      name: year
+      text: What year are you?
+      choices:
+        - First Year (Undergrad)
+        - Second Year (Undergrad)
+        - Third Year (Undergrad)
+        - Fourth Year (Undergrad)
+        - Fifth+ Year (Undergrad)
+        - Graduate student
+        - Other <input type="text" name="year">
+    - type: multiple_choice
+      name: program
+      text: Which program are you enrolled in?
+      choices:
+        - L&S
+        - EECS
+        - Other <input type="text" name="program">
+    - type: free_form_prompt_large
+      name: experience
+      text: How much programming experience, if any, did you have before CS61A? Please briefly describe.
+- open_ended:
+  name: Optional Open-Ended Questions
+  components:
+    - type: problem_description
+      text: Feel free to skip the following questions, but any additional insight is appreciated.
+    - type: free_form_prompt_large
+      name: misc_interface
+      text: >
+        Are there any other thoughts you'd like to share about the three exercise interfaces?
+        Did they change the way you approached the problem (e.g. planning strategies, debugging
+        strategies, focus)?
+    - type: free_form_prompt_large
+      name: misc_repeated
+      text: Are there any other thoughts you'd like to share about working on a problem with multiple interfaces?
+    - type: free_form_prompt_large
+      name: misc_study
+      text: Are there any other thoughts you'd like to share about the study?

@@ -1,0 +1,45 @@
+problem_name: reverse_list
+
+
+problem_description: |
+  Write a recursive function <code>reverse_list(li)</code>
+  that returns <code>li</code> reversed.
+
+  <br><br>
+  <pre><code>
+  >>> reverse_list([1,3,5,7])
+  [7,5,3,1]
+  </code></pre>
+
+code_lines: |
+  def reverse_list(li): #0given
+  if !BLANK:
+  return li
+  return reverse_list(!BLANK) + !BLANK
+
+solution: |
+  def reverse_list(li):
+      # If the list only has one or zero elements,
+      # its reverse is itself
+      if len(li) <= 1:
+          return li
+      # Otherwise, put the first element at the
+      # end of the list and reverse the rest of
+      # it.
+      return reverse_list(li[1:]) + [li[0]]
+
+test_fn: reverse_list
+
+test_cases:
+  - fn_args: [[1,3,5,7]]
+    expected: [7,5,3,1]
+  - fn_args: [[]]
+    expected: []
+
+hidden_tests:
+  - fn_args: [[1,2,3,4]]
+    expected: [4,3,2,1]
+  - fn_args: [[1,2,3,4,5,6,7,8]]
+    expected: [8,7,6,5,4,3,2,1]
+  - fn_args: [[7,6,5,4,3,2,1]]
+    expected: [1,2,3,4,5,6,7]

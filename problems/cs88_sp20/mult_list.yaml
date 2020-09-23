@@ -1,0 +1,46 @@
+problem_name: mult_list
+
+problem_description: |
+  Write a function that takes in a list <code>li</code> of numbers, and returns a new
+  list. In the new list, each element should be multiplied by its
+  index.<br><br>
+
+  <pre><code>
+  >> mult_list([5, 10, 3, 3]) # 5*0=0, 10*1=10, 3*2=6, 3*3=9
+  [0, 10, 6, 9]
+  >> mult_list([1, 1, 1, 1, 1, 1])
+  [0, 1, 2, 3, 4, 5]
+  </code></pre>
+
+initial_code: |
+  def mult_list(li):
+
+solution: |
+  # List comprehension solution
+  def mult_list(li):
+      return [element * i for i, element in enumerate(li)]
+
+  # Alternative solution
+  def alt_mult_list(li):
+      new_li = []
+      for i, val in enumerate(li):
+          new_li.append(val * i)
+      return new_li
+
+test_fn: mult_list
+
+test_cases:
+  - fn_args: [[5, 10, 3, 3]]
+    expected: [0, 10, 6, 9]
+  - fn_args: [[1, 1, 1, 1, 1, 1]]
+    expected: [0, 1, 2, 3, 4, 5]
+  - fn_args: [[0, 1, 2, 3, 4]]
+    expected: [0, 1, 4, 9, 16]
+
+hidden_tests:
+  - fn_args: [[1,2,3,4,5,6]]
+    expected: [0,2,6,12,20,30]
+  - fn_args: [[4078]]
+    expected: [0]
+  - fn_args: [[3,2,1,0]]
+    expected: [0,2,2,0]

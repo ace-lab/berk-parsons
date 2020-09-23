@@ -1,0 +1,168 @@
+problem_name: trie_magic_match
+
+algorithm_description: |
+  <h4> Trie (Prefix Tree) </h4>
+  Tries are a specific type of tree used to efficiently store and retrieve
+  structured data, such as words. Prefix Trees are a very common type of Trie.
+  Prefix Trees are a tree where every node represents an individual letter
+  (except the root, which represents the start of a word). To add a wordeto
+  a trie, each letter is added one at a time as a child of the previous letter,
+  starting at the root. Then the final letter of the word is marked with a flag
+  to indicate that in completes a word.<br><br>
+
+  The image below represents a prefix tree for the words
+  <code>in, inn, tea, to</code>. In this example, terminal nodes are marked
+  with a blue background. The nodes representing <code>in</code> are
+  highlighted with thicker borders. <br><br>
+
+  <img src="/static/images/tree1.png" />
+  <figcaption class="small text-muted">Created with https://www.draw.io</figcaption>
+
+problem_description: |
+  <h4> Problem </h4>
+  Another common trie is a Suffix Tree. It's similar to a prefix trie, except
+  words are inserted in reverse. For example, <code>tea</code> would be
+  represented as <code>a, e, t</code>.<br><br>
+
+  For this problem, you will writing a function that determines if a target word
+  is <i>almost</i> a match with a list of existing words. Specifically, it
+  should return whether the target word is within 1 edit distance of any of the
+  existing words. By this, we mean that it would be an exact match if one letter
+  was added, removed, or changed. For example, <code>cat</code> is an almost
+  match with <code>at</code> (removing a letter), <code>coat</code> (adding a
+  letter), and <code>cab</code> (changing a letter). However, it is not an
+  almost match with <code>boat</code>, which would require 1 letter to change
+  and 1 letter to be added. The function should return <code>True</code> if
+  there is a partial match, and <code>False</code> otherwise.<br><br>
+
+  An efficient solution to this problem will leverage a Prefix Tree and a
+  Suffix Tree. For efficiency considerations, you can assume that you can
+  expensively process the existing list of words once, but the function
+  would be called repeatedly with different target words.<br><br>
+
+  <h4> Technical Specification </h4>
+  <b>Note: Node and PrefixTrees have more features than the previous problem</b><br><br>
+
+  All characters will be lowercase. The <code>Trie</code> will consist of
+  <code>Nodes</code> with a dictionary of <code>children</code>, an
+  <code>end_of_word</code> property, and a <code>value</code> property which
+  can contain any informatin you may find useful.
+  <br><br><pre>
+    class Node:
+      hasChild(letter):
+        "Returns True if the node has a child matching that letter"
+
+      getChild(letter):
+        "Returns a Node if the node has a child matching that letter, returns None otherwise"
+
+      isEndOfWord():
+        "Returns true if this node represents the end of a word"
+
+    class PrefixTree:
+      getRoot():
+        "Returns the root of the PrefixTree"
+
+      addStr(str, value):
+        "Adds str to the Trie and sets the Value of the end_of_word node to value"
+
+      hasStr(str):
+        "Returns True if str is in the Trie and ends on an end_of_word node"
+
+      getStrValue(str):
+        "Returns the Value of the end_of_word node if str is in the Trie, otherwise returns None"
+  </pre>
+
+initial_code: |
+  def almost_match(existing_word_list, target_word):
+    # existing_word_list is a PrefixTree
+    # target_word is a string
+solution: |
+  """This one's pretty complicated.
+
+  If we start with the word 'last', there are 3 types of words we might find within
+  one edit-distance. (It's also imporant to test edge cases here, e.g. the modification
+  at the start or end of the string, but I won't go into detail on that).
+  - 'lat' (removing a letter)
+  - 'lart' (changing a letter)
+  - 'laqst' (adding a letter)
+
+  One pretty efficient way to do this is to look for the prefixes and suffixes of these
+  target words in the list. But we have to be careful to make sure that it's possible to
+  find with an edit. A solution is to add every possible prefix/suffix pair that fully
+  match the existing words ('last'), as well as any that are missing a single letter.
+  Then, we can do a similar search on the target word, checking every prefix/suffix
+  with a possibly missing letter.
+
+  So in the code below, this is a subset of "existing words" we add based on 'last',
+  with a # representing the split between the prefix and suffix entries.
+  - 'la#st' (not skipping any letters)
+  - 'la#t' (skipping a letter)
+
+  Then, for each of the words above, we'd find a match when we checked:
+  - 'lat' --> 'la#t' (not skipping a letter in the target word)
+  - 'lart' --> 'la#t' (skipping a letter in the target word)
+  - 'laqst' --> 'la#st' (skipping a letter in the target word)
+
+  To further convince ourselves this works, besides using test cases,
+  we can think through the 2x2 matrix of whether a letter is skipped
+  in the existing word and the target word.
+
+  Skip both: Catches a letter being changed (e.g. 'lart') or exact match
+  Skip only existing word: Catches letter deleteions (e.g. 'lat')
+  Skip only target word: Catches a letter being added (e.g. 'laqst')
+  Skip none: Only finds exact matches, so there's no harm in leaving
+             it in even though it doesn't help.
+  """
+
+  def almost_match(existing_word_list, target_word):
+    # Create a prefix and suffix tree.
+    prefix_tree = PrefixTree()
+    suffix_tree = PrefixTree()
+    # For every word in the existing word list, add the relevant entries.
+    for word in existing_word_list:
+      # 1: For every possible break point in the word, we'll add the prefix
+      # to the prefix tree and suffix to the suffix tree.
+      for chr_i in range(len(word) + 1):
+        prefix_str = word[:chr_i]
+        suffix_str = word[chr_i:][::-1]
+        prefix_val = prefix_tree.getStrValue(prefix_str) or []
+        # For all of these, we don't add the word itself but rather the
+        # specific prefix/suffix break. This is an easy way to ensure, e.g.
+        # that 'latest' isn't matched by prefix 'la' and suffix 'st', as
+        # 'latest' is NOT 1 edit distance away from 'last'.
+        prefix_val.append(prefix_str + '#' + suffix_str)
+        prefix_tree.addStr(prefix_str, prefix_val)
+        suffix_val = suffix_tree.getStrValue(suffix_str) or []
+        suffix_val.append(prefix_str + '#' + suffix_str)
+        suffix_tree.addStr(suffix_str, suffix_val)
+      # 2: For every possible break point, we'll add the prfix and suffix
+      # but with a single letter missing. This is important so that we can
+      # reasonably check for the match of 'last' given target word 'laqst',
+      # without assuming that the alphabet is a-z in English.
+      for chr_i in range(len(word)):
+        prefix_str = word[:chr_i]
+        suffix_str = word[chr_i+1:][::-1]
+        prefix_val = prefix_tree.getStrValue(prefix_str) or []
+        prefix_val.append(prefix_str + '#' + suffix_str)
+        prefix_tree.addStr(prefix_str, prefix_val)
+        suffix_val = suffix_tree.getStrValue(suffix_str) or []
+        suffix_val.append(prefix_str + '#' + suffix_str)
+        suffix_tree.addStr(suffix_str, suffix_val)
+
+    # For every possible break in the target word, we check if there's an intersected
+    # match in the prefix and suffix trees. We check the relevant off-by-1 cases here.
+    for chr_i in range(len(target_word) + 1):
+      if treeIntersection(target_word[:chr_i], target_word[chr_i:], prefix_tree, suffix_tree):
+        return True
+      if treeIntersection(target_word[:chr_i], target_word[chr_i+1:], prefix_tree, suffix_tree):
+        return True
+    return False
+
+  # Helper function to determine if there is an intersection between the
+  # prefix and suffix tree results for a given prefix and suffix.
+  def treeIntersection(prefix, suffix, prefix_tree, suffix_tree):
+    suffix = suffix[::-1]
+    prefix_words = prefix_tree.getStrValue(prefix) or []
+    suffix_words = suffix_tree.getStrValue(suffix) or []
+    return len(set(prefix_words) & set(suffix_words))
+

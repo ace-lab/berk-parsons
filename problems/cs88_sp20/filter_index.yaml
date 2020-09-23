@@ -1,0 +1,72 @@
+problem_name: filter_index
+
+problem_description: |
+  <code>filter</code> applies a function <code>func(val)</code> to every
+  value <code>val</code> in a sequence and removes any
+  values for which that <code>func</code> returns <code>False</code>.
+  For this question, write a function <code>filter_index</code> that
+  filters each value by <code>func(index)</code>, using the index
+  instead of the value.
+  <br><br>
+
+  <pre><code>
+  >> filter_index(more_than_2, [2, 2, 2, 2, 2]) # Excludes the first 3 elements
+  [2, 2]
+  >> filter_index(is_even, [2, 3, 5, 7, 11])
+  [2, 5, 11]
+  </code></pre>
+
+  <br><i>Reading test results:</i> The test cases below will take in
+  <code>func</code> as a string which takes in the function
+  name. There is hidden code that will evaluate that to call
+  your <code>filter_index(func, li)</code> with a function object.
+
+initial_code: >
+  # more_than_2 = lambda x: x > 2
+
+  # is_even = lambda x: x%2 == 0
+
+  # def test_function(func_str, li):
+
+  #     func = eval(func_str)
+
+  #     return filter_index(func, li)
+
+
+  def filter_index(func, li):
+
+solution: |
+  def filter_index(func, li):
+      new_li = []
+      for index, val in enumerate(li):
+          if func(index):
+              new_li.append(val)
+      return new_li
+
+test_fn: test_function
+
+test_code: |
+  more_than_2 = lambda x: x > 2
+  is_even = lambda x: x%2 == 0
+
+  def test_function(func_str, li):
+    func = eval(func_str)
+    return filter_index(func, li)
+
+test_cases:
+  - fn_args: [more_than_2, [2,2,2,2,2]]
+    expected: [2,2]
+  - fn_args: [is_even, [2,3,5,7,11]]
+    expected: [2,5,11]
+  - fn_args: [more_than_2, [2,3,5,7,11]]
+    expected: [7,11]
+  - fn_args: [more_than_2, [2]]
+    expected: []
+
+hidden_tests:
+  - fn_args: [is_even, [0,1,2]]
+    expected: [0,2]
+  - fn_args: [is_even, [0,1,2,3]]
+    expected: [0,2]
+  - fn_args: [more_than_2, [0,1,2,3,4,5,6,7,8]]
+    expected: [3,4,5,6,7,8]

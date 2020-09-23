@@ -1,0 +1,110 @@
+- intro:
+  name: Intro
+  components:
+    - type: problem_description
+      text: >
+        The following questions will ask you separately about the specific <b>problems</b> you encountered
+        in this study (Fizz Buzz, The Coin Game, and Odd Plusses) as well as the <b>exercise interfaces</b>
+        you used (Code Writing, Code Arrangement, and Code Arrangement With Blanks).
+
+- problems:
+  name: Problems (Fizz Buzz, The Coin Game, and Odd Plusses)
+  components:
+    - type: multiple_choice
+      name: problem_difficulty
+      text: >
+        Imagine, before this study, you were given The Coin Game and Odd Plusses as homework questions,
+        and asked to write code for both to solve them. How would you rate their
+        difficulty relative to each other?<br>
+      choices:
+        - I would need more assistance to solve The Coin Game than Odd Plusses
+        - I would need similar assistance, but it would take me longer to solve The Coin Game than Odd Plusses
+        - It would take me a similar amount of time and assistance to solve both
+        - I would need similar assistance, but it would take me longer to solve Odd Plusses than The Coin Game
+        - I would need more assistance to solve Odd Plusses than The Coin Game
+    - type: multiple_choice
+      name: coin_game_improvement
+      text: >
+        Imagine you were given a game-winning tree recursion problem of similar difficulty to The Coin Game. Compared to
+        how difficult it would have been to solve before the study, how difficult would it be to solve now?<br>
+      choices:
+        - It would have taken me a similar amount of time and assistance to solve before the study as it would now
+        - It would have taken me longer to solve before the study, but I would have needed similar assistance.
+        - I would have needed more assistance to solve it before the study than I would need now.
+    - type: multiple_choice
+      name: odd_plusses_improvement
+      text: >
+        Imagine you were given a conditional tree recursion problem very similar to Odd Plusses. Compared to
+        how difficult it would have been to solve before the study, how difficult would it be to solve now?<br>
+      choices:
+        - It would have taken me a similar amount of time and assistance to solve before the study as it would now
+        - It would have taken me longer to solve before the study, but I would have needed similar assistance.
+        - I would have needed more assistance to solve it before the study than I would need now.
+    - type: multiple_choice
+      name: relative_improvement
+      text: >
+        How has your ability to solve these two types of problems improved relative to each other?<br>
+      choices:
+        - I have improved more on problems of similar type and difficulty to The Coin Game
+        - I have improved similarly for both types of problems
+        - I have improved more on problems of similar type and difficulty to Odd Plusses
+
+- interfaces:
+  name: Exercise Interfaces (Code Writing, Code Arrangement, and Code Arrangement With Blanks)
+  components:
+    - type: free_form_prompt_large
+      name: prev_hw
+      text: >
+        Think about a Code Writing question on a recent homework. Briefly describe the problem
+        below.
+    - type: problem_description
+      text: >
+        Now imagine you were instead asked to solve that question with one of the Code Arragement
+        interfaces used in this study. For each interface, how would you rank the
+        difficulty of solving the problem relative to Code Writing?
+    - type: multiple_choice
+      name: code_arrangement_difficulty
+      text: Code Arrangement<br>
+      choices:
+      - I would need less assistance to solve a Code Arrangment problem (Code Arrangement is much easier)
+      - I would need less time to solve a Code Arrangement problem, but I would need similar assistance
+      - I would need a similar amount of time to solve a Code Arrangement problem
+      - I would need more time to solve a Code Arrangement problem, but I would need similar assistance
+      - I would need more assistance to solve a Code Arrangement problem (Code Arrangement is much harder)
+    - type: free_form_prompt_large
+      name: code_arrangement_explain
+      text: Please briefly explain your selection.
+    - type: multiple_choice
+      name: code_arrangement_with_blanks_difficulty
+      text: Code Arrangement With Blanks<br>
+      choices:
+      - I would need less assistance to solve a Code Arrangment With Blanks problem (Code Arrangement With Blanks is much easier)
+      - I would need less time to solve a Code Arrangement With Blanks problem, but I would need similar assistance
+      - I would need a similar amount of time to solve a Code Arrangement With Blanks problem
+      - I would need more time to solve a Code Arrangement With Blanks problem, but I would need similar assistance
+      - I would need more assistance to solve a Code Arrangement With Blanks problem (Code Arrangement With Blanks is much harder)
+    - type: free_form_prompt_large
+      name: code_arrangement_with_blanks_explain
+      text: Please briefly explain your selection.
+    - type: problem_description
+      text: " "
+    - type: free_form_prompt_large
+      name: hw_interface_preference
+      text: >
+        Thinking back to that same Code Writing HW question: Imagine that question could be left
+        as is, changed to one of the Code Arrangement interfaces, or you could instead add 2nd
+        similar question (in any combination of the exercise interfaces). To best
+        prepare yourself to answer a similar question on an exam later in the class, would you
+        want 1 or 2 questions on the topic and with which exercise interfaces? Please briefly
+        explain why this choice is better than the others.
+    - type: problem_description
+      text: " "
+    - type: free_form_prompt_large
+      name: code_arrangement_place
+      text: In your mind, how could Code Arrangement exercises be best used in any part of CS61A if at all?
+    - type: free_form_prompt_large
+      name: code_arrangement_with_blanks_place
+      text: In your mind, how could Code Arrangement With Blanks exercises be best used in any part of CS61A if at all?
+    - type: free_form_prompt_large
+      name: code_arrangement_with_blanks_where_blanks
+      text: To make Code Arrangment With Blanks the most effective, should blanks be used to replace variable names? Or is there a better way to incorporate blanks?

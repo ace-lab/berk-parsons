@@ -1,0 +1,79 @@
+problem_name: binary_search_2
+
+algorithm_description:
+  <h4> Binary Search </h4>
+  Suppose we’re searching for an element in a sorted array.
+  If an array <code>arr</code> is sorted, we can check the midpoint of the sequence against the <code>target</code> element we’re searching
+  for. Because the array is sorted, we can eliminate half of the sequence from further consideration as we continue our
+  search by updating the upper or lower bound to the midpoint. The binary search algorithm repeats this procedure,
+  halving the size of the remaining portion of the sequence each time.
+  <br>
+  <img id="gif-desc" src="/static/images/binary_search.gif"/>
+  <figcaption class="small text-muted"> Gif credits to mathworks.com </figcaption>
+  <button type="button" class="btn btn-primary"
+  onclick=document.getElementById('gif-desc').src='/static/images/binary_search.gif'>Restart gif</button>
+
+
+
+problem_description: |
+  Suppose you’re given a list of consecutive, increasing integers with one missing
+  (e.g. <code>[2, 4, 5, 6, 7, 8]</code> missing <code>3</code>).
+  You’re asked to find the missing number efficiently. An approach very similar to
+  binary search can be used to solve this problem, using the value at the midpoint
+  and the length of the left or right half to see which half contains the missing number.
+  Write code that returns the missing number.
+  <br><br>
+  <pre>
+  >>> find_missing([2, 3, 4, 5, 7])
+  6
+  </pre>
+
+initial_code: |
+  def find_missing(arr):
+code_lines: |
+  def find_missing(arr): #0given
+    low = 0
+    high = len(arr) - 1
+    while low <= high:
+      mid = (low + high) // 2
+      if arr[mid+1] - arr[mid] > 1:
+        return arr[mid] + 1
+      if arr[mid] - arr[mid-1] > 1:
+        return arr[mid] - 1
+      if arr[mid] - arr[low] > mid - low:
+        high = mid - 1
+      else:
+        low = mid + 1
+
+solution: |
+  def find_missing(arr):
+    low = 0
+    high = len(arr) - 1
+    while low <= high:
+      mid = (low + high) // 2
+      if arr[mid+1] - arr[mid] > 1:
+        return arr[mid] + 1
+      if arr[mid] - arr[mid-1] > 1:
+        return arr[mid] - 1
+      if arr[mid] - arr[low] > mid - low:
+        high = mid - 1
+      else:
+        low = mid + 1
+
+test_fn: find_missing
+
+test_cases:
+  - fn_args: [[5, 7]]
+    expected: 6
+  - fn_args: [[1, 3, 4, 5, 6]]
+    expected: 2
+  - fn_args: [[1, 2, 3, 4, 6]]
+    expected: 5
+  - fn_args: [[1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13]]
+    expected: 10
+  - fn_args: [[1, 2, 3, 4, 6, 7, 8, 9]]
+    expected: 5
+  - fn_args: [[1, 2, 3, 4, 5, 7, 8, 9]]
+    expected: 6
+  - fn_args: [[1, 2, 4, 5, 6, 7]]
+    expected: 3

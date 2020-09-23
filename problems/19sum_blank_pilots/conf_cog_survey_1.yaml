@@ -1,0 +1,42 @@
+- intro:
+  name: Problem Survey
+  components:
+    - type: problem_description
+      text: >
+        For the following questions, please rate how much you agree or disagree with them.
+    - type: multiple_choice
+      name: complex
+      text: The topics covered in the activity were very complex.
+      choices:
+        - "1 (not at all complex)"
+        - "2"
+        - "3"
+        - "4"
+        - "5 (very complex)"
+    - type: multiple_choice
+      name: instructions_ineffective
+      text: The instructions and/or explanations during the activity were, in terms of learning, very ineffective.
+      choices:
+        - "1 (very effective)"
+        - "2"
+        - "3"
+        - "4"
+        - "5 (very ineffective)"
+    - type: multiple_choice
+      name: understanding_topic
+      text: The activity really enhanced my understanding of the topics covered.
+      choices:
+        - "1 (not at all enhanced)"
+        - "2"
+        - "3"
+        - "4"
+        - "5 (very enhanced)"
+    - type: multiple_choice
+      name: interface_understanding_topic
+      text: The problem type specifically really enhanced my understanding of the topics covered.
+      choices:
+        - "1 (not at all enhanced)"
+        - "2"
+        - "3"
+        - "4"
+        - "5 (very enhanced)"

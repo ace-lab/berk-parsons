@@ -1,0 +1,123 @@
+problem_name: account_2
+
+algorithm_description:
+
+
+
+problem_description: |
+  <h4>Problem</h4>
+  We'll now be extending our account.<br><br>
+
+  We'll work on a class to support transfers between accounts,
+  and also keep track of the
+  number of transfers that have been made.<br><br>
+
+  <b>Hint:</b> Be sure to put <code>@staticmethod</code> directly
+  above the definition of <code>transfer</code>.
+
+  <pre><code>
+  class TransferService(object):
+    """Executes and keeps track of transfers.
+
+    transfer
+
+    >>> sophia_account = Account('Sophia')
+    >>> nate_account = Account('Nate')
+    >>> nate_account.deposit(100)
+    100
+    >>> sophia_account.deposit(900)
+    900
+    >>> TransferService.transfer_count
+    0
+    >>> TransferService.transfer(sophia_account, nate_account, 50)
+    1
+    >>> sophia_account.balance # Nate now has 150, Sophia 850
+    850
+    >>> TransferService.transfer(nate_account, sophia_account, 200)
+    'Insufficient funds'
+    >>> TransferService.transfer_count
+    1      # Unsuccessful transfers don't increment the count.
+    >>> TransferService.transfer(sophia_account, nate_account, 300)
+    2
+    >>> TransferService.transfer(sophia_account, nate_account, 50)
+    3
+    >>> nate_account.balance
+    500    # 100 + 50 + 300 + 50
+    >>> sophia_account.balance
+    500    # 900 - 50 - 300 - 50
+    >>> TransferService.transfer_count
+    3
+    """
+  </code></pre>
+
+initial_code: >
+  def coin_winner(row1, row2, curr, other):
+
+code_lines: |
+  class TransferService(object):#0given
+  !BLANKtransfer_count = 0
+  @staticmethod
+  def transfer(from_account, to_account, amount):
+  !BLANKfrom_account_status = !BLANKfrom_account.withdraw(!BLANKamount)
+  if !BLANKfrom_account_status == 'Insufficient funds':
+  return 'Insufficient funds'
+  !BLANKto_account.deposit(!BLANKamount)
+  !BLANKtransfer_count += 1
+  return !BLANKtransfer_count
+
+solution: |
+
+test_code: |
+  class Account(object):#0given
+    def __init__(self, holder):
+      self.balance = 0
+      self.holder = holder
+    def deposit(self, amount):
+      self.balance += amount
+      return self.balance
+    def withdraw(self, amount):
+      if amount > self.balance:
+        return 'Insufficient funds'
+      self.balance -= amount
+      return self.balance
+
+  def test_method(*args):
+    global nate_account, sophia_account
+    if 'nate_account' not in globals():
+      nate_account = Account('nate')
+      sophia_account = Account('sophia')
+    account = globals()[args[0]]
+    fn_name = args[1]
+    if len(args) > 2:
+      fn_args = [globals()[x] if type(x) == str else x for x in args[2:]]
+      return getattr(account, fn_name)(*fn_args)
+    else:
+      return getattr(account, fn_name)
+
+test_fn: test_method
+
+test_cases:
+  - fn_args: ['nate_account', 'deposit', 100]
+    expected: 100
+  - fn_args: ['sophia_account', 'deposit', 900]
+    expected: 900
+  - fn_args: ['TransferService', 'transfer_count']
+    expected: 0
+  - fn_args: ['TransferService', 'transfer', 'sophia_account', 'nate_account', 50]
+    expected: 1
+  - fn_args: ['sophia_account', 'balance']
+    expected: 850
+  - fn_args: ['TransferService', 'transfer', 'nate_account', 'sophia_account', 200]
+    expected: 'Insufficient funds'
+  - fn_args: ['TransferService', 'transfer_count']
+    expected: 1
+  - fn_args: ['TransferService', 'transfer', 'sophia_account', 'nate_account', 300]
+    expected: 2
+  - fn_args: ['TransferService', 'transfer', 'sophia_account', 'nate_account', 50]
+    expected: 3
+  - fn_args: ['nate_account', 'balance']
+    expected: 500
+  - fn_args: ['sophia_account', 'balance']
+    expected: 500
+  - fn_args: ['TransferService', 'transfer_count']
+    expected: 3

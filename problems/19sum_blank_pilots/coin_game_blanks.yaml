@@ -1,0 +1,97 @@
+problem_name: coin_game
+
+algorithm_description:
+
+
+
+problem_description: |
+  <h4>Problem</h4>
+  Alice and Bob are playing a game with coins on a table in 2 distinct rows. In this game,
+  they take turns removing any non-zero number of coins from one of the rows.
+  Whoever takes the last coin on the table wins the game. For example, if there are 2 coins
+  on the table in a single row and Alice starts, Alice could take both coins to win. However,
+  if the 2 coins were in 2 different rows, Alice would have to take one of them, then Bob would
+  take the remaining coin to win the game.<br><br>
+
+  Implement <code>coin_winner(row1, row2, current_player, other_player)</code>, which takes in the number of coins
+  in each row as a list of integers and the starting player and other player as strings, and returns who would win
+  <b>if both players played optimally</b>. For example, if there were 5 coins in a single row the table, the starting player
+  would take all 5; if they took any less, they would lose as their opponent could take all the remaining coins.
+
+  <br><br>
+  <pre><code>
+  >>> coin_winner(1, 0, 'Alice', 'Bob')  # Alice takes 1 coin
+  'Alice'
+  >>> coin_winner(0, 5, 'Alice', 'Bob')  # Alice takes 5 coins
+  'Alice'
+  >>> coin_winner(1, 1, 'Alice', 'Bob')  # Alice takes 1 coin from either row.
+                                           # Bob takes the remaining 1 coin.
+  'Bob'
+  </code></pre>
+
+  <br><br>
+  <i>Hint:</i> These types of problems can often be solved with a recursive
+  solution. The key observation is as follows: If current_player can make <b>any move
+  </b> such that they will always win from the resulting board, then they
+  have a winning strategy for that board. In this game, one player always
+  has a winning strategy from any board, but not all moves necessarily
+  lead to that winning strategy.<br>
+  <i>Hint:</i> <code>coin_winner</code> should always returns a string.<br>
+  <i>Hint:</i> <code>li[:]</code> returns a copy of the list <code>li</code><br>
+  <i>Hint:</i> <code>[x for x in li if x]</code> creates a copy of the list <code>li</code> with all <code>0</code>s removed.
+
+initial_code: >
+  def coin_winner(row1, row2, curr, other):
+
+code_lines: |
+  def coin_winner(row1, row2, curr, other): #0given
+  if !BLANK == 0 and !BLANK == 0:
+  return !BLANK
+  for !BLANK in range(!BLANK):
+  if coin_winner(!BLANK, !BLANK, !BLANK, !BLANK) == !BLANK:
+  return !BLANK
+  for !BLANK in range(!BLANK):
+  if coin_winner(!BLANK, !BLANK, !BLANK, !BLANK) == !BLANK:
+  return !BLANK
+  return !BLANK
+
+solution: |
+  def coin_winner(row1, row2, curr, other):
+    # Base case: If there are no coins left, that means the other
+    # player just took the last coin.
+    if row1 == 0 and row2 == 0:
+      return other
+
+    # Consider taking some number of coins from row 1.
+    for i in range(row1):
+      # If any way of doing this results in winning the game, then curr
+      # has a winning move.
+      if coin_winner(i, row2, other, curr) == curr:
+        return curr
+
+    # Do the same with row 2.
+    for i in range(row2):
+      if coin_winner(row1, i, other, curr) == curr:
+        return curr
+
+    # If the function hasn't returned yet, then all possible moves lead
+    # to other being able to win, so curr has no winning moves.
+    return other
+
+test_fn: coin_winner
+
+test_cases:
+  - fn_args: [1, 0, 'Alice', 'Bob']
+    expected: 'Alice'
+  - fn_args: [0, 5, 'Alice', 'Bob']
+    expected: 'Alice'
+  - fn_args: [1, 1, 'Alice', 'Bob']
+    expected: 'Bob'
+  - fn_args: [1, 0, 'Bob', 'Alice']
+    expected: 'Bob'
+  - fn_args: [3, 3, 'Alice', 'Bob']
+    expected: 'Bob'
+  - fn_args: [3, 4, 'Alice', 'Bob']
+    expected: 'Alice'
+  - fn_args: [3, 20, 'Alice', 'Bob']
+    expected: 'Alice'

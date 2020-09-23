@@ -1,0 +1,306 @@
+problem_name: huffman_saved_bits
+
+algorithm_description: |
+  <h4> Huffman Tree </h4>
+  A Huffman Code is an optimal prefix code that can be used for lossless
+  data compression. In other words, it can efficiently convert characters
+  to compact the size of a message.<br><br>
+
+  <i>Extra background info</i><br>
+  For example, on a standard computer, any letter in English is represented
+  by 8 bits. However, if we only considered lower-case letters, we'd only
+  need 5 bits (allowing for 32 letters, though we only need 26). If the
+  sender and receiver of a message agreed that this would be used, it could
+  make messages 5/8 the size.<br><br>
+
+  A Huffman Code is more general and often more efficient than the method
+  described above. For example, 'e' is much more common letter than 'x'
+  in English. So it would be great to encode 'e' with less than 5 bits since
+  it occurs so often, even if that means 'x' ends up taking more than 5
+  bits. But, that might cause ambiguity, since now there's no
+  clear "space" between characters. We won't get into the proof here, but
+  Huffman coding allows for an unambiguous compression and decompression
+  even though characters are represented by different lengths.<br>
+  <i>End extra background info</i><br><br>
+
+  A Huffman Code requires that you have a frequency for each letter. It
+  begins by creating nodes for each letter and adds them to a list (or
+  priority queue for efficiency). Then, in each iteration, it
+  will remove two nodes from the list and put a new one back, following
+  the steps below.
+  <ol>
+    <li>Take the 2 nodes in the list with the lowest frequencies</li>
+    <li>Create a new node with each of them as children (combining them into a single tree)</li>
+    <li>Set the frequency of the new node to be the sum of the frequencies of the 2 nodes from step 1</li>
+    <li>Insert the new node back into the list (Note that the two nodes from Step 1 are no longer in the list)</li>
+  </ol>
+  By doing this repeatedly, the list ends up with a
+  single node that is the root of a tree. In the image below, (a), (b), ..., (e) each represent
+  one iteration of the sequence above. The nodes that are connected to the horizontal line for
+  each of those are the nodes that are currently in the list being selected from. Nodes not
+  touching that line, e.g. 'E' in iteration (b), can no longer be selected from the list for
+  future iterations. In this image, the steps are ordered as follows:
+  <ol>
+    <li>Take 'E' and 'D', the lowest frequency nodes, combine them, and add back a new node ('DE') with frequency 11.</li>
+    <li>Take 'C' and 'B', now the lowest frequency nodes, combine them, and add back a new node ('BC') with frequency 13.</li>
+    <li>Take 'DE' and 'BC', now the lowest frequency nodes, combine them, and add back a new node ('BCDE') with frequencey 24.</li>
+    <li>Take 'A' and 'BCDE', now the lowest frequency nodes, combine them, and add back a final new node ('ABCDE') with frequency 39.</li>
+  </ol>
+
+  <img src="/static/images/huffman1.png" />
+  <figcaption class="small text-muted">By Andreas.Roever, CC BY-SA 3.0, https://commons.wikimedia.org/w/index.php?curid=3000007</figcaption>
+  <br>
+  Finally, the tree shown above can be used to encode the message. To encode a letter, we follow the path from
+  the root of the tree to that letter. Whenever we follow the left child, we add a <code>0</code> to the representation
+  of the character. Whenever we follow the right child, we add a <code>1</code>. For example, <code>A</code> would be
+  encoded as <code>0</code>, while <code>C</code> would be coded as <code>101</code>
+
+
+
+problem_description: |
+  <h4> Problem </h4>
+  For this question, you'll be going a bit further with Huffman Coding. The
+  main reason to use Huffman Coding is to transmit a message more efficiently.
+  To "prove" it actually works, in this question you'll write a function that
+  returns how many bits were saved by using a Huffman Coding. <b>As a reminder,
+  normally it would take 8 bits to represent any character, but in Huffman
+  Coding it varies from letter to letter.</b><br><br>
+
+  Like before, your function will receive two arguments. The first will be a dictionary
+  (or hashmap) of characters to their frequency for the Huffman code. The
+  second will be a message to encode. Your function should return an integer,
+  the number of bits that would be saved by encoding that message.<br><br>
+
+  You could solve this question by encoding the string, but it's not necessary.
+  <br><br>
+
+  The <code>Node</code> and <code>NodeList</code>
+  classes as described below are already implemented for you. Note that
+  <code>NodeList</code> can now directly create a Huffman Tree for you.<br><br>
+
+  <h4> Technical Specification </h4>
+  Notice that you're no longer given the <code>Node.pathToStr(str)</code>
+  functionality from the last question.
+  <pre>
+    class Node:
+      def getLeftChild():
+        "Returns the left child Node if it exists, None otherwise"
+
+      def getRightChild():
+        "Returns the right child Node if it exists, None otherwise"
+
+      def getLabel():
+        "Returns the label of Node if it exists, '' otherwise"
+
+    class NodeList:
+      def generateHuffmanTree(letters_to_frequency):
+        "Returns a Node representing the root of a Huffman Tree generated from letters_to_frequency"
+  </pre>
+  <h4>Reading test cases</h4>
+  The first argument is a dictionary mapping letters to their frequencies. The
+  second argument is the message to be encoded.<br><br>
+
+  The last 2 test cases demonstrate cases where Huffman Coding is very
+  effective and very ineffective, respectively.<br><br>
+
+  <h4>Starting Code</h4>
+  <pre>def huffman_bits_saved(letters_to_frequency, message):
+      huffman_tree_root = NodeList().generateHuffmanTree(letters_to_frequency)</pre>
+
+initial_code: |
+  def huffman_bits_saved(letters_to_frequency, message):
+  	# letters_to_frequency is a dictionary of characters to integers, message is a string
+  	huffman_tree_root = NodeList().generateHuffmanTree(letters_to_frequency)
+
+code_lines: |
+  def visit(node, path_len, str):
+  if node.getLabel() == str:
+  return path_len
+  if not node.getLeftChild() and not node.getRightChild():
+  return None
+  path_len += 1
+  out = visit(node.left_child, path_len, str)
+  if not out:
+  out = visit(node.right_child, path_len, str)
+  return out
+  def huffman_bits_saved(letters_to_frequency, message): #0given
+  # letters_to_frequency is a dictionary of characters to integers, message is a string #1given
+  huffman_tree_root = NodeList().generateHuffmanTree(letters_to_frequency) #1given
+  bits_saved = 0
+  per_character_savings = {}
+  for chr in message:
+  if chr in per_character_savings:
+  character_savings = per_character_savings[chr]
+  else:
+  character_savings = 8 - visit(huffman_tree_root, 0, chr)
+  per_character_savings[chr] = character_savings
+  bits_saved += character_savings
+  return bits_saved
+
+solution: |
+  # Recursively traverse the Huffman Tree to see how deep the target character is
+  # This depth is the number of characters needed to encode it.
+  def visit(node, path_len, str):
+    if node.getLabel() == str:
+      return path_len
+    # If this is a leaf node and is not the target character,
+    # the character is not on this path.
+    if not node.getLeftChild() and not node.getRightChild():
+      return None
+    path_len += 1
+    out = visit(node.left_child, path_len, str)
+    # If the target character wasn't down the left paths, look down the right ones.
+    if not out:
+      out = visit(node.right_child, path_len, str)
+    return out
+
+  def huffman_bits_saved(letters_to_frequency, message):
+    # letters_to_frequency is a dictionary of characters to integers, message is a string
+    huffman_tree_root = NodeList().generateHuffmanTree(letters_to_frequency)
+
+    bits_saved = 0
+    per_character_savings = {}
+
+    for chr in message:
+      # Remember characters for which we've already computed savings.
+      if chr in per_character_savings:
+        character_savings = per_character_savings[chr]
+      else:
+        # The number of bits saved for this character is 8 minus
+        character_savings = 8 - visit(huffman_tree_root, 0, chr)
+        per_character_savings[chr] = character_savings
+      bits_saved += character_savings
+    return bits_saved
+
+
+test_code: |
+  class Node:
+    def __init__(self):
+      self.label = ''
+      self.path = []
+      self.frequency = 0
+      self.left_child = None
+      self.right_child = None
+
+    def __repr__(self):
+      return "Path to node {}: {}".format(self.label, self.path)
+
+    def setLabel(self, label):
+      self.label = label
+
+    def getLabel(self):
+      return self.label
+
+    def setFrequency(self, freq):
+      self.frequency = freq
+
+    def getFrequency(self):
+      return self.frequency
+
+    def addLeftChild(self, child_node):
+      if self.left_child:
+        raise Exception("Node {} already has a left child {} but is trying to add new one {}".format(
+          self.label, self.left_child.label, child_node.label))
+      self.left_child = child_node
+      self.left_child.path = ['Left'] + self.left_child.path
+
+    def addRightChild(self, child_node):
+      if self.right_child:
+        raise Exception("Node {} already has a right child {} but is trying to add new one {}".format(
+          self.label, self.right_child.label, child_node.label))
+      self.right_child = child_node
+      self.right_child.path = ['Right'] + self.right_child.path
+
+    def getLeftChild(self):
+      return self.left_child
+
+    def getRightChild(self):
+      return self.right_child
+
+  generated_huffman_tree = None
+
+  class NodeList:
+    def __init__(self):
+      self.nodes = []
+
+    def size(self):
+      return len(self.nodes)
+
+    def insertNode(self, node):
+      self.nodes.append(node)
+
+    def popTwoLeastFrequent(self):
+      min_node = min(self.nodes, key=lambda node: node.frequency)
+      self.nodes.remove(min_node)
+      next_min_node = min(self.nodes, key=lambda node: node.frequency)
+      self.nodes.remove(next_min_node)
+      return min_node, next_min_node
+
+    def generateHuffmanTree(self, letters_to_frequency):
+      global generated_huffman_tree
+      for letter, freq in letters_to_frequency.items():
+        node = Node()
+        node.setLabel(letter)
+        node.setFrequency(freq)
+        self.insertNode(node)
+
+      node = None # Not strictly necessary in Python
+      while self.size() > 1:
+        min_node, next_min_node = self.popTwoLeastFrequent()
+        node = Node()
+        node.addLeftChild(next_min_node)
+        node.addRightChild(min_node)
+        freq = min_node.getFrequency() + next_min_node.getFrequency()
+        node.setFrequency(freq)
+        self.insertNode(node)
+
+      generated_huffman_tree = node
+      return node
+
+  def true_huffman_bits_saved(message):
+    huffman_tree = generated_huffman_tree
+
+    def visit(node, path_len, str):
+      if node.getLabel() == str:
+        return path_len
+      if not node.getLeftChild() and not node.getRightChild():
+        return None
+      path_len += 1
+      out = visit(node.left_child, path_len, str)
+      if not out:
+        out = visit(node.right_child, path_len, str)
+      return out
+
+    bits_saved = 0
+    for chr in message:
+      bits_saved += 8 - visit(huffman_tree, 0, chr)
+    return bits_saved
+
+  def huffman_bits_saved_test(letters_to_frequency, message):
+    out = huffman_bits_saved(letters_to_frequency, message)
+    true_out = true_huffman_bits_saved(message)
+    if out != true_out:
+      return "Huffman saves {} bits on message, but your function returned {}".format(true_out, out)
+    return True
+
+test_fn: huffman_bits_saved_test
+
+test_cases:
+  - fn_args: [{'a': 15, 'b': 7, 'c': 6, 'd': 5, 'e': 4}, 'a']
+    expected: True
+  - fn_args: [{'a': 15, 'b': 7, 'c': 6, 'd': 5, 'e': 4}, 'b']
+    expected: True
+  - fn_args: [{'a': 15, 'b': 7, 'c': 6, 'd': 5, 'e': 4}, 'c']
+    expected: True
+  - fn_args: [{'a': 15, 'b': 7, 'c': 6, 'd': 5, 'e': 4}, 'd']
+    expected: True
+  - fn_args: [{'a': 15, 'b': 7, 'c': 6, 'd': 5, 'e': 4}, 'e']
+    expected: True
+  - fn_args: [{'a': 15, 'b': 7, 'c': 6, 'd': 5, 'e': 4}, 'abcdedcba']
+    expected: True
+  - fn_args: [{'a': 1, 'b': 2, 'c': 4, 'd': 8, 'e': 11, 'f': 13, 'g': 17, 'h': 19, 'i': 23, 'j': 29, 'k': 31, 'l': 37, 'm': 41}, 'abcdefghijklm']
+    expected: True
+  - fn_args: [{'a': 1, 'b': 2, 'c': 4, 'd': 8, 'e': 16, 'f': 32, 'g': 64, 'h': 128, 'i': 256, 'j': 512, 'k': 1024, 'l': 2048, 'm': 4096, 'n': 8192, 'o': 16384, 'p': 32768, 'q': 65536, 'r': 131072, 's': 262144, 't': 524288, 'u': 1048576, 'v': 2097152, 'w': 4194304, 'x': 8388608, 'y': 16777216, 'z': 33554432}, 'zzzzzzzz']
+    expected: True
+  - fn_args: [{'a': 1, 'b': 2, 'c': 4, 'd': 8, 'e': 16, 'f': 32, 'g': 64, 'h': 128, 'i': 256, 'j': 512, 'k': 1024, 'l': 2048, 'm': 4096, 'n': 8192, 'o': 16384, 'p': 32768, 'q': 65536, 'r': 131072, 's': 262144, 't': 524288, 'u': 1048576, 'v': 2097152, 'w': 4194304, 'x': 8388608, 'y': 16777216, 'z': 33554432}, 'aaaaaaaa']
+    expected: True

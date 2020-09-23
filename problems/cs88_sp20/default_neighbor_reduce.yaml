@@ -1,0 +1,61 @@
+problem_name: default_neighbor_reduce
+
+problem_description: |
+  Write a function <code>default_neighbor_reduce(li, func)</code> that takes
+  in a list <code>li</code> of length <code>n</code>, a function
+  <code>func</code>, and a starting value <code>default</code>,
+  and returns a list of the same length
+  which is the result of applying <code>func</code> to <code>default</code>
+  and the first element of the list, followed by applying it to
+  all neigbhoring pairs of elements.
+
+  <pre><code>
+  >> default_neighbor_reduce([1,3,5], add, 0) # [0+1, 1+3, 3+5]
+  [1, 4, 8]
+  >> default_neighbor_reduce([1,3,2,4], max, 10)
+  [10, 3, 3, 4]
+
+  </code></pre>
+
+  <br><i>Reading test results:</i> The test cases below will take in
+  <code>func</code> as a string which takes in the function
+  name. There is hidden code that will evaluate that to call
+  your <code>default_neighbor_reduce(li, func, default)</code> with a function object.
+
+initial_code: >
+  def default_neighbor_reduce(li, func, default):
+
+solution: |
+  def default_neighbor_reduce(li, func, default):
+      last = default
+      new_li = []
+      for val in li:
+          new_li.append(func(last, val))
+          last = val
+      return new_li
+
+test_fn: test_function
+
+test_code: |
+  from operator import add, sub
+
+  def test_function(li, func_str, default):
+    func = eval(func_str)
+    return default_neighbor_reduce(li, func, default)
+
+test_cases:
+  - fn_args: [[1,3,5], add, 0]
+    expected: [1,4, 8]
+  - fn_args: [[1,3,2,4], max, 10]
+    expected: [10,3,3,4]
+  - fn_args: [[5,4,3,2,1], sub, 6]
+    expected: [1,1,1,1,1]
+
+hidden_tests:
+
+  - fn_args: [[1,3,5], max, 0]
+    expected: [1,3,5]
+  - fn_args: [[1,3,2,4], sub, 10]
+    expected: [9,-2,1,-2]
+  - fn_args: [[5,4,3,2,1], add, 6]
+    expected: [11,9,7,5,3]

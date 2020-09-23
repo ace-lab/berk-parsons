@@ -1,0 +1,93 @@
+problem_name: dfs_detect_cycle
+
+algorithm_description: |
+  <h4> DFS (Depth-First Search) </h4>
+  Suppose we have a graph of nodes and edges. Depth-First Search (DFS) is an
+  algorithm that visits each of these nodes in a particular order. It
+  starts at an arbitrary node in the graph, and recursively explores as far
+  as possible along each branch before backtracking. This is in contrast to
+  breadth-first search, which explores all 1st-level neighbors of the initial
+  node before any 2nd-level neighbors.<br><br>
+
+  As the DFS algorithm traverses the graph, it keeps track of when a node is
+  <code>entered</code>, or first visited, and when it is <code>exited</code>,
+  once all of its children have been visited.<br><br>
+
+  DFS is often implemented with a helper <code>visit</code> function that is recursively called, though
+  it can also be implemented with a (last-in-first-out) stack.<br><br>
+
+  For example, in the graph below, a possible DFS ordering would be: <code>
+  Enter A, Enter B, Enter C, Enter w, Exit E, Enter D, Exit D, Exit C, Exit B,
+  Exit A</code><br><br>
+
+  <img src="/static/images/graph4.png" />
+  <figcaption class="small text-muted">Created with https://www.nctm.org/Classroom-Resources/Illuminations/Interactives/Graph-Creator/</figcaption>
+
+
+
+problem_description: |
+  <h4> Problem </h4>
+  A cycle in a graph occurs when there is a path visiting a group of vertices
+  that ends where it begins. For example, in the graph above, <code>ABCD</code>
+  form a cycle.
+
+  For this problem, write a function that determines if there is a cycle in a
+  given graph. This should be done with a modified DFS, as described above.
+  The function should return <code>True</code> if there is a cycle, and
+  <code>False</code> otherwise.<br><br>
+
+  <h4> Technical Specification </h4>
+  <code>graph</code> will be represented as a list of <code>Nodes</code> that have
+  <code>children</code> pointing to other <code>Nodes</code> with which they share
+  an edge.
+
+  <br><br><pre>
+    class Node:
+      getNeighbors():
+        "Returns a list of Nodes representing neighboring nodes"
+
+      def getEnter():
+        "Returns the value of self.entered. This is initially set to False"
+
+      def getExit():
+        "Returns the value of self.exited. This is initially set to False"
+
+      def setEnter():
+        "sets self.entered to True"
+
+      def setExit():
+        "Sets self.exited to True"
+  </pre>
+
+initial_code: |
+  def detect_cycle(graph):
+    # graph is a list of Nodes
+solution: |
+  """This solution is based of the DFS implementation that marks enter and
+  exits.
+
+  As you traverse the graph, if you see a node that's been entered but
+  not exited, that means it's part of the current traversal and there
+  is a cycle. The code below uses an implicit None return, which
+  evaluates to false when part of a conditional.
+
+  Note that it does not complete the full DFS."""
+
+  def detect_cycle(graph):
+    for node in graph:
+      if not node.getExit():
+        if visit(node):
+          return True
+    return False
+
+  def visit(node):
+    node.setEnter()
+    for neighbor in node.getNeighbors():
+      if neighbor.getExit():
+        continue
+      if neighbor.getEnter():
+        return True
+      # If a cycle is found in visit, propogate it back up.
+      if visit(neighbor):
+        return True
+    node.setExit()

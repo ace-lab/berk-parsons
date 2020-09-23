@@ -1,0 +1,177 @@
+problem_name: dfs_num_islands
+
+algorithm_description:
+  <h4> DFS (Depth-First Search) </h4>
+  Suppose we have a graph of nodes and edges. Depth-First Search (DFS) is an
+  algorithm that visits each of these nodes in a particular order. It
+  starts at an arbitrary node in the graph, and recursively explores as far
+  as possible along each branch before backtracking. This is in contrast to
+  breadth-first search, which explores all 1st-level neighbors of the initial
+  node before any 2nd-level neighbors.<br><br>
+
+  As the DFS algorithm traverses the graph, it keeps track of when a node is
+  <code>entered</code>, or first visited, and when it is <code>exited</code>,
+  once all of its children have been visited.<br><br>
+
+  DFS is often implemented with a helper <code>visit</code> function that is recursively called, though
+  it can also be implemented with a (last-in-first-out) stack.<br><br>
+
+  For example, in the directed graph below, a possible DFS ordering would be <code>
+  Enter A, Enter B, Enter D, Exit D, Exit B, Enter C, Exit C, Exit A,
+  Enter E, Exit E</code><br><br>
+
+  <img src="/static/images/graph5.png" />
+  <figcaption class="small text-muted">Created with https://www.nctm.org/Classroom-Resources/Illuminations/Interactives/Graph-Creator/</figcaption>
+
+
+
+problem_description: |
+  <h4> Problem </h4>
+  Ok, now that we've practiced implementing DFS, let's practice applying it to
+  a new problem.<br><br>
+
+  For this problem, you will be given a string representing a 2d plot (or map). Each
+  character represents whether the given square is Land (<code>L</code>) or
+  Ocean (<code>O</code>). An island is defined as a group of Land squares
+  that are connected horizontally or vertically (NOT diagonally). This is a
+  special case of connected components in a graph.<br><br>
+
+  Use an algorithm very similar to the DFS you just saw to determine the
+  number of islands on a given map.<br><br>
+
+  For this problem, you can assume plot always represents a rectangle.
+  We can add some checks to make sure a particular coordinate is
+  actually a node (Land in this case) or that a neighboring coordinate
+  (e.g. to the right) is actually a neighboring node (Land in this case).
+  <br><br>
+
+  The following plot represents a single island of size 3:
+  <code><pre>
+  LL
+  LO
+  </pre></code>
+
+  The following plot represents 3 islands, one of size 3 and two of size 1:
+  <code><pre>
+  LOL
+  OOL
+  LOL
+  </pre></code>
+
+  The following plot represents 2 islands, both of size 1:
+  <code><pre>
+  LO
+  OL
+  </pre></code>
+
+  <h4> Technical Specification </h4>
+  No API will be provided to you for this problem.
+  </pre><br><br>
+  <h4>Reading test cases</h4>
+  The only argument is a string representing the map, using new lines to
+  represent separate rows. The return is the expected number of islands.<br><br>
+  <h4>Starting code</h4>
+  A solution to this algorithm begins with the following code:<pre>
+  def num_islands(plot):
+    # This creates a list of lists the same dimensions of plot filled with 0s
+    visited = [[0] * len(row) for row in plot.splitlines()]</pre>
+
+initial_code: >
+  def num_islands(plot):
+  	# plot is a String.
+  	# This creates a list of lists the same dimensions of plot filled with 0s
+  	visited = [[0] * len(row) for row in plot.splitlines()]
+
+code_lines: |
+  def num_islands(plot): #0given
+  # plot is a String. #1given
+  # This creates a list of lists the same dimensions of plot filled with 0s #1given
+  visited = [[0] * len(row) for row in plot.splitlines()] #1given
+  islands_found = 0
+  split_plot = plot.splitlines()
+  for row_i, row in enumerate(split_plot):
+  for col_i, col in enumerate(row):
+  if split_plot[row_i][col_i] == 'O':
+  continue
+  if visited[row_i][col_i]:
+  continue
+  visit(row_i, col_i, split_plot, visited)
+  islands_found += 1
+  return islands_found
+  def visit(row_i, col_i, split_plot, visited):
+  visited[row_i][col_i] = 1
+  directions = [[-1, 0], [0, 1], [1, 0], [0, -1]]
+  for direction in directions:
+  new_col = col_i + direction[0]
+  new_row = row_i + direction[1]
+  if new_col < 0 or new_row < 0:
+  continue
+  if new_col >= len(split_plot[0]) or new_row >= len(split_plot):
+  continue
+  if split_plot[new_row][new_col] == 'O':
+  continue
+  if visited[new_row][new_col]:
+  continue
+  visit(new_row, new_col, split_plot, visited)
+
+solution: |
+  def num_islands(plot):
+    # This creates a list of lists the same dimensions of plot filled with 0s
+    visited = [[0] * len(row) for row in plot.splitlines()]
+
+    # Keep track of the number of islands we find
+    islands_found = 0
+
+    # Convert the input into a list of lists for easier indexing.
+    split_plot = plot.splitlines()
+
+    # For every co-ordinate:
+    for row_i, row in enumerate(split_plot):
+      for col_i, col in enumerate(row):
+        # If it's ocean, we skip over it. This wouldn't be a node in our
+        # graph of land squares.
+        if split_plot[row_i][col_i] == 'O':
+          continue
+        # Similar to DFS, if it's been visited already, we skip over it.
+        if visited[row_i][col_i]:
+          continue
+        visit(row_i, col_i, split_plot, visited)
+        islands_found += 1
+    return islands_found
+
+  def visit(row_i, col_i, split_plot, visited):
+    # For this problem, we don't actually need to know if or when a node
+    # is exited, only if it has been entered.
+    visited[row_i][col_i] = 1
+
+    # Each direction is represented as a pair [change_in_row, change_in_col]
+    directions = [[-1, 0], [0, 1], [1, 0], [0, -1]]
+    for direction in directions:
+      new_col = col_i + direction[0]
+      new_row = row_i + direction[1]
+      # We've fallen off the top or left side of the plot
+      if new_col < 0 or new_row < 0:
+        continue
+      # We've fallen off the right or bottom side of the plot
+      if new_col >= len(split_plot[0]) or new_row >= len(split_plot):
+        continue
+      # We've fallen into the ocean
+      if split_plot[new_row][new_col] == 'O':
+        continue
+      # We've already visited this coordinate
+      if visited[new_row][new_col]:
+        continue
+      visit(new_row, new_col, split_plot, visited)
+
+
+test_fn: num_islands
+
+test_cases:
+  - fn_args: ["LL\nLO"]
+    expected: 1
+  - fn_args: ["LOL\nOOL\nLOL"]
+    expected: 3
+  - fn_args: ["LO\nOL"]
+    expected: 2
+  - fn_args: ["LLOOO\nOLOOL\nLOOLL\nOOOOO\nLOLOL\nOOOLO"]
+    expected: 7

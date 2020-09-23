@@ -1,0 +1,40 @@
+problem_name: binary_search_comprehension
+
+algorithm_description:
+  <h4> Binary Search </h4>
+  Suppose we’re searching for an element in a sorted array.
+  If an array <code>arr</code> is sorted, we can check the midpoint of the sequence against the <code>target</code> element we’re searching
+  for. Because the array is sorted, we can eliminate half of the sequence from further consideration as we continue our
+  search by updating the upper or lower bound to the midpoint. The binary search algorithm repeats this procedure,
+  halving the size of the remaining portion of the sequence each time.
+  <br>
+  <img id="gif-desc" src="/static/images/binary_search.gif"/>
+  <figcaption class="small text-muted"> Gif credits to mathworks.com </figcaption>
+  <button type="button" class="btn btn-primary"
+  onclick=document.getElementById('gif-desc').src='/static/images/binary_search.gif'>Restart gif</button>
+
+problem_description:
+  Say that your <code>target</code> is <code>3</code>, and the midpoint of the current interval <code>5</code>.
+  Do you update the upper or lower interval boundary to continue searching?
+
+
+pseudocode: |
+  BINARY_SEARCH(target, arr)
+    low = 0
+    high = length(arr) - 1
+    while low <= high
+      mid = floor((low+high)/2)
+        if arr[mid] > target
+          high = mid - 1
+      else if arr[mid] < target
+        low = mid + 1
+      else
+        return mid
+    return not_found
+
+choices:
+  - Lower
+  - Upper
+
+# Note: This is the index, not the text of the actual solution
+correct_answer: 1
