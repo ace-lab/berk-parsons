@@ -6,7 +6,7 @@
    var blankRegexp = /#blank([^#]*)/;
    var userStrings = {
      trash_label: 'Drag from here',
-     solution_label: 'Construct your solution here, including indents',
+     solution_label: 'Construct your solution here',
      order: function() {
        return "Code fragments in your program are wrong, or in wrong order. This can be fixed by moving, removing, or replacing highlighted fragments.";},
      lines_missing: function() {
@@ -384,31 +384,32 @@
    };
 
    ParsonsWidget.prototype.solutionCode = function() {
-     var solutionCode = "";
-     var codeMetadata = "";
+     var frames = [];
      var lines = this.normalizeIndents(this.getModifiedCode("#ul-" + this.options.sortableId));
      for (let i = 0; i < lines.length; i++) {
        var blankText = "";
        //Original line from the YAML File
        var originalLine = "";
-       let yamlConfigClone = $("#" + lines[i].id).clone();
-       yamlConfigClone.find("input").each(function (_, inp) {
-           inp.replaceWith('!BLANK');
-           blankText += " #blank" + inp.value
-       });
        let codeClone = $("#" + lines[i].id).clone();
        codeClone.find("input").each(function (_, inp) {
            inp.replaceWith(inp.value);
        });
-       yamlConfigClone[0].innerText = yamlConfigClone[0].innerText.trimRight();
-       codeClone[0].innerText = codeClone[0].innerText.trimRight();
-       if (yamlConfigClone[0].innerText != codeClone[0].innerText) {
-         originalLine = " #!ORIGINAL" + yamlConfigClone[0].innerText + blankText;
-       }
-       solutionCode += "  ".repeat(lines[i].indent) + codeClone[0].innerText + "\n";
-       codeMetadata +=  originalLine + "\n";
+       var label = codeClone.find('thead th')[0].innerText.trimRight();
+       var data = [];
+       codeClone.find('tbody').each(function (_, row) {
+           values = $(row).find('td');
+           if (values.length === 2) {
+             datum = {}
+             datum[values[0].innerText.trimRight()] = values[1].innerText.trimRight();
+             data.push(datum);
+           } else {
+             console.log("Error: Expected 2 elements in each row after the 1st");
+           }
+       })
+
+       frames.push({label: label, data: data})
      }
-     return [solutionCode, codeMetadata];
+     return frames;
    };
 
    ParsonsWidget.prototype.addLogEntry = function(entry) {
@@ -668,13 +669,9 @@
              return 1;
            } else if (a.code.startsWith('print(')) {
              return 1;
-           } else if (a.code.startsWith('p !BLANK')) {
-             return 1;
            } else if (b.code.startsWith('#')) {
              return -1;
            } else if (b.code.startsWith('print(')) {
-             return -1;
-           } else if (b.code.startsWith('p !BLANK')) {
              return -1;
            } else if (a.code > b.code) {
                return 1;
@@ -705,7 +702,7 @@
 
        // TODO: Move somewhere else or remove after better UI PR.
        codeLines.forEach(function(codeLine) {
-         if (codeLine.code.startsWith('# <input') || codeLine.code.startsWith('print(') || codeLine.code.startsWith('p <input')) {
+         if (codeLine.code.startsWith('# <input') || codeLine.code.startsWith('print(')) {
            $('#' + codeLine.id).css('background-color', 'lightblue');
          }
        });
@@ -753,20 +750,54 @@
     }
 
     ParsonsWidget.prototype.codeLineToHTML = function(codeline) {
-      while (codeline.code.search(/!BLANK/) >= 0) {
-        var replaceText = "";
-        console.log(codeline.code)
-        if (codeline.code.search(blankRegexp) >= 0) {
-          replaceText = codeline.code.match(blankRegexp)[1].trim()
-          codeline.code = codeline.code.replace(blankRegexp, "");
-        }
-        codeline.code = codeline.code.replace(/!BLANK/, function() {
-          return "<input type='text' class='text-box' value=\"" + replaceText + "\" " +
-              "style = 'width: " + ((replaceText.length + 3) * 8) + 'px\'' +
+      function blank() {
+        return "<input type='text' class='text-box' value=\"" + '' + "\" " +
+              "style = 'width: " + ((3) * 8) + 'px\'' +
               "onkeypress=\"this.style.width = ((this.value.length + 3) * 8) + 'px';\"'/>"
-        });
       }
-      return '<li id="' + codeline.id + '" class="prettyprint ' + this.options['syntax_language'] + ' ">' + codeline.code + '<\/li>';
+
+      function parse_blank(s) {
+        return s.replaceAll('blank', blank)
+      }
+
+
+      // while (codeline.code.search(/!BLANK/) >= 0) {
+      //   var replaceText = "";
+      //   console.log(codeline.code)
+      //   if (codeline.code.search(blankRegexp) >= 0) {
+      //     replaceText = codeline.code.match(blankRegexp)[1].trim()
+      //     codeline.code = codeline.code.replace(blankRegexp, "");
+      //   }
+      //   codeline.code = codeline.code.replace(/!BLANK/, function() {
+      //     return "<input type='text' class='text-box' value=\"" + replaceText + "\" " +
+      //         "style = 'width: " + ((replaceText.length + 3) * 8) + 'px\'' +
+      //         "onkeypress=\"this.style.width = ((this.value.length + 3) * 8) + 'px';\"'/>"
+      //   });
+      // }
+      data = JSON.parse(codeline.code);
+      // table = '<li id="' + codeline.id + '" style="padding: 0px;">' +
+      //   '<table class="table table-bordered" style="margin-bottom: 0px;"><thead><tr>' +
+      //     '<th scope="col" colspan="2">Scope: '+blank()+'</th>'+//'<th scope="col">Bar</th>'+
+      //     '</tr></thead><tbody><tr><td class="prettyprint lang-py">x</td><td>'+blank()+'</td></tr>'+
+      //     '</tr></thead><tbody><tr><td class="prettyprint lang-py">y</td><td>'+blank()+'</td></tr>'+
+      //   // '</tr></thead><tbody><tr><td colspan="2">Continuation: '+blank()+'</td></tr>'+
+      //   '</tbody></table>'+
+      //   '<\/li>';
+      table = '<li id="' + codeline.id + '" style="padding: 0px;">' +
+        '<table class="table table-bordered" style="margin-bottom: 0px;"><thead><tr>' +
+          '<th scope="col" colspan="2">'+parse_blank(data.label)+'</th>';
+      data.vars.forEach(element => {
+        table += '</tr></thead><tbody><tr><td class="prettyprint lang-py">'+parse_blank(element.left)+'</td><td>'+parse_blank(element.right)+'</td></tr>';
+      });
+          // '</tr></thead><tbody><tr><td class="prettyprint lang-py">x</td><td>'+blank()+'</td></tr>'+
+          // '</tr></thead><tbody><tr><td class="prettyprint lang-py">y</td><td>'+blank()+'</td></tr>'+
+        // '</tr></thead><tbody><tr><td colspan="2">Continuation: '+blank()+'</td></tr>'+
+
+      table += '</tbody></table>'+
+        '<\/li>';
+
+      return table
+      // return '<li id="' + codeline.id + '" class="prettyprint lang-py">' + codeline.code + '<\/li>';
     };
 
     ParsonsWidget.prototype.codeLinesToHTML = function(codelineIDs, destinationID) {

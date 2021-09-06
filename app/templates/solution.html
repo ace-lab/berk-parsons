@@ -48,7 +48,7 @@
                         <div class="row mt-4 float-right">
                             <div class="col-md-6 sm-12">
                                 {% if disable_new_tab %}
-                                    <button id="move_on" type="button" class="btn btn-success" onclick="window.location = '{{ next_problem }}'">
+                                    <button id="move_on" type="button" class="btn btn-secondary" onclick="window.location = '{{ next_problem }}'">
                                         Back to Problems
                                     </button>
                                 {% else %}
@@ -84,7 +84,11 @@
         function make_editor(editor_name) {
             ace.require("ace/etc/language_tools");
             editor_name = ace.edit(editor_name);
-            editor_name.session.setMode("ace/mode/python");
+            {% if language == 'ruby' %}
+                editor_name.session.setMode("ace/mode/ruby");
+            {% else %}
+                editor_name.session.setMode("ace/mode/python");
+            {% endif %}
             editor_name.setTheme("ace/theme/tomorrow");
             editor_name.setOptions({
                 enableBasicAutocompletion: true,
@@ -107,11 +111,6 @@
                 } else {
                     mostRecentCode = `{{ most_recent_code }}`;
                 }
-                var lines = mostRecentCode.split('\n');
-                for (var i = 0; i < lines.length; i++) {
-                    lines[i] = lines[i].split('#!ORIGINAL')[0]
-                }
-                mostRecentCode = lines.join('\n')
                 editor.setValue(mostRecentCode, 1)
             }
 

@@ -80,7 +80,11 @@
     function make_editor(editor_name) {
         ace.require("ace/etc/language_tools");
         editor_name = ace.edit(editor_name);
-        editor_name.session.setMode("ace/mode/python");
+        {% if language == 'ruby' %}
+            editor_name.session.setMode("ace/mode/ruby");
+        {% else %}
+            editor_name.session.setMode("ace/mode/python");
+        {% endif %}
         editor_name.setTheme("ace/theme/tomorrow");
         editor_name.setOptions({
             enableBasicAutocompletion: true,
@@ -191,8 +195,10 @@
         {% endif %}
     })
     var enableMoveOn = function() {
-        storeQuestionStatus(2);
-        $("#move_on").show();
+        if ($("#move_on").is(":hidden")) {
+            storeQuestionStatus(2);
+            $("#move_on").show();
+        }
     }
     var enableMoveOnTimeout = function() {
         moveOnTimeout = true;

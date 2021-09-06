@@ -22,10 +22,10 @@
                     <div class="row-mt-4 float-left">
                             <button id="go_back" type="button" class="btn btn-secondary">Back to Problem List</button>
                     </div>
-                    <div class="row float-right">
+                     <div class="row float-right">
                         <div class="col-sm-12">
-                            <button id="move-on" type="button" class="btn btn-success"  style="display:none">View Instructor Solution</button>
-                            <button id="submit" type="button" class="btn btn-primary">Run Tests</button>
+                            {# <button id="move-on" type="button" class="btn btn-success"  style="display:none">View Instructor Solution</button> #}
+                            <a id="save" type="button" class="btn btn-primary" href="#">Download Solution</a>
                         </div>
                     </div>
                 </div>
@@ -33,7 +33,7 @@
         </div>
     </div>
 
-    <div class="row mt-4">
+    {# <div class="row mt-4">
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-header">
@@ -50,7 +50,7 @@
             </div>
             <div class="row mb-4"></div>
         </div>
-    </div>
+    </div> #}
 {% endblock %}
 
 {% block scripts %}
@@ -62,20 +62,16 @@
     <script src="/static/js/skulpt-stdlib.js"></script>
     <script src="/static/js/underscore-min.js"></script>
     <script src="/static/js/lis.js"></script>
-    <script src="/static/vendors/parsons/parsons.js"></script>
+    <script src="/static/vendors/parsons/parsons_frames.js"></script>
 
     <script>
     var ParsonsGlobal = {};
     var problemName = `{{ problem_name | safe }}`;
     var currText = '';
-    ParsonsGlobal.initial = `{{ code_lines }}`;
+    ParsonsGlobal.initial = `{{ code_lines | safe }}`;
     var submitCount = 0;
     var lastSubmit = '';
     var moveOnTimeout = false;
-    var language = 'lang-py'
-    {% if language == 'ruby' %}
-        language = 'lang-rb'
-    {% endif %}
 
     function storeQuestionStatus(status) {
         $.ajax({
@@ -96,7 +92,7 @@
             },
             'trashId': 'starter-code',
             'max_wrong_lines': 1,
-            'syntax_language': language,
+            'can_indent': false,
         });
         ParsonsGlobal.widget.init(ParsonsGlobal.initial);
         ParsonsGlobal.widget.alphabetize();
@@ -169,7 +165,16 @@
             })
         }
 
+        function downloadJSON() {
+            var student_solution = JSON.parse(getSolutionCode())['code'];
+            console.log(student_solution)
+            var data = "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(student_solution));
+            $('#save').attr("href", "data:"+data);
+            $('#save').attr("download", "data.json");
+        }
+
         $("#submit").click(_.throttle(submitParsons, 500));
+        $("#save").click(_.throttle(downloadJSON, 500));
 
         $("#move-on").click(function() {
             // Deregisters beforeunload handler to avoid double logging
@@ -236,27 +241,25 @@
         // Removes line numbers so they don't pollute solutionCode
         $(".line-number").remove();
 
-        var [solutionCode, codeMetadata] = ParsonsGlobal.widget.solutionCode();
-        solutionCode = decodeHtmlEntity(solutionCode.deentitize());
-        codeMetadata = decodeHtmlEntity(codeMetadata.deentitize());
+        var solutionCode = ParsonsGlobal.widget.solutionCode();
+        // solutionCode = decodeHtmlEntity(solutionCode.deentitize());
 
         // var solutionCode = decodeHtmlEntity(ParsonsGlobal.widget.solutionCode().deentitize());
         setLineNumbers();
         return JSON.stringify({
             'code': solutionCode,
-            'code_metadata': codeMetadata,
         })
     };
 
     var setLineNumbers = function() {
         // Removes all line numbers
-        $(".line-number").remove();
-        var lines = $("#ul-parsons-solution").children('li');
-        lines.each(function() {
-            var line = $(this);
-            var lineNumber = line.index() + 1;
-            line.append('<code class="line-number"> ' + lineNumber + '</code>')
-        })
+        // $(".line-number").remove();
+        // var lines = $("#ul-parsons-solution").children('li');
+        // lines.each(function() {
+        //     var line = $(this);
+        //     var lineNumber = line.index() + 1;
+        //     line.append('<code class="line-number"> ' + lineNumber + '</code>')
+        // })
     }
 
     </script>

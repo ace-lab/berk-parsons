@@ -125,7 +125,11 @@
     function loadAce() {
         ace.require("ace/etc/language_tools");
         editor = ace.edit("editor");
-        editor.session.setMode("ace/mode/python");
+        {% if language == 'ruby' %}
+            editor.session.setMode("ace/mode/ruby");
+        {% else %}
+            editor.session.setMode("ace/mode/python");
+        {% endif %}
         // Log the first action in the editor
         editor.session.on('change', function() {
             if (!setupChangeOccured) {
@@ -242,8 +246,10 @@
 
 
     var enableMoveOn = function() {
-        storeQuestionStatus(2);
-        $("#move-on").show();
+        if ($("#move-on").is(":hidden")) {
+            storeQuestionStatus(2);
+            $("#move-on").show();
+        }
     }
 
     var enableMoveOnTimeout = function() {

@@ -5,9 +5,11 @@ import time
 import json
 import random
 import requests
-from grader import grader_queue, grade
+from grader import python_grader_queue, grade, ruby_grader_queue
 from flask import render_template, current_app, request, session, redirect, url_for
 from flask_login import current_user, login_required, login_user, logout_user
+# from flask_restful import reqparse
+from urllib.parse import urlparse
 from werkzeug.urls import url_parse
 
 from app.forms import ConsentForm, LoginForm
@@ -39,7 +41,6 @@ LABS_TO_PROBLEMS = {}
 # Routes to begin flows.
 # ------------------------------
 # TODO: Add decorator to ensure consent for each user.
-
 
 @app.route('/test/')
 @app.route('/test/start/')
@@ -117,7 +118,6 @@ def get_solution_hash(problem_name):
 # ------------------------------
 # Routes for displaying a set of problems.
 # ------------------------------
-
 @app.route('/sigcse-demo')
 def recursion_blanks_resume():
   if not current_user.is_authenticated:
@@ -140,6 +140,7 @@ def cs88_lab05():
     ]
 
   return cs88_lab(problems, 'cs88-lab05', 'Lab 5')
+
 
 def staff_whitelist(sid):
   return sid in [
@@ -209,7 +210,7 @@ def cs88_lab(problems, curr_route, problem_set):
 @app.route('/login', methods=['GET', 'POST'])
 def login():
   if current_user.is_authenticated:
-    return redirect(url_for('cs88_lab02'))
+    return redirect(url_for('cs88_lab05'))
   form = LoginForm()
   if form.validate_on_submit():
     # It appears that the database connection stays open until Python
@@ -230,9 +231,9 @@ def login():
       # next?
       next_page = request.args.get('next')
       # if user.consent is None:
-      #   next_page = url_for('consent', next='multi/cs88_sp20/demographics', final=next_page)
+      #   next_page = url_for('consent', next=next_page)
       if not next_page or url_parse(next_page).netloc != '':
-        next_page = url_for('cs88_lab02')
+        next_page = url_for('cs88_lab05')
       return redirect(next_page)
   return render_template('login.html', title='Sign In', form=form)
 
@@ -242,6 +243,7 @@ def logout():
   logout_user()
   session['cached_user_meta'] = None
   return redirect(url_for('login'))
+
 
 # ------------------------------
 # Routes for custom flows
@@ -384,7 +386,9 @@ def multi_code(problem_name):
       hide_timer=app.config['HIDE_TIMER'],
       show_approach_input=True,
       next_problem=next_problem,
-      initial_code=problem_config['initial_code'])
+      initial_code=problem_config['initial_code'],
+      language=problem_config.get('language', 'python')
+      )
 
 
 @app.route('/code_skeleton/<path:problem_name>')
@@ -405,12 +409,21 @@ def parsons(problem_name, code_skeleton=False):
 
   problem_config = load_config(problem_name)
 
+  language = problem_config.get('language', 'python')
+
   with read_semaphore:
     time.sleep(.4)
     most_recent_code = Event.most_recent_code(
         current_user.id, problem_name, 'parsons')
-  code_lines = problem_config['code_lines'] + \
-      '\nprint(!BLANK)' * 3 + '\n# !BLANK' * 3
+  if language == 'ruby':
+    code_lines = problem_config['code_lines'] + \
+        '\np !BLANK' * 3 + '\n# !BLANK' * 3
+  elif language == 'js':
+    code_lines = problem_config['code_lines'] + \
+        '\nconsole.log(!BLANK)' * 3 + '\n// !BLANK' * 3
+  else:
+    code_lines = problem_config['code_lines'] + \
+        '\nprint(!BLANK)' * 3 + '\n# !BLANK' * 3
   if most_recent_code:
     code_lines = most_recent_parsons(most_recent_code, code_lines)
   return render_template("parsons.html",
@@ -421,14 +434,48 @@ def parsons(problem_name, code_skeleton=False):
                              'problem_description'],
                          timer_start=timer_start,
                          hide_timer=app.config['HIDE_TIMER'],
+                         test_cases=problem_config['test_cases'],
                          # TODO(nweinman): Better UI for this (and comment
                          # lines as well)
                          code_lines=code_lines,
                          next_problem=next_problem,
                          back_url=back_url,
                          code_skeleton=code_skeleton,
+                         language=language
                          )
 
+
+@app.route('/parsons_frames/')
+def parsons_frames():
+  # print(request.url)
+  # print(urlparse(request.url).query)
+  params = urlparse(request.url).query
+  params = params.split('&')
+  rows = []
+  labels = []
+  for param in params:
+    if param:
+      key, val = param.split('=')
+      if key == 'var':
+        left, right = val.split('~')
+        rows.append({'left': left, 'right': right})
+      elif key == 'label':
+        labels.append(val)
+
+  if not rows:
+    rows = [{'left': 'x', 'right': 'blank'}, {'left': 'y', 'right': 'blank'}]
+  if not labels:
+    labels = ['box'+str(i) for i in range(3)]
+  code_lines = ''
+  for label in labels:
+    code_lines += json.dumps({'label': label, 'vars': rows}) + '\n'
+
+  return render_template("parsons_frames.html",
+                         problem_name="test_problem",
+                         hide_timer=True,
+                         code_lines=code_lines,
+                         disable_problem_statement=True,
+                         )
 
 @app.route('/coding/<path:problem_name>')
 @login_required
@@ -465,7 +512,9 @@ def coding(problem_name):
                          is_testable=True,
                          next_problem=next_problem,
                          back_url=back_url,
-                         initial_code=initial_code)
+                         initial_code=initial_code,
+                         language=problem_config.get('language', 'python')
+                         )
 
 
 @app.route('/tracing/<problem_hash>')
@@ -476,11 +525,10 @@ def tracing(problem_hash):
   back_url = None
   if request.args.get('final'):
     back_url = '/{}'.format(request.args.get('final'))
+
   problem_config = load_config(problem_name)
 
   timer_start = get_problem_start('coding', problem_name)
-
-  problem_config = load_config(problem_name)
 
   test_inputs = []
   if problem_config['custom_tracing_tests']:
@@ -499,7 +547,8 @@ def tracing(problem_hash):
                          hide_timer=app.config['HIDE_TIMER'],
                          disable_problem_statement=True,
                          next_problem=next_problem,
-                         back_url=back_url
+                         back_url=back_url,
+                         language=problem_config.get('language', 'python')
                          )
 
 
@@ -525,6 +574,7 @@ def comprehension(problem_name):
 
 
 @app.route('/solution/<problem_hash>')
+@app.route('/cs88/solution/<problem_hash>')
 @login_required
 def solution(problem_hash):
   problem_name = hash_to_problem(problem_hash)
@@ -550,6 +600,7 @@ def solution(problem_hash):
                          next_problem=next_problem,
                          disable_new_tab=request.args.get('disable_new_tab'),
                          correct_only='correct_only' in request.args,
+                         language=problem_config.get('language', 'python')
                          )
 
 
@@ -625,7 +676,8 @@ def submit():
   try:
     grader_results = submit_to_grader(
         pre_test_code + submitted_code + test_code,
-        problem_config['test_cases'], problem_config['test_fn'])
+        problem_config['test_cases'], problem_config['test_fn'],
+        problem_config['language'])
   except Exception as e:
     test_results = '<div class="testcase {}"><span class="msg">{}</span></div>'.format(
         "error", str(e))
@@ -665,6 +717,7 @@ def submit_tracing():
 def set_flow():
   flow_id = request.form['flow_id']
   return set_flow_internal(flow_id)
+
 
 # ------------------------------
 # Helper functions.
@@ -761,7 +814,7 @@ def get_problem_start(question_type, problem_name):
 # ------------------------ GRADING ------------------------
 
 
-def submit_to_grader(code, tests, function_name=None):
+def submit_to_grader(code, tests, function_name=None, language='python'):
   """
   Tests the code
   Args:
@@ -776,7 +829,10 @@ def submit_to_grader(code, tests, function_name=None):
       list of dictionaries, one dictionary for every test containing the results.
   """
   try:
-    job = grader_queue.enqueue(grade, code, tests, function_name)
+    if language == 'ruby':
+      job = ruby_grader_queue.enqueue(grade, code, tests, function_name)
+    else:
+      job = python_grader_queue.enqueue(grade, code, tests, function_name)
   except Exception as e:
     # TODO: Contact info
     raise Exception("Error connecting to Redis server. Contact someone!")

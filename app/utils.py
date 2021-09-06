@@ -9,8 +9,9 @@ import re
 from collections import defaultdict
 from pathlib import PosixPath
 
+PROBLEM_PATHS = ['problems/', 'app/cs88_parsons/problems/']
 
-def load_config_file(path):
+def load_config_file(paths):
   """
   Loads a YAML file.
   Args:
@@ -20,28 +21,34 @@ def load_config_file(path):
       for unspecified attributes.
 
   """
-  try:
-    with open(os.path.abspath(path), 'r') as file:
-      config = yaml.load(file)
-    if type(config) == dict:
-      config = defaultdict(lambda: None, config)
-    return config
-  except IOError as e:
-    raise Exception("Cannot find file {0}".format(path))
+  if type(paths) != list:
+    paths = [paths]
+  for path in paths:
+    try:
+      with open(os.path.abspath(path), 'r') as file:
+        config = yaml.load(file)
+      if type(config) == dict:
+        config = defaultdict(lambda: None, config)
+      return config
+    except IOError as e:
+      pass
+  raise Exception("Cannot find files {0}".format(paths))
 
 
-def load_config(problem_name):
+def load_config(file_name):
   """
-  Loads a YAML file, assuming that the YAML file is located in the problems/PROBLEM_NAME/config.yaml directory.
+  Loads a YAML file, assuming that the YAML file is located in the problems/PROBLEM_NAME.yaml directory.
   Args:
-      problem_name: The name of the directory in the data directory.
+      file_name: The name of the directory in the data directory.
+      root_path: Optional argument that specifies the root_path for problems.
 
   Returns: The contents of the YAML file as a defaultdict, returning None
       for unspecified attributes.
   """
-  config_file = os.path.join(os.path.abspath(
-      "problems/"), problem_name + ".yaml")
-  return load_config_file(config_file)
+  config_files = []
+  for path in PROBLEM_PATHS:
+    config_files.append(os.path.join(os.path.abspath(path), file_name + ".yaml"))
+  return load_config_file(config_files)
 
 
 def retry_query(query_fn):
@@ -71,9 +78,13 @@ def problem_to_hash(problem_name):
 
 
 def problems_iter():
-  for problem in PosixPath('problems').glob('**/*.yaml'):
-    # Remove problems/ from the path and .yaml from the filename.
-    yield str(PosixPath(*problem.parts[1:]))[:-5]
+  for path in PROBLEM_PATHS:
+    # Find the number of folders defined in the paths to remove
+    # fromt he assumed path prefix for hashing.
+    folders_drop = path.count('/')
+    for problem in PosixPath(path).glob('**/*.yaml'):
+      # Remove problems/ from the path and .yaml from the filename.
+      yield str(PosixPath(*problem.parts[folders_drop:]))[:-5]
 
 
 def hash_to_problem(problem_hash):
