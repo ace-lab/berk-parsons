@@ -13,7 +13,7 @@ app = Flask(__name__)
 
 cleardb_database_url = os.getenv('CLEARDB_DATABASE_URL')
 postgres_database_url = os.getenv(
-    'DATABASE_URL', 'postgres://localhost/parsons')
+    'DATABASE_URL', 'postgresql://localhost/parsons')
 
 app.config['DISABLE_LAB02'] = os.getenv('DISABLE_LAB02', False)
 

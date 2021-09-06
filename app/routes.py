@@ -5,7 +5,7 @@ import time
 import json
 import random
 import requests
-from grader import python_grader_queue, grade, ruby_grader_queue
+from grader import grader_queue, grade
 from flask import render_template, current_app, request, session, redirect, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 # from flask_restful import reqparse
@@ -830,9 +830,10 @@ def submit_to_grader(code, tests, function_name=None, language='python'):
   """
   try:
     if language == 'ruby':
-      job = ruby_grader_queue.enqueue(grade, code, tests, function_name)
+      # job = ruby_grader_queue.enqueue(grade, code, tests, function_name)
+      raise Exception("Not yet implemented")
     else:
-      job = python_grader_queue.enqueue(grade, code, tests, function_name)
+      job = grader_queue.enqueue(grade, code, tests, function_name)
   except Exception as e:
     # TODO: Contact info
     raise Exception("Error connecting to Redis server. Contact someone!")
